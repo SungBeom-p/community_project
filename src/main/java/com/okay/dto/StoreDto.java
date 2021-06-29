@@ -16,10 +16,10 @@ public class StoreDto {
     private Long views;
     private User userNo;
     private String fileName;   //이미지이름
+    private String mapId; //api
     private Long size; // 이미지크기
     private String name;
     private String pw;
-    private String category;
     private String title;
     private String content;
     private LocalDateTime regDate;
