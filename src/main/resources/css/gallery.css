@@ -1,0 +1,80 @@
+
+a {
+    text-decoration:none;
+}
+a.okaya:link { color: black; text-decoration: none;}
+a.okaya:visited { color: black; text-decoration: none;}
+a.okaya:hover { color: royalblue; text-decoration: underline;}
+
+/*   nav ul {
+       list-style: none;
+       border-top: 1px solid #23698b;
+       border-bottom: 1px solid #23698b;
+       text-align: center;
+       background-color: #232f32;
+   } */
+h5 {
+    padding-bottom: 5%;
+    border-bottom: 2.5px solid royalblue;
+}
+
+.post ul li {
+    height: 40px;
+}
+
+.store_container {
+    float: right;
+    margin-top: 3%;
+    margin-right: 25%;
+    width: 20%;
+    text-align: left;
+}
+
+.hobby_container {
+    float: right;
+    margin-top: 5%;
+    margin-right: 25%;
+    width: 20%;
+    text-align: left;
+}
+
+.post_container {
+    float: left;
+    margin-top: 3%;  /* header와의 간격 설정*/
+    margin-left: 25%;
+    width: 25%;
+    text-align: left;
+}
+#sessiontag {
+    position: absolute;
+    top: 0px;
+    right: 35px;
+}
+#sessiontag1{
+    position: absolute;
+    top: 0px;
+    right: 35px;
+
+}
+#sessiontag1>a{
+    color: #cdcdcd;
+}
+
+#sessiontag>a{
+    color: #cdcdcd;
+}
+#okaytitle{
+    color:#cdcdcd;
+}
+#headertop{
+    background-color: #131921;
+}
+#nav2 {
+    background-color:#232f32;
+
+}
+#nav2 li>a{
+    display: inline;
+    color: white;
+}
+

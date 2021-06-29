@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link th:href="@{./css/login.css}" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="logo"><a th:href="@{/}">OKAY</a></div>
+<hr class="logo-line">
+<div clas="space"></div>
+<article>
+    <form action="login" method="post">
+        <div class="loginBox">
+            <label>
+                <input type="text" name="Id" id="Id" class="box1" placeholder="ID를 입력하세요." />
+            </label>
+            <Br>
+            <label>
+                <input type="password" name="Pw" id="Pw" class="box2" placeholder="Pw를 입력하세요."/>
+            </label>
+        </div>
+        <div class="space"/>
+        <div class="buttonBox">
+            <button type="submit" class="snip1535" id="LogIn">Log In</button>
+            <button type="button" class="snip1535" id="join">Join</button>
+        </div>
+    </form>
+
+</article>
+
+
+<script th:inline="javascript">
+        let session = [[${session}]];
+        document.querySelector('#join').addEventListener('click', func);
+    function func (){
+        location.href="/userInfoCheck";
+    }
+</script>
+    </body>
+</html>

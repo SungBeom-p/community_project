@@ -1,0 +1,93 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    /***
+     * test dependencies
+     * */
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // spring-test
+    testCompile group: 'org.springframework', name: 'spring-test', version: '5.2.5.RELEASE'
+    // mockito-core
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
+    // mockito-junit-jupiter
+    testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.1.0'
+    // junit-jupiter
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.4.2'
+    // hamcrest-all
+    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    // spring-boot-starter-test
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.3.12.RELEASE'
+
+    /***
+     * web dependencies
+     * */
+    compile 'javax.servlet:servlet-api:2.5'
+    // Spring - Web Mvc
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '5.2.5.RELEASE'
+
+    /***
+     *  front template dependencies
+     * */
+
+    // thymeleaf
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.3.12.RELEASE'
+    // Dev Tools
+    runtime group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.3.12.RELEASE'
+
+
+
+//    // Handlebars
+//    compile group: 'com.github.jknack', name: 'handlebars', version: '4.0.6'
+//    // Handlebars-jackson2
+//    compile group: 'com.github.jknack', name: 'handlebars-jackson2', version: '4.0.6'
+//    // handlebars-springmvc
+//    compile group: 'com.github.jknack', name: 'handlebars-springmvc', version: '4.0.6'
+
+    /***
+     * datebase dependencies
+     * */
+
+    // Spring-data-jpa
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.2.6.RELEASE'
+    // Hibernate-entitymanager
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.10.Final'
+    // mysql/mysql-connector-java
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+    // Maria DB
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.2'
+
+    /***
+     * logger dependencies
+     * */
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+
+
+    // lombok
+    compileOnly("org.projectlombok:lombok:1.18.10")
+    testCompileOnly("org.projectlombok:lombok:1.18.10")
+    annotationProcessor("org.projectlombok:lombok:1.18.10")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.10")
+
+
+}
+
+test {
+    useJUnitPlatform()
+}

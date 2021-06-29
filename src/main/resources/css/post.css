@@ -1,0 +1,95 @@
+
+#postTable {
+    border: solid 1px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+
+    width: 70%;
+    height: 200px;
+}
+
+#commentTable {
+    border: solid 1px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+
+    padding-top: 30px;
+
+    width: 70%;
+
+    text-align: center;
+}
+
+#newCommentTable {
+    border: solid 1px;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-top: 30px;
+
+    width: 70%;
+}
+
+.commentNo {
+    width: 5%;
+}
+
+.name {
+    width: 10%;
+}
+
+.content {
+    width: 70%;
+}
+
+.regDate {
+    width: 10%;
+    font-size: 13px;
+}
+
+#deleteCommentButton {
+    width: 5%;
+}
+
+#newCommentTd {
+    width: 100%;
+    height: 100px;
+}
+
+#newCommentInput {
+    width: 90%;
+    height: 90%;
+
+    padding-top: 5px;
+    resize: none;
+}
+
+A:link {
+    text-decoration: none;
+    color: blue;
+}
+
+A:visited {
+    text-decoration: none;
+    color: blue;
+}
+
+A:active {
+    text-decoration: none;
+    color: blue;
+}
+
+A:hover {
+    text-decoration: none;
+    color: blue;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+
+

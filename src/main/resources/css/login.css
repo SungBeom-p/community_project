@@ -1,0 +1,113 @@
+body{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.loginBox {
+    border: 5px solid #23698B;
+    text-align: center;
+    width: 30%;
+    margin-top: 50px;
+    margin-bottom: 40px;
+    margin-left: 35%;
+}
+.box1{
+    margin-top: 50px;
+    margin-bottom: 10px;
+    width: 200px;
+    height: 30px;
+    border: 2px solid #23698B;
+    text-align: center;
+    font-size: 16x;
+}
+.box2{
+    margin-top: 10px;
+    margin-bottom: 50px;
+    width: 200px;
+    height: 30px;
+    border: 2px solid #23698B;
+    text-align: center;
+    font-size: 16x;
+}
+.space{
+    height: 10px;
+}
+.logo{
+    margin-top: 150px;
+    text-align: center;
+    font-size: 70px;
+    font-weight: bold;
+}
+label{
+    font-size: 25px;
+    font-style: inherit;
+}
+.buttonBox{
+    text-align: center;
+}
+.logo-line{
+    width: 30.5%;
+    margin-left: 35%;
+    background-color: #23698B;
+    height: 5px;
+}
+
+.snip1535 {
+    background-color: #2C85B1;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'BenchNine', Arial, sans-serif;
+    font-size: 1em;
+    font-size: 22px;
+    line-height: 1em;
+    margin: 15px 40px;
+    outline: none;
+    padding: 12px 40px 10px;
+    position: relative;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.snip1535:before,
+.snip1535:after {
+    border-color: transparent;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+    border-style: solid;
+    border-width: 0;
+    content: "";
+    height: 24px;
+    position: absolute;
+    width: 24px;
+}
+.snip1535:before {
+    border-color: #c47135;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    right: -5px;
+    top: -5px;
+}
+.snip1535:after {
+    border-bottom-width: 2px;
+    border-color: #c47135;
+    border-left-width: 2px;
+    bottom: -5px;
+    left: -5px;
+}
+.snip1535:hover,
+.snip1535.hover {
+    background-color: #0F2F3E;
+}
+.snip1535:hover:before,
+.snip1535.hover:before,
+.snip1535:hover:after,
+.snip1535.hover:after {
+    height: 100%;
+    width: 100%;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+.snip1535 a{
+    color: white;
+}

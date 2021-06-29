@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link th:href="@{./css/header.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<header id="container">
+    <nav class="navbar navbar-expand-lg navbar-light" id="headertop">
+        <a class="navbar-brand" id="okaytitle" href="/">okaycommunity</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li th:if="${session.userId != 2 && session.userId != null}" class="nav-item active" id ="sessiontag1">
+                    <a class="nav-link" href="/login" >LOG OUT</a>
+                </li>
+                <li th:unless="${session.userId != 2 && session.userId != null}" class="nav-item active" id ="sessiontag">
+                    <a class="nav-link" href="/login" >LOGIN</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="subcontainer">
+        <ul id="nav2" class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" href="/news">공지 사항</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/gallery">전체글</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/gallery">중고거래</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/gallery">모임/모집</a>
+            </li>
+            <li class = "nav-item" th:if="${session.userId != 2 && session.userId != null}">
+                <a th:href="@{/mypage(request=${session.userId})}" class="nav-link">MY PAGE</a>
+            </li>
+        </ul>
+    </div>
+</header>

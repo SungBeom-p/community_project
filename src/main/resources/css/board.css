@@ -1,0 +1,137 @@
+
+ul{
+    list-style:none;
+}
+li{
+    text-align: center
+}
+a {
+    text-decoration:none;
+}
+/*   nav ul {
+       list-style: none;
+       border-top: 1px solid #23698b;
+       border-bottom: 1px solid #23698b;
+       text-align: center;
+       background-color: #232f32;
+   } */
+
+nav ul li {
+    display: inline;
+    letter-spacing: .3em;
+    margin-left: 2em;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    line-height: 3em;
+}
+#sessiontag {
+    position: absolute;
+    top: 0px;
+    right: 35px;
+}
+#sessiontag1{
+    position: absolute;
+    top: 0px;
+    right: 35px;
+
+}
+#sessiontag1>a{
+    color: #cdcdcd;
+}
+
+#sessiontag>a{
+    color: #cdcdcd;
+}
+#okaytitle{
+    color:#cdcdcd;
+}
+#headertop{
+    background-color: #131921;
+}
+#nav2 {
+    background-color:#232f32;
+
+}
+#nav2 li>a{
+    display: inline;
+    color: white;
+}
+h2{
+    position: relative;
+    margin: 0 auto;
+    padding: 20px 0px 5px 10px;
+    width: auto;
+    max-width: 820px;
+    display: block;
+    font-weight: bold;
+    font-family: "Franklin Gothic Demi";
+}
+/*.size{*/
+/*    position: relative;*/
+/*    margin-left: 300px;*/
+/*    padding: 10px 5px 0 10px;*/
+/*    width: auto;*/
+/*    display: block;*/
+/*    font-size: x-large;*/
+/*}*/
+.searchForm{
+    float: left;
+    width:700px; height:0px;
+    margin-left: 750px;
+    padding: 0 20px 0px 0px;
+
+}
+.new{
+    display: inline-block;
+    width:100px; height:50px;
+    /*position: relative;*/
+    margin-left: 1080px;
+    /*padding: 0 0px 15px 0px;*/
+    /*max-width: 820px;*/
+}
+table{
+    position: relative;
+    margin: auto;
+    padding: 0 10px 0px 10px;
+    width: auto;
+    max-width: 970px;
+    display: table;
+    border-collapse: collapse;
+    text-align: center;
+}
+table tr th{
+    border-bottom: 2.5px solid royalblue;
+    height: 50px;
+}
+th:nth-child(1){
+    width: 80px
+}
+th:nth-child(2){
+    width: 350px
+}
+th:nth-child(3){
+    width: 160px
+}
+th:nth-child(4){
+    width: 110px
+}
+th:nth-child(5){
+    width: 90px
+}
+table tr td{
+    border-bottom: 1.5px solid gray;
+    height: 40px;
+}
+.paging{
+    padding: 40px 0px 10px 0px;
+    height: 110px;
+}
+#searchForm2{
+    text-align: center;
+    padding: 20px 0px 80px 0px;
+    height: 30px;
+}
+
