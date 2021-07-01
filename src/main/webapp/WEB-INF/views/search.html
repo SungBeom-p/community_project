@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html xmlns:th="http://www.thymeleaf.org">
+        <head>
+        <meta charset="UTF-8">
+        <title>전체검색</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <!--    <link th:href="@{./css/board.css}" rel="stylesheet"/>-->
+    <style>
+        ul{
+            list-style:none;
+        }
+        li{
+            text-align: center
+        }
+        a {
+            text-decoration:none;
+        }
+        /*   nav ul {
+               list-style: none;
+               border-top: 1px solid #23698b;
+               border-bottom: 1px solid #23698b;
+               text-align: center;
+               background-color: #232f32;
+           } */
+
+        nav ul li {
+            display: inline;
+            letter-spacing: .3em;
+            margin-left: 2em;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            line-height: 3em;
+        }
+        #sessiontag {
+            position: absolute;
+            top: 0px;
+            right: 35px;
+        }
+        #sessiontag1{
+            position: absolute;
+            top: 0px;
+            right: 35px;
+
+        }
+        #sessiontag1>a{
+            color: #cdcdcd;
+        }
+
+        #sessiontag>a{
+            color: #cdcdcd;
+        }
+        #okaytitle{
+            color:#cdcdcd;
+        }
+        #headertop{
+            background-color: #131921;
+        }
+        #nav2 {
+            background-color:#232f32;
+
+        }
+        #nav2 li>a{
+            display: inline;
+            color: white;
+        }
+        h2{
+            position: relative;
+            margin: 0 auto;
+            padding: 20px 0px 5px 10px;
+            width: auto;
+            max-width: 820px;
+            display: block;
+            font-weight: bold;
+            font-family: "Franklin Gothic Demi";
+        }
+        /*.size{*/
+        /*    position: relative;*/
+        /*    margin-left: 300px;*/
+        /*    padding: 10px 5px 0 10px;*/
+        /*    width: auto;*/
+        /*    display: block;*/
+        /*    font-size: x-large;*/
+        /*}*/
+        .searchForm{
+            text-align: center;
+            margin-top: 3%;
+            margin-bottom: 5%;
+        }
+        #searchButton{
+            border-radius: 10px;
+            background-color: #b2b2b2;
+            color: white;
+            padding: 2px 5px;
+            display: inline-block;
+            border: 1px solid rgba(0,0,0,0.21);
+            border-bottom-color: rgba(0,0,0,0.34);
+            text-shadow:0 1px 0 rgba(0,0,0,0.15);
+        }
+        #searchButton:active{
+            top: 1px;
+            border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+            position: relative;
+        }
+        table{
+            position: relative;
+            margin: auto;
+            padding: 0 10px 0px 10px;
+            width: auto;
+            max-width: 970px;
+            display: table;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        table tr th{
+            border-bottom: 2.5px solid #c1dad6 !important;
+            height: 50px;
+        }
+        th:nth-child(1){
+            width: 80px
+        }
+        th:nth-child(2){
+            width: 350px
+        }
+        th:nth-child(3){
+            width: 160px
+        }
+        th:nth-child(4){
+            width: 110px
+        }
+        th:nth-child(5){
+            width: 90px
+        }
+        table tr td{
+            border-bottom: 1.5px solid gray;
+            height: 40px;
+        }
+        .paging{
+            padding: 40px 0px 10px 0px;
+            height: 110px;
+        }
+        #searchFilter{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<header th:insert="/header.html"></header>
+<h2></h2>
+<!--    <div class="size">-->
+<!--        <select th:onchange="'window.location.href = \'' + @{/board?size=} + '\' + this.value ' ">-->
+<!--            <option th:each="size : ${postList.size}" th:text=${size}></option>-->
+<!--        </select>-->
+<!--    </div>-->
+<div class="searchForm">
+    <form name="searchForm" id="searchForm" th:object="${searchDto}" action="#">
+        <select name="searchFilter" id="searchFilter">
+            <option value="all">전체</option>
+        </select>
+        <input type="text" id="value" name="searchValue" th:field="*{searchValue}"/>
+        <input type="button" id="searchButton" value="검색"/>
+    </form>
+</div>
+<table>
+    <tr>
+        <th> </th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>조회</th>
+    </tr>
+    <tr th:each="post : ${searchList}">
+        <td th:text="${post.postNo}"/>
+        <td>
+      <span><a th:href="@{'/post/' + ${post.postNo}}">
+        <span th:text="${post.title}"></span></a>
+      </span>
+        </td>
+        <td th:text="${post.name}"/>
+        <td th:text="${post.regDate}"/>
+        <td th:text="${post.views}"/>
+    </tr>
+</table>
+<div class="paging">
+    <ul class="pagination justify-content-center"
+        th:with="start=${T(Math).floor(searchList.number/10)*10 + 1},
+                    last=(${start + 9 < searchList.totalPages ? start + 9 : searchList.totalPages})">
+        <li class="page-item">
+            <a class="page-link" th:href="@{/search(page=1)}" aria-label="First">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item" th:class="${searchList.first} ? 'disabled'">
+            <a class="page-link" th:href="${searchList.first} ? '#' :@{/search(page=${searchList.number})}" aria-label="Previous">
+                <span aria-hidden="true">&lt;</span>
+            </a>
+        </li>
+        <li class="page-item" th:each="page: ${#numbers.sequence(start,last)}" th:class="${page == searchList.number + 1} ? 'active'">
+            <a class="page-link" th:text="${page}" th:href="@{/search(page=${page})}"></a>
+        </li>
+        <li class="page-item" th:class="${searchList.last} ? 'disabled'">
+            <a class="page-link" th:href="${searchList.last} ? '#' : @{/search(page=${searchList.number + 2})}" aria-label="Next">
+                <span aria-hidden="true">&gt;</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:href="@{/board?(page=${searchList.totalPages})}" aria-label="Last">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>
