@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -155,12 +156,6 @@ public class PostService extends Service{
         return postRepository.findAll(pageable);
     }
 
-    public PostDto getPost(Long postNo) {
-        Post postEntity = postRepository.findByPostNo(postNo);
-        PostDto postDto = new PostDto();
-        postDto = postDto.changePostDto(postEntity);
-        return postDto;
-    }
     public List<Post> postCntTen(){
 
         List<Post> postgallatyorderten = postRepository.findFirst10ByOrderByViewsDesc();
@@ -184,4 +179,53 @@ public class PostService extends Service{
 
         return list;
     }
+
+
+
+
+
+
+
+
+
+
+    //인환씨
+
+
+    public PostDto getPost(Long postNo) {
+        Post postEntity = postRepository.findByPostNo(postNo);
+        PostDto postDto = new PostDto();
+        postDto = postDto.changePostDto(postEntity);
+        return postDto;
+    }
+
+
+    public void editPost(User userNo, Long postNo, Long views, String title,
+                         String name, String pw, String category, String content,
+                         LocalDateTime regDate) {
+        User user = userRepository.findByUserNo(userNo.getUserNo());
+        Post post = Post.builder()
+                .userNo(user)
+                .postNo(postNo)
+                .views(views)
+                .title(title)
+                .name(name)
+                .pw(pw)
+                .category(category)
+                .content(content)
+                .regDate(regDate)
+                .modDate(LocalDateTime.now())
+                .build();
+
+        postRepository.save(post);
+    }
+
+    public void delete(Long postNo) {
+        postRepository.deleteById(postNo);
+    }
+
+
+
+
+
 }

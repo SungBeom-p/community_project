@@ -47,7 +47,7 @@
     <tr th:each="post : ${postList}">
         <td th:text="${post.postNo}"/>
         <td>
-                    <span><a th:href="@{'/post/' + ${post.postNo}}">
+                    <span><a th:href="@{/post(postNo=${post.postNo})}">
                         <span th:text="${post.title}"></span></a>
                     </span>
         </td>

@@ -21,7 +21,7 @@ public class Post {
     private Long views; // 조회 수
 
     @JoinColumn(name = "user_no")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private User userNo; // 사용자 고유 번호
 
     @Column(nullable = false, length = 20)

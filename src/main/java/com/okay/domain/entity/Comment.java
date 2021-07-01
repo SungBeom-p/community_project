@@ -20,11 +20,11 @@ public class Comment {
     private Long commentNo;
 
     @JoinColumn(name = "post_no")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private Post postNo;
 
     @JoinColumn(name = "user_no")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private User userNo;
 
     @Column(nullable = false, length = 20)

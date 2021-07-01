@@ -99,4 +99,17 @@ public class UserService extends Service {
     public void remove(Long userNo){
         userRepository.deleteById(userNo);
     }
+
+
+    //인환씨
+    public User getUser (Long userNo) {
+        User user = userRepository.findByUserNo(userNo);
+        return user;
+    }
+
+
+
+
+
+
 }

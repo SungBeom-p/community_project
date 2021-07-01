@@ -9,6 +9,7 @@ import com.okay.dto.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,6 +61,28 @@ public class CommentService extends Service{
     }
 
 
+
+
+
+
+    @Transactional
+    public Comment deletepost(Post postNo){
+        Comment comment = commentRepository.deleteCommentByPostNo(postNo);
+        return comment;
+    }
+
+    public List<Comment> commentsize(){
+        List<Comment> list = commentRepository.findAllBy();
+        return list;
+    }
+
+
+
+
+
+
+
+    //인환씨
     public List<CommentDto> getFullCommentList(Long postNo) {
         Optional<Post> post = postRepository.findById(postNo);
         List<Comment> commentEntityList = commentRepository.findByPostNo(post.get());
@@ -111,24 +134,45 @@ public class CommentService extends Service{
             endComment = paging.getTotalElement();
         }
 
-
         for (; startComment <= endComment; startComment++) {
             commentList.add(fullCommentList.get(startComment.intValue() - 1));
         }
-
-
         return commentList;
     }
 
-    @Transactional
-    public Comment deletepost(Post postNo){
-        Comment comment = commentRepository.deleteCommentByPostNo(postNo);
-        return comment;
+    public void newComment(Long postNo, Long userNo, String name, String pw, String content) {
+        User user = userRepository.getOne(userNo);
+        Post post = postRepository.getOne(postNo);
+        Comment lastComment = commentRepository.findTop1ByOrderByCommentNoDesc();
+        Long cNo ;
+        if(lastComment == null) {
+            cNo = 0L;
+        }
+        else {
+             cNo = lastComment.getCommentNo() + 1L;
+        }
+
+        Comment comment = Comment.builder()
+                .commentNo(cNo)
+                .postNo(post)
+                .userNo(user)
+                .name(name)
+                .pw(pw)
+                .content(content)
+                .regDate(LocalDateTime.now())
+                .build();
+        commentRepository.save(comment);
     }
 
-    public List<Comment> commentsize(){
-        List<Comment> list = commentRepository.findAllBy();
-        return list;
+
+    public void delete(Long commentNo) {
+        commentRepository.deleteById(commentNo);
     }
+
+    public void deleteAll(Long postNo) {
+        Post post = postRepository.findByPostNo(postNo);
+        commentRepository.deleteAllByPostNo(post);
+    }
+
 
 }

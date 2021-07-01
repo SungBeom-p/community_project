@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,35 +70,6 @@ public class PostController {
         return "gallery";
     }
 
-    @GetMapping("/post")
-    public String test(Model model, Long postNo, Long presentPage) {
-        if (presentPage == null) {
-            presentPage = 1L;
-        }
-
-        model.addAttribute("post", postService.getPost(postNo));
-        List<CommentDto> fullCommentList = commentService.getFullCommentList(postNo);
-        Paging commentPaging = commentService.paging(presentPage, new Long(fullCommentList.size()));
-        model.addAttribute("commentPaging", commentPaging);
-        if (commentPaging.getTotalElement() > 0) {
-            List<CommentDto> commentList = commentService.getCommentList(fullCommentList, commentPaging);
-            model.addAttribute("commentList", commentList);
-        }
-        return "post";
-    }
-
-    @GetMapping("/edit")
-    public String edit(Model model, PostDto postDto, String func) {
-        if (func == null) {
-            func = "";
-            postDto = postService.getPost(postDto.getPostNo());
-            model.addAttribute("post", postService.getPost(postDto.getPostNo()));
-        } else if (func.equals("edit")) {
-            postService.update(postDto);
-            return "redirect:/post?postNo=" + postDto.getPostNo();
-        }
-        return "edit";
-    }
 
     @GetMapping("/write")
     public String getWrite(HttpServletRequest request){
@@ -173,6 +145,110 @@ public class PostController {
         postService.create(dto);
         return"redirect:/service";
     }
+
+
+
+
+
+
+
+
+
+
+
+    //인환씨
+
+
+    @GetMapping("/post")
+    public String post(HttpServletRequest request, Model model, Long postNo, Long presentPage, String func,
+                       Long userNo, String name, String pw, String content, Long commentNo) {
+        HttpSession session = request.getSession();
+        Long userNum = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+
+        if (presentPage == null) {
+            presentPage = 1L;
+        }
+        if (func == null) {
+            func = "";
+        }
+
+        if (func.equals("editPost")) {
+            return "redirect:/edit?postNo=" + postNo;
+        } else if (func.equals("deletePost")) {
+            commentService.deleteAll(postNo);
+            postService.delete(postNo);
+            return "main";
+        } else if (func.equals("newComment")) {
+            commentService.newComment(postNo, userNo, name, pw, content);
+            return "redirect:/post?postNo=" + postNo;
+        } else if (func.equals("deleteComment")) {
+            commentService.delete(commentNo);
+            return "redirect:/post?postNo=" + postNo;
+        }
+
+//        get postDto and exception handling
+        PostDto post = postService.getPost(postNo);
+        if (post == null) {
+            return "main";
+        } else {
+            model.addAttribute("post", post);
+        }
+        List<CommentDto> fullCommentList = commentService.getFullCommentList(postNo);
+        Paging commentPaging = commentService.paging(presentPage, new Long(fullCommentList.size()));
+        model.addAttribute("commentPaging", commentPaging);
+        if (commentPaging.getTotalElement() > 0) {
+            List<CommentDto> commentList = commentService.getCommentList(fullCommentList, commentPaging);
+            model.addAttribute("commentList", commentList);
+        }
+
+        if (userNum != 2L) {
+            User user = userService.getUser(userNum);
+
+            model.addAttribute("userNo", user.getUserNo());
+            model.addAttribute("name", user.getName());
+        } else {
+            model.addAttribute("userNo", 2);
+        }
+        return "post";
+    }
+
+    @RequestMapping("/edit")
+    public String edit(Model model, Long postNo, String func, Long views,
+                       String title, String name, String pw, String category,
+                       String content, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Long userNum = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        if (func == null) {
+            func = "";
+        }
+
+        PostDto post = postService.getPost(postNo);
+        model.addAttribute("post", post);
+
+        if (func.equals("editPost")) {
+            postService.editPost(post.getUserNo(), postNo, views, title, name, pw, category, content, post.getRegDate());
+            return "redirect:/post?postNo=" + postNo;
+        }
+
+        if (post.getUserNo().getUserNo() > 2 || userNum == 1) {
+            System.out.println("ininininininininin!!!!" +userNum);
+            return "edit_members";
+        } else {
+            return "edit_nMembers";
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
