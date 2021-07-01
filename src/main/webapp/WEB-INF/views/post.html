@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title th:text="${post.title}"/>
+    </head>
+    <style>
+        #postTable {
+            border: solid 1px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10px;
+
+            width: 70%;
+            height: 200px;
+        }
+
+        #commentTable {
+            border: solid 1px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 10px;
+
+            padding-top: 30px;
+
+            width: 70%;
+
+            text-align: center;
+        }
+        #pagingTable {
+            margin: auto;
+        }
+
+        #newCommentTable {
+            border: solid 1px;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+
+            width: 70%;
+        }
+
+        #boardButton {
+            margin-top: 3%;
+            margin-left: 80%;
+        }
+
+        .name {
+            width: 10%;
+        }
+
+        .content {
+            width: 70%;
+        }
+
+        .regDate {
+            width: 10%;
+            font-size: 13px;
+        }
+
+        #newCommentContent {
+            margin-left: 3px;
+            width: 90%;
+            height: 90%;
+
+            resize: none;
+        }
+
+        A:link {
+            text-decoration: none;
+            color: purple;
+        }
+
+        A:visited {
+            text-decoration: none;
+            color: purple;
+        }
+
+        A:active {
+            text-decoration: none;
+            color: purple;
+        }
+
+        A:hover {
+            text-decoration: none;
+            color: purple;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <body>
+        <!--post-->
+        <table id="postTable">
+            <tr>
+                <td th:text="'Title: ' + ${post.title}"/>
+            </tr>
+            <tr>
+                <td th:text="'Name: ' + ${post.name}"/>
+                <td th:text="'Category: ' + ${post.category}"/>
+            </tr>
+            <tr>
+                <td th:text="'RegDate: ' + ${post.regDate}"/>
+                <td th:text="'ModDate: ' + ${post.modDate}"/>
+            </tr>
+            <tr>
+                <td>
+                    <br/>
+                </td>
+            </tr>
+            <tr>
+                <td>Content</td>
+            </tr>
+            <tr>
+                <td th:text="${post.content}"/>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" id="editPostButton" value="edit"/>
+                    <input type="button" id="deletePostButton" value="delete"/>
+                </td>
+            </tr>
+        </table>
+        <!--comment-->
+        <table id="commentTable">
+            <tr th:each="comment:${commentList}">
+                <td th:text="${comment.commentNo}"/>
+                <td class="name" th:text="${comment.name}"/>
+                <td class="content" th:text="${comment.content}"/>
+                <td class="regDate" th:text="${comment.regDate}"/>
+                <td>
+                    <input type="button" value="X" th:onclick="deleteCommentFunc([[${comment.commentNo}]],
+                               [[${comment.userNo.userNo}]], [[${comment.pw}]])"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <br/>
+                </td>
+            </tr>
+        </table>
+        <!--paging-->
+        <table id="pagingTable">
+            <tr>
+                <td th:block th:with="startAt=${commentPaging.startAt}, endBy=${commentPaging.endBy}" th:colspan="5">
+                    <a th:if="${commentPaging.startAt} - 1 > 0"
+                       th:href="@{/post( postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} - 5)}"
+                       th:text="prev"/>
+                    <span th:if="${commentPaging.totalPage} != 0">
+                        <a th:each="presentPage : ${#numbers.sequence(startAt, endBy)}"
+                           th:href="@{/post(postNo=${post.postNo}, presentPage=${presentPage})}"
+                           th:text=|[${presentPage}]| />
+                    </span>
+                    <span th:if="${commentPaging.totalPage} == 0">
+                        Comments not exist
+                    </span>
+                    <a th:if="${commentPaging.endBy} + 1 < ${commentPaging.totalPage}"
+                       th:href="@{/post(postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} + 5)}"
+                       th:text="next"/>
+                </td>
+            </tr>
+        </table>
+        <!--new comment-->
+        <table id="newCommentTable">
+            <tr th:if="${userNo} != 2">
+                <td th:text="${name}" id="newCommentNameM"/>
+            </tr>
+            <tr th:if="${userNo} == 2">
+                <td>
+                    Name: <input type="text" id="newCommentNameNm"/>
+                    Password: <input type="password" id="newCommentPassword"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <textarea id="newCommentContent"></textarea>
+                </td>
+                <td>
+                    <input type="button" id="newCommentButton" value="submit"/>
+                </td>
+            </tr>
+        </table>
+
+        <table id="boardButton">
+            <tr>
+                <td>
+                    <input type="button" value="back"/>
+                </td>
+            </tr>
+        </table>
+
+
+        <!--forms-->
+        <form id="editPostForm">
+            <input type="hidden" name="func" value="editPost">
+            <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+        </form>
+
+
+
+        <form id="deletePostForm">
+            <input type="hidden" name="func" value="deletePost">
+            <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+        </form>
+
+
+        <form id="newCommentForm" method="get">
+            <input type="hidden" name="func" value="newComment"/>
+            <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+            <input type="hidden" name="name" id="name"/>
+            <input type="hidden" name="pw" id="pw"/>
+            <input type="hidden" name="content" id="content"/>
+            <input type="hidden" name="userNo" id="userNo"/>
+        </form>
+
+
+
+        <form id="deleteCommentForm">
+            <input type="hidden" name="func" value="deleteComment"/>
+            <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+            <input type="hidden" name="commentNo" id="commentNo"/>
+        </form>
+
+
+        <script th:inline="javascript">
+            function editPostFunc() {
+                let editPostForm = document.querySelector('#editPostForm');
+                if ([[${userNo}]] > 2 && [[${post.postNo}]] == [[${session.userId}]]) {
+                    editPostForm.submit();
+                } else if ([[${post.userNo.userNo}]] == 2) {
+                    let pwCheck = prompt("Enter the password");
+                    if (pwCheck == [[${post.pw}]]) {
+                        editPostForm.submit();
+                    } else {
+                        alert("You are not authorized");
+                    }
+                } else if ([[${session.userId}]] == 1) {
+                    editPostForm.submit();
+                } else {
+                    alert("You are not authorized");
+                }
+            }
+
+            function deletePostFunc() {
+                let deletePostForm = document.querySelector('#deletePostForm');
+
+                if ([[${post.userNo.userNo}]] != 2) {
+                    let deleteConfirm = confirm("Delete this post?");
+                    if (([[${session.userId}]] == [[${post.userNo.userNo}]] || [[${session.userId}]] == 1) && deleteConfirm) {
+                        deletePostForm.submit();
+                    } else {
+                        alert("You are not authorized");
+                    }
+                } else {
+                    let pwCheck = prompt("Enter the password");
+                    if (pwCheck == [[${post.pw}]]) {
+                        deletePostForm.submit();
+                    } else {
+                        alert("You are not authorized");
+                    }
+                }
+            }
+
+            function newCommentFuncM() {
+                let newCommentForm = document.querySelector('#newCommentForm');
+                let content = document.querySelector('#newCommentContent').value;
+
+                if (content.length < 5) {
+                    alert("Please check your comment form");
+                } else {
+                    document.querySelector('#name').value = [[${name}]];
+                    document.querySelector('#pw').value = "0000";
+                    document.querySelector('#content').value = content;
+                    document.querySelector('#userNo').value = [[${userNo}]];
+
+                    newCommentForm.submit();
+                }
+            }
+
+            function newCommentFuncNm() {
+                let newCommentForm = document.querySelector('#newCommentForm');
+                let name = document.querySelector('#newCommentNameNm').value;
+                let pw = document.querySelector('#newCommentPassword').value;
+                let content = document.querySelector('#newCommentContent').value;
+
+                if (name.length < 3 || pw.length < 4 || content.length < 5) {
+                    alert("Please check your comment form");
+                } else {
+                    document.querySelector('#name').value = name;
+                    document.querySelector('#pw').value = pw;
+                    document.querySelector('#content').value = content;
+                    document.querySelector('#userNo').value = [[${userNo}]];
+
+                    newCommentForm.submit();
+                }
+            }
+
+            function deleteCommentFunc(commentNo, userNo, pw) {
+                let deleteCommentForm = document.querySelector('#deleteCommentForm');
+                document.querySelector('#commentNo').value = commentNo;
+
+                if (userNo > 2) {
+                    let deleteConfirm = confirm("Delete this comment?");
+                    if ([[${session.userId}]] == userNo && deleteConfirm) {
+                        deleteCommentForm.submit();
+                    } else {
+                        alert("You are not authorized");
+                    }
+                } else if (userNo == 2) {
+                    let pwCheck = prompt("Enter the password");
+                    if (pwCheck == pw) {
+                        deleteCommentForm.submit();
+                    } else {
+                        alert("You are not authorized");
+                    }
+                } else {
+                    alert("You are not authorized");
+                }
+            }
+
+            document.querySelector('#editPostButton').addEventListener('click', editPostFunc);
+            document.querySelector('#deletePostButton').addEventListener('click', deletePostFunc);
+
+            if ([[${userNo}]] != 2) {
+                document.querySelector('#newCommentButton').addEventListener('click', newCommentFuncM);
+            } else if ([[${userNo}]] == 2) {
+                document.querySelector('#newCommentButton').addEventListener('click', newCommentFuncNm);
+            }
+        </script>
+    </body>
+</html>
