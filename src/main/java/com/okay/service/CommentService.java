@@ -2,10 +2,12 @@ package com.okay.service;
 
 import com.okay.domain.entity.Comment;
 import com.okay.domain.entity.Post;
+import com.okay.domain.entity.User;
 import com.okay.domain.repository.CommentRepository;
 import com.okay.dto.CommentDto;
 import com.okay.dto.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,4 +119,16 @@ public class CommentService extends Service{
 
         return commentList;
     }
+
+    @Transactional
+    public Comment deletepost(Post postNo){
+        Comment comment = commentRepository.deleteCommentByPostNo(postNo);
+        return comment;
+    }
+
+    public List<Comment> commentsize(){
+        List<Comment> list = commentRepository.findAllBy();
+        return list;
+    }
+
 }

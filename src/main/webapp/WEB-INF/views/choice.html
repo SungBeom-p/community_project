@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
+    <style>
+        ul{
+            list-style:none;
+        }
+        li{
+            text-align: center
+        }
+        a {
+            text-decoration:none;
+        }
+        /*   nav ul {
+               list-style: none;
+               border-top: 1px solid #23698b;
+               border-bottom: 1px solid #23698b;
+               text-align: center;
+               background-color: #232f32;
+           } */
+
+        nav ul li {
+            display: inline;
+            letter-spacing: .3em;
+            margin-left: 2em;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            line-height: 3em;
+        }
+        #sessiontag {
+            position: absolute;
+            top: 0px;
+            right: 35px;
+        }
+        #sessiontag1{
+            position: absolute;
+            top: 0px;
+            right: 35px;
+
+        }
+        #sessiontag1>a{
+            color: #cdcdcd;
+        }
+
+        #sessiontag>a{
+            color: #cdcdcd;
+        }
+        #okaytitle{
+            color:#cdcdcd;
+        }
+        #headertop{
+            background-color: #131921;
+        }
+        #nav2 {
+            background-color:#232f32;
+
+        }
+        #nav2 li>a{
+            display: inline;
+            color: white;
+        }
+        @import url(https://fonts.googleapis.com/css?family=Roboto:400,700);
+
+
+        strong{
+            color: #58ba83;
+        }
+        .transition{
+            transition: all .3s ease-out;
+        }
+        .heading{
+            text-align: center;
+            font-size:0.8em;
+
+        }
+        .center-align{
+            width: 300px;
+            height: 80px;
+            float: left;
+            left: 50%;
+            top: 50%;
+            display: table;
+            margin-top: 3%;
+            margin-left: 42%;
+        }
+
+        input[type="radio"]{
+            visibility: hidden;
+            height: 0;
+            width: 0;
+
+        }
+
+        label {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            cursor: pointer;
+            background-color: #919191;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition:none;
+        }
+        input[type="radio"]:checked + label{
+            background-color:#297BA3;
+        }
+        .img{
+            float:left;
+            width: 10%;
+        }
+        #img1{
+            margin-top: 1%;
+            margin-left: 35%;
+            margin-right: 5%;
+        }
+        #img2{
+            margin-top: 0%;
+            margin-left: 5%;
+            margin-right: 35%;
+        }
+        .opnion1{
+            float : left;
+            margin-left: 34%;
+            margin-right: 5%;
+        }
+        .opnion2{
+            float : left;
+            margin-left: 5%;
+            margin-right: 15%;
+
+        }
+        button{
+            background:#36A2D7;
+            color:#fff;
+            border:none;
+            position:relative;
+            height:60px;
+            font-size:1.6em;
+            padding:0 2em;
+            cursor:pointer;
+            transition:800ms ease all;
+            outline:none;
+        }
+        button:hover{
+            background:#fff;
+            color:#36A2D7;
+        }
+        button:before,button:after{
+            content:'';
+            position:absolute;
+            top:0;
+            right:0;
+            height:2px;
+            width:0;
+            background: #36A2D7;
+            transition:400ms ease all;
+        }
+        button:after{
+            right:inherit;
+            top:inherit;
+            left:0;
+            bottom:0;
+        }
+        button:hover:before,button:hover:after{
+            width:100%;
+            transition:800ms ease all;
+        }
+        .button{
+            margin-top: 3%;
+            float: left;
+            margin-left: 42%;
+            width: 300px;
+
+        }
+        h1{
+            margin-top: 2%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            text-align: center;
+            font-weight: bold;
+        }
+        .agora{
+            margin-top: 20%;
+            width: 60%;
+            margin-left: 20%;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+<header id="container">
+    <nav class="navbar navbar-expand-lg navbar-light" id="headertop">
+        <a class="navbar-brand" id="okaytitle" href="/">okaycommunity</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li th:if="${session.userId != 2 && session.userId != null}" class="nav-item active" id ="sessiontag1">
+                    <a class="nav-link" href="/login" >LOG OUT</a>
+                </li>
+                <li th:unless="${session.userId != 2 && session.userId != null}" class="nav-item active" id ="sessiontag">
+                    <a class="nav-link" href="/login" >LOGIN</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="subcontainer">
+        <ul id="nav2" class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" href="/news">공지 사항</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/service">고객 센터</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/gallery">전체글</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/gallery">중고거래</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/gallery">모임/모집</a>
+            </li>
+            <li class = "nav-item" th:if="${session.userId != 2 && session.userId != null}">
+                <a th:href="@{/mypage(request=${session.userId})}" class="nav-link">MY PAGE</a>
+            </li>
+        </ul>
+    </div>
+</header>
+<article>
+    <form action="survey" method="POST">
+        <h1>투표 시스템 </h1>
+        <hr>
+        <div class="content">
+            <img class="img" id="img1" src="./img/favicon.ico" /><br>
+            <img class="img" id="img2" src="./img/favicon.ico" /><br><br><br><br><br><br><br><br><br>
+            <div class="opnion">
+                <h3 class="opnion1">탕수육은 부먹파!</h3>
+                <h3 class="opnion2">탕수육은 찍먹파!</h3>
+            </div>
+            <div class="center-align">
+                <input type="radio" name="result" id="size_1" value="true" checked/>
+                <label for="size_1">부먹</label>
+                <input type="radio" name="result" id="size_2" value="false" />
+                <label for="size_2">찍먹</label>
+            </div>
+        </div>
+        <button class="button" type="submit">Submit !</button>
+    </form>
+</article>
+
+<div class="agora">
+    <!-- Reply Form {s} -->
+    <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
+        <form name="form" id="form" role="form" modelAttribute="replyVO" method="post">
+            <div class="row">
+                <div class="col-sm-10">
+                    <textarea path="content" id="content" class="form-control" rows="3" placeholder="댓글을 입력해 주세요"></textarea>
+                </div>
+                <div class="col-sm-2">
+                    <input class="form-control" id="reg_id" readonly  th:value="${name}"/>
+                    <input th:if="${session.userId ==1 || session.userId > 2 }" type="button" class="btn btn-sm btn-primary" id="btnReplySave" value="저 장" style="width: 100%; margin-top: 10px"/>
+                </div>
+            </div>
+            </form>
+    </div>
+    <!-- Reply List {s}-->
+    <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
+        <h6 class="border-bottom pb-2 mb-0">Reply list</h6>
+        <div id="replyList"></div>
+        <table style='margin-top: 5px;' th:each="comment:${comment}">
+            <tr style='border-bottom: #B7B7B7 1px double ;'>
+                <td th:text="${comment.content}" style='width: 900px;height: 50px;margin-right: 2px'>
+                    </td><td th:text="${comment.regDate}" style='width: 200px; border-bottom: #B7B7B7 1px double; width: 50px'></td>
+                <td th:text="${comment.name}" style='width: 100px'></td>
+                </tr>
+        </table>
+    </div>
+</div>
+
+    <!-- Reply List {e}-->
+<script th:inline="javascript">
+    $(document).ready(function () {
+    start.init();
+        $("#btnReplySave").click(function(event) {
+            let content = $("#content").val();
+            let user = $("#reg_id").val();
+            let regDate = new Date();
+            let today = regDate.toLocaleDateString();
+            let cnt = 1;
+            let id = 3;
+
+            let testString = window.location.href;
+            let regex = /[^0-9]/g;// 숫자가 아닌 문자열을 선택하는 정규식
+            let testm = testString.replace(regex, "");	// 원래 문자열에서 숫자가 아닌 모든 문자열을 빈 문자로 변경
+            let result = testm.slice(4,testm.length);
+            console.log(result);
+            if(cnt%2===0){
+                alert("댓글은 1분당 한개만 작성할 수 있습니다.");
+                setTimeout(function (){
+                    cnt++;
+                },3000);
+            }
+            let obj = {
+                "id" : id,
+                "surveyNo" :result,
+                "name": user,
+                "content": content,
+                "regDate": today
+            }
+            $.ajax({ // 댓글 Server 저장
+                url: "/choice",
+                type: "post",
+                data: obj,
+///                dataType:'json',
+                success: function(id,content,today){
+                    alert("작성 완료");
+                    location.reload();
+            },
+                error: function(request, status, error){
+                    alert(request+"|"+status+"|"+error);
+                }
+
+            });
+            });
+        })
+    let testString = window.location.href;
+    let regex = /[^0-9]/g;// 숫자가 아닌 문자열을 선택하는 정규식
+    let testm = testString.replace(regex, "");	// 원래 문자열에서 숫자가 아닌 모든 문자열을 빈 문자로 변경
+    let result = testm.slice(4,testm.length);
+    var start = {
+        param: {
+            surveyNo: result,
+            curPage: 1,
+        },
+
+        init: function () {
+ //           this.testData();
+            this.testEvent();
+        },
+//        testData: function () {
+//            this.setListItems("${firstData}"); // 첫 진입시 데이터 셋팅
+//        },
+        testEvent: function () {
+            // 무한 스크롤
+            $(window).scroll(function () {
+                // 맨 밑으로 스크롤이 갔을경우 if문을 탑니다.
+                if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                    start.param.curPage++; // 현재 페이지에서 +1 처리.
+
+                    start.testAjax(); //ajax 호출
+                }
+            });
+        },
+        // 무한 스크롤 ajax 요청
+        testAjax: function () {
+            $.ajax({
+                url: '/choice',
+                type: 'get',
+                data: start.param, // 다음 페이지 번호와 페이지 사이즈를 가지고 갑니다.
+            //    dataType: 'json',
+                contentType: "application/json",
+                success: function() {
+                    console.log("success");
+                    console.log(start.param.curPage);
+                  location.href="/choice?surveyNo="+result+"&&page="+start.param.curPage;
+                },
+                error:function() {
+                    console.log("fail");
+                }
+            })
+        }
+    };
+
+
+
+
+</script>
+</body>
+</html>

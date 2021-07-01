@@ -4,9 +4,7 @@ import com.okay.domain.entity.Post;
 import com.okay.domain.entity.User;
 import com.okay.dto.PostDto;
 import com.okay.dto.UserDto;
-import com.okay.service.CommentService;
-import com.okay.service.PostService;
-import com.okay.service.UserService;
+import com.okay.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
@@ -29,6 +27,8 @@ public class UserController extends Exception{
     PostService postService;
     @Autowired
     CommentService commentService;
+    @Autowired
+    SurveyCommentService surveyCommentService;
 
 
     @GetMapping("/login")
@@ -125,7 +125,7 @@ public class UserController extends Exception{
         if(userNo != 1){
             return "gallery";
         }
-
+        model.addAttribute("comment",commentService.commentsize().size() +surveyCommentService.selectsize().size());
         model.addAttribute("post", postService.selectAll().size());
         model.addAttribute("count", userService.allUser().size());
         model.addAttribute("user", userService.allUser());

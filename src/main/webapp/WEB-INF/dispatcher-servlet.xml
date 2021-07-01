@@ -6,6 +6,9 @@
        xmlns:beans="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <!-- Root Context: defines shared resources visible to all other web components -->
+
+
     <mvc:annotation-driven />
     <context:component-scan base-package="com.okay.controller" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -39,9 +42,10 @@
         <beans:property name="templateEngine" ref="templateEngine" />
     </beans:bean>
 
-<!--    <mvc:default-servlet-handler/>-->
+   <mvc:default-servlet-handler/>
 <!--    <mvc:resources location="/WEB-INF/views/" mapping="/views/**" />-->
 <!--    <mvc:resources mapping="/static/**" location="/static/" />-->
+
     <mvc:resources mapping="/resources/**" location="/resources/" />
     <mvc:resources location="/js/" mapping="/js/**"/>
     <mvc:resources location="/css/" mapping="/css/**"/>

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -33,13 +34,24 @@ public class PostController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/board")
-    public String board(Model model, @RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="size", defaultValue="20") int size, SearchDto searchDto) {
+
+    @GetMapping("/search")
+    public String search(Model model, @RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="size", defaultValue="20") int size, SearchDto searchDto) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("postNo").descending()); // 0부터 담기기때문에..-1 requestparam->페이징 받아줌
-        Page<Post> postList = postService.getPostList(pageable, searchDto);
+        Page<Post> searchList = postService.getSearchList(pageable, searchDto);
+        model.addAttribute("searchList", searchList);
+        return "search";
+    }
+
+    @GetMapping("/board")
+    public String board(Model model, @RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="size", defaultValue="20") int size, String category, SearchDto searchDto) {
+        category = "off";
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("postNo").descending()); // 0부터 담기기때문에..-1 requestparam->페이징 받아줌
+        Page<Post> postList = postService.getPostList(pageable, category, searchDto);
         model.addAttribute("postList", postList);
         return "board";
     }
+
     @GetMapping("/gallery")
     public String gallarylist(Model model) {
         System.out.println("컨트롤러 출력되나??");
@@ -93,12 +105,74 @@ public class PostController {
         return "write";
     }
     @PostMapping("/write")
-    public String postWrite(String title, String name, String password ,String content, String category){
-//        PostDto postDto = PostDto.builder()
-//                .postNo()
-//                .userNo()
-//                .category()
-//                .build();
-        return "";
+    public String postWrite(HttpServletRequest request, String title, String name, String userPw ,String content, String category){
+        if(category ==null){
+            category="off";
+        }
+
+        HttpSession session = userService.sessionAutowired(request);
+        Long id = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        System.out.println("@@@@@@@@@@@@@@");
+        System.out.println(id);
+        User user = userService.selectOne(id);
+
+        PostDto postDto = PostDto.builder()
+                .postNo(3L)
+                .userNo(user)
+                .category(category)
+                .title(title)
+                .name(name)
+                .pw(userPw)
+                .content(content)
+                .modDate(LocalDateTime.now())
+                .regDate(LocalDateTime.now())
+                .views(0L)
+                .build();
+        postService.create(postDto);
+
+        return "post";
     }
+
+    @GetMapping("service")
+    public String serviceList(Model model, HttpServletRequest request){
+        model.addAttribute("service",postService.categoryservice("고객센터"));
+        return"serviceboard";
+    }
+
+    @GetMapping("question")
+    public String getquestion(HttpServletRequest request,Model model){
+        HttpSession session = request.getSession();
+        Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        User user = userService.selectOne(userNo);
+        model.addAttribute("user", user);
+        return"question";
+    }
+    @GetMapping("nonquestion")
+    public String nongetquestion(){
+        return"question";
+    }
+    @PostMapping("question")
+    public String postquestion(HttpServletRequest request,String name, String title, String content){
+        HttpSession session = request.getSession();
+        String cate ="고객센터";
+        Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        User user = userService.selectOne(userNo);
+        PostDto dto = new PostDto();
+            dto = PostDto.builder()
+                    .postNo(3L)
+                    .userNo(user)
+                    .category(cate)
+                    .content(content)
+                    .name(name)
+                    .title(title)
+                    .pw(user.getUserPw())
+                    .regDate(LocalDateTime.now())
+                    .modDate(LocalDateTime.now())
+                    .views(0L)
+                    .build();
+        postService.create(dto);
+        return"redirect:/service";
+    }
+
+
 }

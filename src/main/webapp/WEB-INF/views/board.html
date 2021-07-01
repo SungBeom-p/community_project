@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>게시글 목록</title>
+    <title>자유게시판</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet"
@@ -13,7 +13,7 @@
 </head>
 <body>
 <header th:insert="/header.html"></header>
-<h2>전체게시판</h2>
+<h2>자유게시판</h2>
 <!--    <div class="size">-->
 <!--        <select th:onchange="'window.location.href = \'' + @{/board?size=} + '\' + this.value ' ">-->
 <!--            <option th:each="size : ${postList.size}" th:text=${size}></option>-->
@@ -22,10 +22,9 @@
 <div class="searchForm">
     <form name="searchForm" id="searchForm" th:object="${searchDto}" action="#">
         <select name="searchFilter" th:field="*{searchFilter}">
-            <option value="title">제목</option>
-            <option value="content">내용</option>
-            <option value="name">작성자</option>
-            <option value="all">전체</option>
+            <option value="post_title">제목</option>
+            <option value="post_content">내용</option>
+            <option value="post_name">작성자</option>
         </select>
         <input type="text" id="value" name="searchValue" th:field="*{searchValue}"/>
         <input type="button" id="searchButton" value="검색"/>
@@ -34,7 +33,7 @@
 <div class="new">
     <form>
         <input type="hidden" name="func" value="new">
-        <input type="button" value="글쓰기"  onclick = "location.href = '/edit' ">
+        <input type="button" value="글쓰기" id="writeButton" onclick = "location.href = '/write' ">
     </form>
 </div>
 <table>
@@ -48,7 +47,7 @@
     <tr th:each="post : ${postList}">
         <td th:text="${post.postNo}"/>
         <td>
-                    <span><a th:href="@{'/post?postNo=' + ${post.postNo}}">
+                    <span><a th:href="@{'/post/' + ${post.postNo}}">
                         <span th:text="${post.title}"></span></a>
                     </span>
         </td>
@@ -88,10 +87,9 @@
 </div>
 <form name="searchForm" id="searchForm2" th:object="${searchDto}" action="#">
     <select name="searchFilter" th:field="*{searchFilter}">
-        <option value="title">제목</option>
-        <option value="content">내용</option>
-        <option value="name">작성자</option>
-        <option value="all">전체</option>
+        <option value="post_title">제목</option>
+        <option value="post_content">내용</option>
+        <option value="post_name">작성자</option>
     </select>
     <input type="text" id="value2" name="searchValue" th:field="*{searchValue}"/>
     <input type="button" id="searchButton2" value="검색"/>

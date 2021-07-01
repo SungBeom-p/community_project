@@ -11,17 +11,121 @@
           crossorigin="anonymous">
     <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
     <script src="https://kit.fontawesome.com/afd6aa68df.js" crossorigin="anonymous"></script>
-    <link th:href="@{./css/main.css}" rel="stylesheet" type="text/css"/>
+    <!--    <link th:href="@{./css/main.css}" rel="stylesheet" type="text/css"/>-->
+    <style>
+
+        ul{
+            list-style:none;
+        }
+        li{
+            text-align: center
+        }
+        a {
+            text-decoration:none;
+        }
+        /*   nav ul {
+               list-style: none;
+               border-top: 1px solid #23698b;
+               border-bottom: 1px solid #23698b;
+               text-align: center;
+               background-color: #232f32;
+           } */
+
+        nav ul li {
+            display: inline;
+            letter-spacing: .3em;
+            margin-left: 2em;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            line-height: 3em;
+        }
+        #sessiontag {
+            position: absolute;
+            top: 0px;
+            right: 35px;
+        }
+        #sessiontag1{
+            position: absolute;
+            top: 0px;
+            right: 35px;
+
+        }
+        #sessiontag1>a{
+            color: #cdcdcd;
+        }
+
+        #sessiontag>a{
+            color: #cdcdcd;
+        }
+        #okaytitle{
+            color:#cdcdcd;
+        }
+        #headertop{
+            background-color: #131921;
+        }
+        #nav2 {
+            background-color:#232f32;
+
+        }
+        #nav2 li>a{
+            display: inline;
+            color: white;
+        }
+        body{
+            margin: 0;
+            padding: 0;
+            background-color: #c1dad6 !important;
+        }
+        .box{
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .input {
+            padding: 10px;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 5px solid #7c7c7c;
+            border-radius: 50px;
+            box-sizing: border-box;
+            font-size: 20px;
+            font-weight: bold;
+            color: #7c7c7c;
+            transition: .5s;
+        }
+        .box:hover input{
+            width: 350px;
+            background: none;
+            border-radius: 50px;
+        }
+        i{
+            position: absolute;
+            top: 50%;
+            right: 25px;
+            transform: translate(-50%,-50%);
+            font-size: 15px;
+            color: #87cbc3;
+            transition: .2s;
+        }
+        .box:hover i {
+            opacity: 0;
+            z-index: -1;
+        }
+        #searchFilter{
+            display: none;
+        }
+
+    </style>
 </head>
-<style>
-    body{
-        background-color: #C4D6Cf !important;
-    }
-</style>
 <body>
 <header th:insert="/header.html"></header>
 <div class="box">
-    <form name="search" id="search" th:object="${searchDto}" action="/board#">
+    <form name="search" id="search" th:object="${searchDto}" action="/search">
         <select name="searchFilter" id="searchFilter">
             <option value="all">전체</option>
         </select>

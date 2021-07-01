@@ -3,13 +3,10 @@ package com.okay.service;
 import com.okay.domain.entity.User;
 import com.okay.domain.repository.UserRepository;
 import com.okay.dto.UserDto;
-import com.sun.jdi.LongValue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

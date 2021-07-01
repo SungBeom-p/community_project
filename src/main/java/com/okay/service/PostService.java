@@ -8,6 +8,7 @@ import com.okay.dto.SearchDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,8 @@ public class PostService extends Service{
         postRepository.save(post);
     }
 
-    public void remove(PostDto postDto){
+    @Transactional
+    public void removed(PostDto postDto){
         postRepository.deleteById(postDto.getPostNo());
     }
 
@@ -53,7 +55,6 @@ public class PostService extends Service{
         });
         return result;
     }
-
     public List<Post> selectAll(Long id){
         return postRepository.findAll();
     }
@@ -74,25 +75,75 @@ public class PostService extends Service{
         }
         return result;
     }
+    //메인페이지에서의 전체 검색
+    public Page<Post> getSearchList(Pageable pageable, SearchDto searchDto) {
+        Page<Post> searchList = null;
+        Page<Post> nullSearchList = null;
+        switch (searchDto.getSearchFilter()) {
+            case "all":
+                searchList = postRepository.findAllByTitleContainingOrContentContainingOrNameContaining(searchDto.getSearchValue(), searchDto.getSearchValue(), searchDto.getSearchValue(), pageable);
+                break;
+        }
+        if(searchList.isEmpty()) return nullSearchList; //검색 결과가 없을 경우 빈 객체 반환
 
-    public Page<Post> getPostList(Pageable pageable, SearchDto searchDto) { // 글 목록 조회
+        return searchList;
+    }
+
+    public Page<Post> getPostList(Pageable pageable, String category, SearchDto searchDto) {
+        // 자유글 목록 조회
         Page<Post> postList = null;
         Page<Post> nullPostList = null;
         switch (searchDto.getSearchFilter()) {
-            case "title" : postList = postRepository.findAllByTitleContaining(searchDto.getSearchValue(), pageable); //제목으로 검색하는 경우
+            case "post_title" : postList = postRepository.findAllByTitleContainingAndCategory(searchDto.getSearchValue(), "off", pageable); //제목으로 검색하는 경우
                 break;
-            case "content" : postList = postRepository.findAllByContentContaining(searchDto.getSearchValue(), pageable); //내용으로 검색하는 경우
+            case "post_content" : postList = postRepository.findAllByContentContainingAndCategory(searchDto.getSearchValue(), "off", pageable); //내용으로 검색하는 경우
                 break;
-            case "name" : postList = postRepository.findAllByNameContaining(searchDto.getSearchValue(), pageable); //작성자로 검색하는 경우
+            case "post_name" : postList = postRepository.findAllByNameContainingAndCategory(searchDto.getSearchValue(), "off", pageable); //작성자로 검색하는 경우
                 break;
-            case "all" : postList = postRepository.findAllByTitleContainingOrContentContainingOrNameContaining(searchDto.getSearchValue(), searchDto.getSearchValue(), searchDto.getSearchValue(), pageable); //전체 검색
-                break;
-            default : postList = postRepository.findAll(pageable); //기본값 전체글 목록 (Paging)
+            default : postList = postRepository.findAllByCategory("off", pageable); //기본값 전체글 목록 (Paging)
                 break;
         }
         if(postList.isEmpty()) return nullPostList; //검색 결과가 없을 경우 빈 객체 반환
 
         return postList;
+    }
+
+    public Page<Post> getNoticeList(Pageable pageable, String category, SearchDto searchDto) {
+        // 공지글 목록 조회
+        Page<Post> noticeList = null;
+        Page<Post> nullNoticeList = null;
+        switch (searchDto.getSearchFilter()) {
+            case "notice_title" : noticeList = postRepository.findAllByTitleContainingAndCategory(searchDto.getSearchValue(), "notice", pageable); //제목으로 검색하는 경우
+                break;
+            case "notice_content" : noticeList = postRepository.findAllByContentContainingAndCategory(searchDto.getSearchValue(), "notice", pageable); //내용으로 검색하는 경우
+                break;
+            case "notice_name" : noticeList = postRepository.findAllByNameContainingAndCategory(searchDto.getSearchValue(), "notice", pageable); //작성자로 검색하는 경우
+                break;
+            default : noticeList = postRepository.findAllByCategory("notice", pageable); //기본값 전체글 목록 (Paging)
+                break;
+        }
+        if(noticeList.isEmpty()) return nullNoticeList; //검색 결과가 없을 경우 빈 객체 반환
+
+        return noticeList;
+    }
+
+    public Page<Post> getClientList(Pageable pageable, String category, SearchDto searchDto) {
+        // 고객센터 목록 조회
+        Page<Post> clientList = null;
+        Page<Post> nullClientList = null;
+        switch (searchDto.getSearchFilter()) {
+            case "client_title" : clientList = postRepository.findAllByTitleContainingAndCategory(searchDto.getSearchValue(), "client", pageable); //제목으로 검색하는 경우
+                break;
+            case "client_content" : clientList = postRepository.findAllByContentContainingAndCategory(searchDto.getSearchValue(), "client", pageable); //내용으로 검색하는 경우
+                break;
+            case "client_name" : clientList = postRepository.findAllByNameContainingAndCategory(searchDto.getSearchValue(), "client", pageable); //작성자로 검색하는 경우
+                break;
+            default : clientList = postRepository.findAllByCategory("client", pageable); //기본값 전체글 목록 (Paging)
+                break;
+        }
+        if(clientList.isEmpty()) return nullClientList; //검색 결과가 없을 경우 빈 객체 반환
+
+        return clientList;
     }
     public List<Post> postCnt(){
 
@@ -121,5 +172,16 @@ public class PostService extends Service{
         List<Post> updatepost = postRepository.findAllByUserNo(userno);
 
         return updatepost;
+    }
+
+    public void create(Post post){
+
+        postRepository.save(post);
+    }
+    //postcategori가 고객센터인 리스트
+    public List<Post> categoryservice(String category){
+        List<Post> list = postRepository.findAllByCategory(category);
+
+        return list;
     }
 }
