@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,14 +24,27 @@ public class SurveyCommentService {
         surveyCommentRepository.save(surveyComment);
     }
 
-    public List<SurveyComment> selectAll(Survey surveyNo,Pageable pageable){
-        List<SurveyComment> list = surveyCommentRepository.findAllBySurveyNoOrderByIdDesc(surveyNo,pageable);
+    public List<SurveyComment> selectAll(Survey surveyNo){
+        List<SurveyComment> list = surveyCommentRepository.findAllBySurveyNoOrderByIdDesc(surveyNo);
         return list;
     }
+
+    public Page<SurveyComment> pagesurveycomment(Survey surveyNo,Pageable pageable){
+        Page<SurveyComment> surveyCommentPage = surveyCommentRepository.findAllBySurveyNo(surveyNo,pageable);
+        return surveyCommentPage;
+    }
+
 
     public List<SurveyComment> selectsize(){
         List<SurveyComment> list = surveyCommentRepository.findAllBy();
         return list;
+    }
+
+    public Long max(){
+
+        BigDecimal max = surveyCommentRepository.max();
+        Long no = Long.valueOf(String.valueOf(max));
+        return no;
     }
 
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -105,6 +106,14 @@ public class UserService extends Service {
     public User getUser (Long userNo) {
         User user = userRepository.findByUserNo(userNo);
         return user;
+    }
+
+
+    public Long max(){
+
+        BigDecimal max = userRepository.max();
+        Long no = Long.valueOf(String.valueOf(max));
+        return no;
     }
 
 

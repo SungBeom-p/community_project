@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,8 @@ public class SurveyService extends Service {
         return result.get();
     }
 
+
+
     public Page<Survey> getSurveyList(Pageable pageable, SearchDto searchDto) { // 글 목록 조회
         Page<Survey> surveyList = null;
         Page<Survey> nullStoreList = null;
@@ -66,6 +69,17 @@ public class SurveyService extends Service {
         SurveyDto surveyDto = new SurveyDto();
         surveyDto = surveyDto.changeSurveyDto(surveyEntity);
         return surveyDto;
+    }
+    public List<Survey> surveyListfive(){
+        List<Survey> surveyList = surveyRepository.findFirst5ByOrderByViewsDesc();
+        return surveyList;
+    }
+
+    public Long max(){
+
+        BigDecimal max = surveyRepository.max();
+        Long no = Long.valueOf(String.valueOf(max));
+        return no;
     }
 
 

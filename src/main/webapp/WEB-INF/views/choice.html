@@ -113,7 +113,7 @@
             color: white;
             padding: 5px 10px;
             border-radius: 3px;
-            transition:none;
+        .transition;
         }
         input[type="radio"]:checked + label{
             background-color:#297BA3;
@@ -224,9 +224,6 @@
                 <a class="nav-link active" href="/news">공지 사항</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/service">고객 센터</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link active" href="/gallery">전체글</a>
             </li>
             <li class="nav-item">
@@ -243,9 +240,10 @@
 </header>
 <article>
     <form action="survey" method="POST">
-        <h1>투표 시스템 </h1>
+        <h1>투표 시스템</h1>
         <hr>
         <div class="content">
+
             <img class="img" id="img1" src="./img/favicon.ico" /><br>
             <img class="img" id="img2" src="./img/favicon.ico" /><br><br><br><br><br><br><br><br><br>
             <div class="opnion">
@@ -264,127 +262,107 @@
 </article>
 
 <div class="agora">
+
+
     <!-- Reply Form {s} -->
+
     <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
+
         <form name="form" id="form" role="form" modelAttribute="replyVO" method="post">
+
+
+
             <div class="row">
+
                 <div class="col-sm-10">
+
                     <textarea path="content" id="content" class="form-control" rows="3" placeholder="댓글을 입력해 주세요"></textarea>
+
                 </div>
+
                 <div class="col-sm-2">
-                    <input class="form-control" id="reg_id" readonly  th:value="${name}"/>
-                    <input th:if="${session.userId ==1 || session.userId > 2 }" type="button" class="btn btn-sm btn-primary" id="btnReplySave" value="저 장" style="width: 100%; margin-top: 10px"/>
+
+                    <input class="form-control" id="reg_id" readonly  th:value="${name}"></input>
+                    <th:block th:if="${session.userId==1 || session.userId>2}">
+                        <button type="button" class="btn btn-sm btn-primary" id="btnReplySave" style="width: 100%; margin-top: 10px"> 저 장 </button>
+                    </th:block>
                 </div>
             </div>
-            </form>
+        </form>
     </div>
     <!-- Reply List {s}-->
     <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
         <h6 class="border-bottom pb-2 mb-0">Reply list</h6>
         <div id="replyList"></div>
-        <table style='margin-top: 5px;' th:each="comment:${comment}">
-            <tr style='border-bottom: #B7B7B7 1px double ;'>
-                <td th:text="${comment.content}" style='width: 900px;height: 50px;margin-right: 2px'>
-                    </td><td th:text="${comment.regDate}" style='width: 200px; border-bottom: #B7B7B7 1px double; width: 50px'></td>
-                <td th:text="${comment.name}" style='width: 100px'></td>
-                </tr>
-        </table>
     </div>
-</div>
-
     <!-- Reply List {e}-->
+</div>
 <script th:inline="javascript">
     $(document).ready(function () {
-    start.init();
-        $("#btnReplySave").click(function(event) {
+        let list = [[${comment}]];
+        console.log(list);
+        let temp = [];
+
+        $("#btnReplySave").click(function (event) {
             let content = $("#content").val();
             let user = $("#reg_id").val();
             let regDate = new Date();
             let today = regDate.toLocaleDateString();
             let cnt = 1;
-            let id = 3;
 
             let testString = window.location.href;
             let regex = /[^0-9]/g;// 숫자가 아닌 문자열을 선택하는 정규식
-            let testm = testString.replace(regex, "");	// 원래 문자열에서 숫자가 아닌 모든 문자열을 빈 문자로 변경
-            let result = testm.slice(4,testm.length);
-            console.log(result);
-            if(cnt%2===0){
+            let testm = testString.replace(regex, "");   // 원래 문자열에서 숫자가 아닌 모든 문자열을 빈 문자로 변경
+            let result = testm.slice(4, testm.length);
+
+
+            if (cnt % 2 === 0) {
                 alert("댓글은 1분당 한개만 작성할 수 있습니다.");
-                setTimeout(function (){
+                setTimeout(function () {
                     cnt++;
-                },3000);
+                }, 3000);
             }
             let obj = {
-                "id" : id,
-                "surveyNo" :result,
+                "surveyNo": result,
                 "name": user,
                 "content": content,
                 "regDate": today
             }
             $.ajax({ // 댓글 Server 저장
                 url: "/choice",
-                type: "post",
+                type: "POST",
                 data: obj,
-///                dataType:'json',
-                success: function(id,content,today){
-                    alert("작성 완료");
+                //    dataType: 'json',
+                success: function (content, user, today) {
                     location.reload();
-            },
-                error: function(request, status, error){
-                    alert(request+"|"+status+"|"+error);
+                },
+                error: function (request, status, error) {
+                    alert(request + "|" + status + "|" + error);
                 }
 
-            });
             });
         })
-    let testString = window.location.href;
-    let regex = /[^0-9]/g;// 숫자가 아닌 문자열을 선택하는 정규식
-    let testm = testString.replace(regex, "");	// 원래 문자열에서 숫자가 아닌 모든 문자열을 빈 문자로 변경
-    let result = testm.slice(4,testm.length);
-    var start = {
-        param: {
-            surveyNo: result,
-            curPage: 1,
-        },
+        $(window).scroll(function () {   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
+            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+                list.forEach(i => {
+                    temp.push(i);
+                    $("#replyList").append("<table style='margin-top: 5px;'> " +
+                        "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
+                        "<td style='width: 900px;height: 50px;margin-right: 2px'>" + i.content +
+                        "</td><td style='width: 200px;border-bottom: #B7B7B7 1px double; width: 50px'>" + i.regDate + "</td>" +
+                        "<td style='width: 100px'>" + i.name + "</td>" +
+                        "</tr> " +
+                        "</table>");
+                    if (i == 10 || i == 20 || i == 30) {
+                        i.slice(0, temp.length)
+                    }
 
-        init: function () {
- //           this.testData();
-            this.testEvent();
-        },
-//        testData: function () {
-//            this.setListItems("${firstData}"); // 첫 진입시 데이터 셋팅
-//        },
-        testEvent: function () {
-            // 무한 스크롤
-            $(window).scroll(function () {
-                // 맨 밑으로 스크롤이 갔을경우 if문을 탑니다.
-                if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                    start.param.curPage++; // 현재 페이지에서 +1 처리.
 
-                    start.testAjax(); //ajax 호출
-                }
-            });
-        },
-        // 무한 스크롤 ajax 요청
-        testAjax: function () {
-            $.ajax({
-                url: '/choice',
-                type: 'get',
-                data: start.param, // 다음 페이지 번호와 페이지 사이즈를 가지고 갑니다.
-            //    dataType: 'json',
-                contentType: "application/json",
-                success: function() {
-                    console.log("success");
-                    console.log(start.param.curPage);
-                  location.href="/choice?surveyNo="+result+"&&page="+start.param.curPage;
-                },
-                error:function() {
-                    console.log("fail");
-                }
-            })
-        }
-    };
+                })
+            }
+        })
+
+    })
 
 
 

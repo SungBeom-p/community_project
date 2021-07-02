@@ -5,6 +5,7 @@ import com.okay.domain.entity.Survey;
 import com.okay.domain.entity.User;
 import lombok.*;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -24,6 +25,8 @@ public class SurveyDto implements SurveyAdapt {
     private Long result1;
     private Long result2;
     private String name;
+    private String option1; // 의견 1
+    private String option2; // 의견 2
     private String pw;
     private String path;
     private String title;
@@ -41,6 +44,8 @@ public class SurveyDto implements SurveyAdapt {
                 .size1(surveyDto.getSize2())
                 .size2(surveyDto.getSize2())
                 .path(surveyDto.getPath())
+                .option1(surveyDto.getOption1())
+                .option2(surveyDto.getOption2())
                 .name(surveyDto.getName())
                 .result1(surveyDto.getResult1())
                 .result2(surveyDto.getResult2())
@@ -66,6 +71,8 @@ public class SurveyDto implements SurveyAdapt {
                 .path(survey.getPath())
                 .hit(survey.getHit())
                 .pw(survey.getPw())
+                .option1(survey.getOption1())
+                .option2(survey.getOption2())
                 .title(survey.getTitle())
                 .result1(survey.getResult1())
                 .result2(survey.getResult2())

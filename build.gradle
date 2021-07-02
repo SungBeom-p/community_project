@@ -92,7 +92,15 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.10")
     annotationProcessor("org.projectlombok:lombok:1.18.10")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.10")
-
+/***
+ * File
+ * */
+    // commons-io
+    implementation group: 'commons-io', name: 'commons-io', version: '2.4'
+    // file-upload
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.2.1'
+    // imgscalr-lib
+    implementation group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
 
 }
 

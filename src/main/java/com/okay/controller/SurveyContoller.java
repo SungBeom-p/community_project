@@ -37,7 +37,6 @@ public class SurveyContoller {
     @Autowired
     SurveyCommentService surveyCommentService;
 
-    Long count = 0L;
 
     @GetMapping("surveywrite")
     public String surveyGet(HttpServletRequest request) {
@@ -51,7 +50,7 @@ public class SurveyContoller {
         User user = userService.selectOne(userNo);
         SurveyDto dto = new SurveyDto();
         dto = SurveyDto.builder()
-                .surveyNo(count++)
+                .surveyNo(surveyService.max()+1L)
                 .userNo(user)
                 .name(name)
                 .fileName1(opinion1)
@@ -121,23 +120,23 @@ public class SurveyContoller {
 
     @GetMapping(path = "/choice")
     public String test2(HttpServletRequest request, Model model,
-                        @Param("surveyNo") Long surveyNo,@RequestParam(value = "page", defaultValue = "1")int page
-            ,@RequestParam(value = "size",defaultValue = "10")int size ){
-        Pageable pageable = PageRequest.of(page - 1 , size, Sort.by("id"));
+                        @Param("surveyNo") Long surveyNo){
         HttpSession session = userService.sessionAutowired(request);
         Long id = Long.valueOf(String.valueOf(session.getAttribute("userId")));
         User user = userService.selectOne(id);
         Survey survey = surveyService.selectOne(surveyNo);
-        List<SurveyComment> comlist = surveyCommentService.selectAll(survey,pageable);
+        List<SurveyComment> comlist = surveyCommentService.selectAll(survey);
         model.addAttribute("comment",comlist);
         model.addAttribute("name", user.getName()); // 작성자
         return "choice";
     }
 
 
-    @PostMapping("/choice")
-    public String test(@Param("surveyNo")Long surveyNo,String name, Long id, String content, String regDate){
 
+
+    @PostMapping("/choice")
+    public String test(@Param("surveyNo")Long surveyNo,String name, String content, String regDate){
+        Long id= surveyCommentService.max();
         Survey survey = surveyService.selectOne(surveyNo);
         SurveyCommentDto dto = SurveyCommentDto.builder()
                 .id(id)

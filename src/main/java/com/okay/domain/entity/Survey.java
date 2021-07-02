@@ -41,6 +41,12 @@ public class Survey {
     @Column(name="size1")
     private Long size1; // 이미지크기
 
+    @Column
+    private String option1; // 의견 1
+
+    @Column
+    private String option2; // 의견 2
+
     @Column(name="size2")
     private Long size2; // 이미지크기
 

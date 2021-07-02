@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,8 @@ public class PostService extends Service{
     @Autowired
     PostRepository postRepository;
 
+
+
     public void create(PostDto postDto){
         Post post = postDto.changePost(postDto);
         postRepository.save(post);
@@ -30,6 +33,9 @@ public class PostService extends Service{
     public void removed(PostDto postDto){
         postRepository.deleteById(postDto.getPostNo());
     }
+
+
+
 
     public void update(PostDto postDto){
         Post post = postDto.changePost(postDto);
@@ -114,13 +120,13 @@ public class PostService extends Service{
         Page<Post> noticeList = null;
         Page<Post> nullNoticeList = null;
         switch (searchDto.getSearchFilter()) {
-            case "notice_title" : noticeList = postRepository.findAllByTitleContainingAndCategory(searchDto.getSearchValue(), "notice", pageable); //제목으로 검색하는 경우
+            case "notice_title" : noticeList = postRepository.findAllByTitleContainingAndCategory(searchDto.getSearchValue(), category, pageable); //제목으로 검색하는 경우
                 break;
-            case "notice_content" : noticeList = postRepository.findAllByContentContainingAndCategory(searchDto.getSearchValue(), "notice", pageable); //내용으로 검색하는 경우
+            case "notice_content" : noticeList = postRepository.findAllByContentContainingAndCategory(searchDto.getSearchValue(), category, pageable); //내용으로 검색하는 경우
                 break;
-            case "notice_name" : noticeList = postRepository.findAllByNameContainingAndCategory(searchDto.getSearchValue(), "notice", pageable); //작성자로 검색하는 경우
+            case "notice_name" : noticeList = postRepository.findAllByNameContainingAndCategory(searchDto.getSearchValue(), category, pageable); //작성자로 검색하는 경우
                 break;
-            default : noticeList = postRepository.findAllByCategory("notice", pageable); //기본값 전체글 목록 (Paging)
+            default : noticeList = postRepository.findAllByCategory(category, pageable); //기본값 전체글 목록 (Paging)
                 break;
         }
         if(noticeList.isEmpty()) return nullNoticeList; //검색 결과가 없을 경우 빈 객체 반환
@@ -133,22 +139,22 @@ public class PostService extends Service{
         Page<Post> clientList = null;
         Page<Post> nullClientList = null;
         switch (searchDto.getSearchFilter()) {
-            case "client_title" : clientList = postRepository.findAllByTitleContainingAndCategory(searchDto.getSearchValue(), "client", pageable); //제목으로 검색하는 경우
+            case "service_title" : clientList = postRepository.findAllByTitleContainingAndCategory(searchDto.getSearchValue(), category, pageable); //제목으로 검색하는 경우
                 break;
-            case "client_content" : clientList = postRepository.findAllByContentContainingAndCategory(searchDto.getSearchValue(), "client", pageable); //내용으로 검색하는 경우
+            case "service_content" : clientList = postRepository.findAllByContentContainingAndCategory(searchDto.getSearchValue(), category, pageable); //내용으로 검색하는 경우
                 break;
-            case "client_name" : clientList = postRepository.findAllByNameContainingAndCategory(searchDto.getSearchValue(), "client", pageable); //작성자로 검색하는 경우
+            case "service_name" : clientList = postRepository.findAllByNameContainingAndCategory(searchDto.getSearchValue(), category, pageable); //작성자로 검색하는 경우
                 break;
-            default : clientList = postRepository.findAllByCategory("client", pageable); //기본값 전체글 목록 (Paging)
+            default : clientList = postRepository.findAllByCategory(category, pageable); //기본값 전체글 목록 (Paging)
                 break;
         }
         if(clientList.isEmpty()) return nullClientList; //검색 결과가 없을 경우 빈 객체 반환
 
         return clientList;
     }
-    public List<Post> postCnt(){
+    public List<Post> postCnt(String category){
 
-        List<Post> postgallatyorder = postRepository.findFirst5ByOrderByViewsDesc();
+        List<Post> postgallatyorder = postRepository.findFirst5ByCategoryOrderByViewsDesc(category);
 
         return postgallatyorder;
     }
@@ -156,9 +162,9 @@ public class PostService extends Service{
         return postRepository.findAll(pageable);
     }
 
-    public List<Post> postCntTen(){
+    public List<Post> postCntTen(String category){
 
-        List<Post> postgallatyorderten = postRepository.findFirst10ByOrderByViewsDesc();
+        List<Post> postgallatyorderten = postRepository.findFirst10ByCategoryOrderByViewsDesc(category);
 
         return postgallatyorderten;
     }
@@ -167,6 +173,17 @@ public class PostService extends Service{
         List<Post> updatepost = postRepository.findAllByUserNo(userno);
 
         return updatepost;
+    }
+
+
+    public Post postviewupdate(Long postNo){
+        Post updateviewpost = postRepository.findAllByPostNo(postNo);
+        PostDto postDto = new PostDto();
+        postDto = postDto.changePostDto(updateviewpost);
+        postDto.setViews(updateviewpost.getViews()+1L);
+        Post post = postDto.changePost(postDto);
+        postRepository.save(post);
+        return post;
     }
 
     public void create(Post post){
@@ -178,6 +195,13 @@ public class PostService extends Service{
         List<Post> list = postRepository.findAllByCategory(category);
 
         return list;
+    }
+
+    public Long max(){
+
+        BigDecimal max = postRepository.max();
+        Long no = Long.valueOf(String.valueOf(max));
+        return no;
     }
 
 

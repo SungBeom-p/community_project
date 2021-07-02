@@ -63,7 +63,7 @@ public class UserController extends Exception{
     public String register(UserDto dto){ // 회원가입 Server Data 전송
             userService.login(dto.getUserId(), dto.getUserPw());
             UserDto userDto = UserDto.builder()
-                    .userNo(dto.getUserNo())
+                    .userNo(userService.max()+1L)
                     .userId(dto.getUserId())
                     .userPw(dto.getUserPw())
                     .name(dto.getName())
