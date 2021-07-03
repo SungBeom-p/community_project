@@ -1,5 +1,6 @@
 package com.okay.service;
 
+import com.okay.domain.entity.Comment;
 import com.okay.domain.entity.Survey;
 import com.okay.domain.entity.User;
 import com.okay.domain.repository.SurveyRepository;
@@ -74,6 +75,22 @@ public class SurveyService extends Service {
         List<Survey> surveyList = surveyRepository.findFirst5ByOrderByViewsDesc();
         return surveyList;
     }
+    public List<Survey> selectadmin(){
+        List<Survey> list = surveyRepository.findAllBy();
+        return list;
+    }
+
+    //회원 관리자 활동내역에 사용 0703
+    public List<Survey> selectActive(User userNo){
+        List<Survey> list = surveyRepository.findAllByUserNo(userNo);
+        return list;
+    }
+    //회원 와 관리자 가 mypqge 활동내역에 사용
+    public List<Survey> listsurvey(User userNo){
+        List<Survey> list = surveyRepository.findFirst5ByUserNoOrderBySurveyNoDesc(userNo);
+        return list;
+    }
+
 
     public Long max(){
 
@@ -81,6 +98,7 @@ public class SurveyService extends Service {
         Long no = Long.valueOf(String.valueOf(max));
         return no;
     }
+
 
 
 }

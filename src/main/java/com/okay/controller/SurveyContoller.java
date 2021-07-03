@@ -126,7 +126,10 @@ public class SurveyContoller {
         User user = userService.selectOne(id);
         Survey survey = surveyService.selectOne(surveyNo);
         List<SurveyComment> comlist = surveyCommentService.selectAll(survey);
+        List<SurveyComment> topcomlist = surveyCommentService.selecttopAll(survey);
+
         model.addAttribute("comment",comlist);
+        model.addAttribute("top",topcomlist);
         model.addAttribute("name", user.getName()); // 작성자
         return "choice";
     }
@@ -135,7 +138,11 @@ public class SurveyContoller {
 
 
     @PostMapping("/choice")
-    public String test(@Param("surveyNo")Long surveyNo,String name, String content, String regDate){
+    public String test(@Param("surveyNo")Long surveyNo,String name,
+                       String content, String regDate , HttpServletRequest request){
+        HttpSession session = userService.sessionAutowired(request);
+        Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        User user = userService.selectOne(userNo);
         Long id= surveyCommentService.max();
         Survey survey = surveyService.selectOne(surveyNo);
         SurveyCommentDto dto = SurveyCommentDto.builder()
@@ -144,6 +151,7 @@ public class SurveyContoller {
                 .name(name)
                 .content(content)
                 .regDate(regDate)
+                .userNO(user)
                 .build();
         surveyCommentService.create(dto);
         return "choice";

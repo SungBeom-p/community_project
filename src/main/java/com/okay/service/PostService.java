@@ -1,5 +1,6 @@
 package com.okay.service;
 
+import com.okay.domain.entity.Comment;
 import com.okay.domain.entity.Post;
 import com.okay.domain.entity.User;
 import com.okay.domain.repository.PostRepository;
@@ -152,6 +153,12 @@ public class PostService extends Service{
 
         return clientList;
     }
+    //회원 와 관리자 가 mypqge 활동내역에 사용
+    public List<Post> listpost(User userNo){
+        List<Post> list = postRepository.findFirst5ByUserNoOrderByPostNoDesc(userNo);
+        return list;
+    }
+
     public List<Post> postCnt(String category){
 
         List<Post> postgallatyorder = postRepository.findFirst5ByCategoryOrderByViewsDesc(category);
@@ -190,6 +197,7 @@ public class PostService extends Service{
 
         postRepository.save(post);
     }
+
     //postcategori가 고객센터인 리스트
     public List<Post> categoryservice(String category){
         List<Post> list = postRepository.findAllByCategory(category);

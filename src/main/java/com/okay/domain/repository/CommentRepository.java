@@ -2,6 +2,7 @@ package com.okay.domain.repository;
 
 import com.okay.domain.entity.Comment;
 import com.okay.domain.entity.Post;
+import com.okay.domain.entity.SurveyComment;
 import com.okay.domain.entity.User;
 import com.okay.dto.Paging;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,9 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     List<Comment> findByPostNo (Post post);
     //List<Comment> findAllByUserNo(User user);
     List<Comment> findAllBy();
+    List<Comment> findAllByUserNo(User UserNo);
+
+    List<Comment> findFirst5ByUserNoOrderByCommentNoDesc(User userNo); //최근 기준으로 내림차순 5개 추출
     Comment deleteCommentByPostNo(Post postNo);
 
 

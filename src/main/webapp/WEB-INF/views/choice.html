@@ -11,6 +11,7 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
+    <script src="https://kit.fontawesome.com/fd1e0c1830.js" crossorigin="anonymous"></script>
     <style>
         ul{
             list-style:none;
@@ -143,7 +144,7 @@
             margin-right: 15%;
 
         }
-        button{
+        .button{
             background:#36A2D7;
             color:#fff;
             border:none;
@@ -154,12 +155,16 @@
             cursor:pointer;
             transition:800ms ease all;
             outline:none;
+            margin-top: 3%;
+            float: left;
+            margin-left: 42%;
+            width: 300px;
         }
-        button:hover{
+        .button:hover{
             background:#fff;
             color:#36A2D7;
         }
-        button:before,button:after{
+        .button:before,button:after{
             content:'';
             position:absolute;
             top:0;
@@ -169,23 +174,32 @@
             background: #36A2D7;
             transition:400ms ease all;
         }
-        button:after{
+        .button:after{
             right:inherit;
             top:inherit;
             left:0;
             bottom:0;
         }
-        button:hover:before,button:hover:after{
+        .button:hover:before,.button:hover:after{
             width:100%;
             transition:800ms ease all;
         }
-        .button{
-            margin-top: 3%;
-            float: left;
-            margin-left: 42%;
-            width: 300px;
-
+        #listadd{
+            margin-left: 50%;
+            background-color: white;
+            border:none;
+            cursor:pointer;
         }
+        #listadd:after{
+            right:inherit;
+            top:inherit;
+            left:0;
+            bottom:0;
+        }
+        #listadd:hover:before,#listadd:hover:after{
+            transition:800ms ease all;
+        }
+
         h1{
             margin-top: 2%;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -260,28 +274,15 @@
         <button class="button" type="submit">Submit !</button>
     </form>
 </article>
-
 <div class="agora">
-
-
     <!-- Reply Form {s} -->
-
     <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
-
         <form name="form" id="form" role="form" modelAttribute="replyVO" method="post">
-
-
-
             <div class="row">
-
                 <div class="col-sm-10">
-
                     <textarea path="content" id="content" class="form-control" rows="3" placeholder="댓글을 입력해 주세요"></textarea>
-
                 </div>
-
                 <div class="col-sm-2">
-
                     <input class="form-control" id="reg_id" readonly  th:value="${name}"></input>
                     <th:block th:if="${session.userId==1 || session.userId>2}">
                         <button type="button" class="btn btn-sm btn-primary" id="btnReplySave" style="width: 100%; margin-top: 10px"> 저 장 </button>
@@ -294,16 +295,26 @@
     <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
         <h6 class="border-bottom pb-2 mb-0">Reply list</h6>
         <div id="replyList"></div>
+        <button type="button" id="listadd" style="color: #36A2D7; font-size: 10px ">
+            <i class="fas fa-chevron-down" id="icon">더보기</i>
+        </button>
     </div>
     <!-- Reply List {e}-->
 </div>
 <script th:inline="javascript">
     $(document).ready(function () {
+        let toplist = [[${top}]];
         let list = [[${comment}]];
-        console.log(list);
-        let temp = [];
 
-        $("#btnReplySave").click(function (event) {
+        if(list.length < 16){
+            $('#icon').contents().unwrap().text('');
+            $('#listadd').unwrap().text('');
+        }
+
+        console.log(toplist);
+        console.log(list);
+
+        $("#btnReplySave").click(function(event) {
             let content = $("#content").val();
             let user = $("#reg_id").val();
             let regDate = new Date();
@@ -323,10 +334,10 @@
                 }, 3000);
             }
             let obj = {
-                "surveyNo": result,
-                "name": user,
-                "content": content,
-                "regDate": today
+                    "surveyNo": result,
+                    "name": user,
+                    "content": content,
+                    "regDate": today
             }
             $.ajax({ // 댓글 Server 저장
                 url: "/choice",
@@ -342,10 +353,12 @@
 
             });
         })
+
+            let flag = false;
         $(window).scroll(function () {   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
-            if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
-                list.forEach(i => {
-                    temp.push(i);
+            if($(window).scrollTop() >= $(document).height() - $(window).height()-1 && !flag ) {
+                console.log("이벤트발생")
+                toplist.forEach(i => {
                     $("#replyList").append("<table style='margin-top: 5px;'> " +
                         "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
                         "<td style='width: 900px;height: 50px;margin-right: 2px'>" + i.content +
@@ -353,14 +366,31 @@
                         "<td style='width: 100px'>" + i.name + "</td>" +
                         "</tr> " +
                         "</table>");
-                    if (i == 10 || i == 20 || i == 30) {
-                        i.slice(0, temp.length)
-                    }
-
-
                 })
+                flag=true;
             }
         })
+        $('#listadd').click(function (){
+            list = list.slice(15,undefined);
+            console.log(list)
+            console.log('눌리나?');
+            flag = false;
+            if(flag==false){
+            list.forEach(i=>{
+                $("#replyList").append("<table style='margin-top: 5px;'> " +
+                    "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
+                    "<td style='width: 900px;height: 50px;margin-right: 2px'>" + i.content +
+                    "</td><td style='width: 200px;border-bottom: #B7B7B7 1px double; width: 50px'>" + i.regDate + "</td>" +
+                    "<td style='width: 100px'>" + i.name + "</td>" +
+                    "</tr> " +
+                    "</table>");
+            })
+                flag = true;
+
+            }
+            $('#icon').contents().unwrap().text('');
+            $('#listadd').unwrap().text('');
+            })
 
     })
 

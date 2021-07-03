@@ -28,4 +28,8 @@ public class SurveyComment{
     @Column(name = "reg_date")
     String regDate;
 
+    @JoinColumn(name = "user_no")
+    @ManyToOne(cascade = CascadeType.DETACH)
+    private User userNo; // 사용자 고유 번호
+
 }

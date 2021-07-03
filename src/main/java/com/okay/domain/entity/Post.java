@@ -30,6 +30,9 @@ public class Post {
     @Column(nullable = false, length = 20)
     private String pw;
 
+    @Column(name="fileName")
+    private String fileName;
+
     @Column(nullable = false)
     private String category;
 

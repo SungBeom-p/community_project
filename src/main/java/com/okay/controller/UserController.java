@@ -29,6 +29,8 @@ public class UserController extends Exception{
     CommentService commentService;
     @Autowired
     SurveyCommentService surveyCommentService;
+    @Autowired
+    SurveyService surveyService;
 
 
     @GetMapping("/login")
@@ -117,7 +119,7 @@ public class UserController extends Exception{
 
         return "redirect:/mypage";
     }
-    @GetMapping("/myadmin")
+    @GetMapping("/myadmin") //관리자일경우만
     public String adminmenu(HttpServletRequest request, Model model) {
         System.out.println("admin in!!!~~~~~~~");
         HttpSession session = request.getSession();
@@ -126,10 +128,30 @@ public class UserController extends Exception{
             return "gallery";
         }
         model.addAttribute("comment",commentService.commentsize().size() +surveyCommentService.selectsize().size());
-        model.addAttribute("post", postService.selectAll().size());
+        model.addAttribute("post", postService.selectAll().size() + surveyService.selectadmin().size());
         model.addAttribute("count", userService.allUser().size());
         model.addAttribute("user", userService.allUser());
         return "myadmin";
+    }
+    @GetMapping("/myactive") //회원 || 관리자 일경우만
+    public String activemenu(HttpServletRequest request, Model model) {
+        System.out.println("mypage active in!!!~~~~~~~");
+        HttpSession session = request.getSession();
+        Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        if(userNo == 2 ){
+            return "gallery";
+        }
+        User user = userService.selectOne(userNo);
+
+        model.addAttribute("postlist",postService.listpost(user));
+        model.addAttribute("surveylist",surveyService.listsurvey(user));
+        model.addAttribute("commentlist",commentService.listcomment(user));
+        model.addAttribute("svcommentlist",surveyCommentService.listcomment(user));
+
+        model.addAttribute("comment",commentService.activeommentsize(user).size() +surveyCommentService.selectcommentsize(user).size());
+        model.addAttribute("post", postService.postupdate(user).size() + surveyService.selectActive(user).size());
+        //model.addAttribute("user", userService.allUser());
+        return "myactive";
     }
 
     @GetMapping("/admindelete")

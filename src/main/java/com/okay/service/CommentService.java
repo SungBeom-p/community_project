@@ -71,11 +71,22 @@ public class CommentService extends Service{
         return comment;
     }
 
+    //관리자 회원관리에 사용
     public List<Comment> commentsize(){
         List<Comment> list = commentRepository.findAllBy();
         return list;
     }
 
+    //회원 와 관리자 가 mypqge 활동내역에 사용
+    public List<Comment> activeommentsize(User userNo){
+        List<Comment> list = commentRepository.findAllByUserNo(userNo);
+        return list;
+    }
+    //회원 와 관리자 가 mypqge 활동내역에 사용
+    public List<Comment> listcomment(User userNo){
+        List<Comment> list = commentRepository.findFirst5ByUserNoOrderByCommentNoDesc(userNo);
+        return list;
+    }
 
 
 

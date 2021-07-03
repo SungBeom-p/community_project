@@ -23,6 +23,7 @@ public class PostDto implements PostAdapt {
     private String content;
     private LocalDateTime regDate;
     private LocalDateTime modDate;
+    private String fileName;
 
     @Override
     public Post changePost(PostDto postDto) {
@@ -37,6 +38,7 @@ public class PostDto implements PostAdapt {
                 .content(postDto.getContent())
                 .regDate(postDto.getRegDate())
                 .modDate(postDto.getModDate())
+                .fileName(postDto.getFileName())
                 .build();
         return post;
     }
@@ -53,6 +55,7 @@ public class PostDto implements PostAdapt {
                 .content(post.getContent())
                 .regDate(post.getRegDate())
                 .modDate(post.getModDate())
+                .fileName(post.getFileName())
                 .build();
         return postDto;
     }

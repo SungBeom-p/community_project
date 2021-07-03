@@ -24,6 +24,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "select max(postNo) from Post")
     BigDecimal max();
+    List<Post> findFirst5ByUserNoOrderByPostNoDesc(User userNo); //최근 기준으로 내림차순 5개 추출
 
     List<Post> findFirst5ByCategoryOrderByViewsDesc(String category); //조회수를 기준으로 내림차순 5개 추출
     List<Post> findFirst10ByCategoryOrderByViewsDesc(String category); //조회수를 기준으로 내림차순 10개 추출
