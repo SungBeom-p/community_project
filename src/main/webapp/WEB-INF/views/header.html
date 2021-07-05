@@ -11,6 +11,7 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <link th:href="@{./css/header.css}" rel="stylesheet" type="text/css"/>
+    <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
 </head>
 <body>
 <header id="container">
@@ -22,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li th:if="${session.userId != 2 && session.userId != null}" class="nav-item active" id ="sessiontag1">
-                    <a class="nav-link" href="/login" >LOG OUT</a>
+                    <a class="nav-link" href="/logout" id="logout" >LOG OUT</a>
                 </li>
                 <li th:unless="${session.userId != 2 && session.userId != null}" class="nav-item active" id ="sessiontag">
                     <a class="nav-link" href="/login" >LOGIN</a>
@@ -52,4 +53,14 @@
             </li>
         </ul>
     </div>
+    <script th:inline="javascript">
+        $(document).ready(function (){
+            $("#logout").click(function (){
+                console.log("세션제거");
+                sessionStorage.clear();
+            })
+
+        })
+
+    </script>
 </header>

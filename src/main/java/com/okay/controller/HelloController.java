@@ -33,6 +33,15 @@ public class HelloController {
         HttpSession session = userService.sessionAutowired(request);
         return "main";
     }
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        //session.setAttribute("id", "value");
+        //String userid = (String)session.getAttribute("userId"); //리턴 타입은 Object
+        //session.removeAttribute("userid");
+        session.invalidate();// 세션의 모든 속성을 삭제
+    return "redirect:/";
+    }
 
     @GetMapping("/a")
     public void deletee(){

@@ -7,6 +7,7 @@ import com.okay.domain.entity.User;
 import com.okay.domain.repository.SurveyCommentRepository;
 import com.okay.domain.repository.SurveyRepository;
 import com.okay.dto.SurveyCommentDto;
+import com.okay.dto.SurveyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,7 +62,16 @@ public class SurveyCommentService {
         List<SurveyComment> list = surveyCommentRepository.findFirst5ByUserNoOrderByIdDesc(userNo);
         return list;
     }
-
+// 0705
+    public SurveyComment selectOne(Long id) { // DB SELECT ONE <- ID
+        Optional<SurveyComment> result = surveyCommentRepository.findById(id);
+        return result.get();
+    }
+// 0705
+    public void update(SurveyCommentDto surveyCommentDto) { // DB UPDATE
+        SurveyComment surveyComment = surveyCommentDto.changeSurveyComment(surveyCommentDto);
+        surveyCommentRepository.save(surveyComment);
+    }
 
 
     public Long max(){

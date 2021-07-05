@@ -303,15 +303,13 @@
 </div>
 <script th:inline="javascript">
     $(document).ready(function () {
-        let toplist = [[${top}]];
         let list = [[${comment}]];
 
-        if(list.length < 16){
+        if(list.length <= 15){
             $('#icon').contents().unwrap().text('');
             $('#listadd').unwrap().text('');
         }
 
-        console.log(toplist);
         console.log(list);
 
         $("#btnReplySave").click(function(event) {
@@ -358,7 +356,8 @@
         $(window).scroll(function () {   //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
             if($(window).scrollTop() >= $(document).height() - $(window).height()-1 && !flag ) {
                 console.log("이벤트발생")
-                toplist.forEach(i => {
+                list = list.slice(0,15);
+                list.forEach(i => {
                     $("#replyList").append("<table style='margin-top: 5px;'> " +
                         "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
                         "<td style='width: 900px;height: 50px;margin-right: 2px'>" + i.content +
@@ -371,6 +370,7 @@
             }
         })
         $('#listadd').click(function (){
+            list = [[${comment}]]
             list = list.slice(15,undefined);
             console.log(list)
             console.log('눌리나?');

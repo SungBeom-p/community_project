@@ -43,8 +43,8 @@ public class CommentService extends Service{
 
     public Comment selectOne(Long id){
         Optional<Comment> result = commentRepository.findById(id);
-        result.ifPresent(comment -> {throw new IllegalAccessError();
-        });
+       // result.ifPresent(comment -> {throw new IllegalAccessError();
+       // });
         return result.get();
     }
 

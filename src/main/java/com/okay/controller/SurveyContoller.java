@@ -125,11 +125,18 @@ public class SurveyContoller {
         Long id = Long.valueOf(String.valueOf(session.getAttribute("userId")));
         User user = userService.selectOne(id);
         Survey survey = surveyService.selectOne(surveyNo);
+
+        SurveyDto dto = new SurveyDto();
+        dto = dto.changeSurveyDto(survey);
+        dto.setViews(survey.getViews()+1L);
+
+        surveyService.update(dto);
+
         List<SurveyComment> comlist = surveyCommentService.selectAll(survey);
-        List<SurveyComment> topcomlist = surveyCommentService.selecttopAll(survey);
+    //    List<SurveyComment> topcomlist = surveyCommentService.selecttopAll(survey);
 
         model.addAttribute("comment",comlist);
-        model.addAttribute("top",topcomlist);
+    //    model.addAttribute("top",topcomlist);
         model.addAttribute("name", user.getName()); // 작성자
         return "choice";
     }

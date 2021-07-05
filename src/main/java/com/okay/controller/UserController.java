@@ -1,9 +1,7 @@
 package com.okay.controller;
 
-import com.okay.domain.entity.Post;
-import com.okay.domain.entity.User;
-import com.okay.dto.PostDto;
-import com.okay.dto.UserDto;
+import com.okay.domain.entity.*;
+import com.okay.dto.*;
 import com.okay.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -92,6 +90,9 @@ public class UserController extends Exception{
     public String mypages(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        if(userNo == 2){
+            return "redirect:/gallery";
+        }
         model.addAttribute("user", userService.selectOne(userNo));
         return "mypage";
     }
@@ -100,6 +101,9 @@ public class UserController extends Exception{
     public String getmypageedit(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
         Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        if(userNo == 2){
+            return "redirect:/gallery";
+        }
         model.addAttribute("user", userService.selectOne(userNo));
         return "userEdit";
     }
@@ -109,7 +113,6 @@ public class UserController extends Exception{
         HttpSession session = request.getSession();
         Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
         User user = userService.selectOne(userNo);
-
         if (user != null) {
             dto.setUserNo(user.getUserNo());
             dto.setRegDate(LocalDateTime.now());
@@ -125,7 +128,7 @@ public class UserController extends Exception{
         HttpSession session = request.getSession();
         Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
         if(userNo != 1){
-            return "gallery";
+            return "redirect:/gallery";
         }
         model.addAttribute("comment",commentService.commentsize().size() +surveyCommentService.selectsize().size());
         model.addAttribute("post", postService.selectAll().size() + surveyService.selectadmin().size());
@@ -139,7 +142,7 @@ public class UserController extends Exception{
         HttpSession session = request.getSession();
         Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
         if(userNo == 2 ){
-            return "gallery";
+            return "redirect:/gallery";
         }
         User user = userService.selectOne(userNo);
 
@@ -156,23 +159,101 @@ public class UserController extends Exception{
 
     @GetMapping("/admindelete")
     public String deleteadmin(HttpServletRequest request,Long userNo){
+        HttpSession session = request.getSession();
+        Long check = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        if(check != 1){
+            return "redirect:/gallery";
+        }
         User useren = userService.selectOne(userNo);
+        if(userNo != 2){
+        //0705 회원삭제시 post의 userNo를 2로 변경
         List<Post> postup = postService.postupdate(useren);
         postup.stream().forEach(i->{
             Post pooup = postService.selectOne(i.getPostNo());
             PostDto dto = new PostDto();
-            dto.setPostNo(pooup.getPostNo());
+                    //        PostDto.builder()
+            //        .postNo(pooup.getPostNo())
+            //        .userNo(userService.selectOne(2L))
+            //        .content(pooup.getContent())
+            //        .views(pooup.getViews())
+            //        .name(pooup.getName())
+            //        .modDate(pooup.getModDate())
+            //        .regDate(pooup.getRegDate())
+            //        .category(pooup.getCategory())
+            //        .fileName(pooup.getFileName())
+            //        .pw(pooup.getPw())
+            //        .title(pooup.getTitle())
+            //        .build();
+            dto = dto.changePostDto(pooup);
             dto.setUserNo(userService.selectOne(2L));
-            dto.setPw(pooup.getPw());
-            dto.setTitle(pooup.getTitle());
-            dto.setContent(pooup.getContent());
-            dto.setCategory(pooup.getCategory());
-            dto.setName(pooup.getName());
-            dto.setModDate(pooup.getModDate());
-            dto.setRegDate(pooup.getRegDate());
-            dto.setViews(pooup.getViews());
             postService.update(dto);
         });
+        //0705 회원삭제시 comment의 userNo를 2로 변경
+        List<Comment> commentlist = commentService.activeommentsize(useren);
+        commentlist.forEach(i->{
+            Comment comment = commentService.selectOne(i.getCommentNo());
+            CommentDto comentdto = new CommentDto();
+                    //        CommentDto.builder()
+            //        .commentNo(comment.getCommentNo())
+            //        .userNo(userService.selectOne(2L))
+            //        .postNo(comment.getPostNo())
+            //        .content(comment.getContent())
+            //        .name(comment.getName())
+            //        .pw(comment.getPw())
+            //        .regDate(comment.getRegDate())
+            //            .build();
+           comentdto = comentdto.changeCommentDto(comment);
+            comentdto.setUserNo(userService.selectOne(2L));
+            commentService.update(comentdto);
+        });
+
+        //survey의 userNo를 2로 변경
+        List<Survey> surveylist = surveyService.selectActive(useren);
+        surveylist.forEach(i->{
+            Survey survey = surveyService.selectOne(i.getSurveyNo());
+            SurveyDto surveyDto = new SurveyDto();
+                    //        SurveyDto.builder()
+            //        .surveyNo(survey.getSurveyNo())
+            //        .userNo(userService.selectOne(2L))
+            //        .path(survey.getPath())
+            //        .name(survey.getName())
+            //        .title(survey.getTitle())
+            //        .pw(survey.getPw())
+            //        .fileName2(survey.getFileName2())
+            //        .fileName1(survey.getFileName1())
+            //        .result2(survey.getResult2())
+            //        .result1(survey.getResult1())
+            //        .startTime(survey.getStartTime())
+            //        .endTime(survey.getEndTime())
+            //        .option1(survey.getOption1())
+            //        .option2(survey.getOption2())
+            //        .size1(survey.getSize1())
+            //        .size2(survey.getSize2())
+            //        .views(survey.getViews())
+            //        .hit(survey.getHit())
+            //        .build();
+                surveyDto = surveyDto.changeSurveyDto(survey);
+            surveyDto.setUserNo(userService.selectOne(2L));
+            surveyService.update(surveyDto);
+        });
+        //surveyComment의 userNo를 2로 변경
+        List<SurveyComment> selectcommentsize = surveyCommentService.selectcommentsize(useren);
+        selectcommentsize.forEach(i->{
+            SurveyComment surveycomment = surveyCommentService.selectOne(i.getId());
+            SurveyCommentDto surveyCommentDto = new SurveyCommentDto();
+            //SurveyCommentDto.builder()
+            //        .id(surveycomment.getId())
+            //        .userNO(userService.selectOne(2L))
+            //        .name(surveycomment.getName())
+            //        .surveyNo(surveycomment.getSurveyNo())
+            //        .regDate(surveycomment.getRegDate())
+            //        .content(surveycomment.getContent())
+            //        .build();
+            surveyCommentDto = surveyCommentDto.changeSurveyCommentDto(surveycomment);
+            surveyCommentDto.setUserNO(userService.selectOne(2L));
+            surveyCommentService.update(surveyCommentDto);
+        });
+        }
         userService.remove(userNo);
         return"mypage";
     }
