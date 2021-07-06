@@ -48,6 +48,11 @@
 <!--        <location>/WEB-INF/views/common/error.jsp</location>-->
 <!--    </error-page>-->
 <!--    <error-page>-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/404error.html</location>
+    </error-page>
+
 <!--        <error-code>404</error-code>-->
 <!--        <location>/WEB-INF/views/common/error404.jsp</location>-->
 <!--    </error-page>-->

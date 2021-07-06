@@ -11,6 +11,7 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <link th:href="@{./css/gallery.css}" rel="stylesheet" type="text/css"/>
+    <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
 </head>
 <body>
 <header th:insert="/header.html"></header>
@@ -27,11 +28,11 @@
     <div class="post">
         <ul th:each="post:${post}" class="list-group list-group-flush">
             <li class="list-group-item">
-                <text th:text="${post.regDate}"></text>
                 <a class="okaya" href="#" th:href="@{/post(postNo=${post.postNo})}"
                    th:text="${post.title}"></a>
                 <text th:text="${post.name}"/>
                 <text th:text="${post.views}"/>
+                <text th:text="${post.regDate}" id = "regdate"></text>
             </li>
         </ul>
     </div>
@@ -59,7 +60,7 @@
 </div>
 </div>
 <div class = "notice_container" id="notice">
-    <h5><a class="okaya" href="/noticeBoard">공지사항
+    <h5><a class="okaya" href="/notice">공지사항
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
@@ -80,7 +81,11 @@
     </div>
 </div>
 </div>
+<script th:inline="javascript">
+        let regdate = [[${post}]]
+        console.log(regdate);
 
+</script>
 
 </body>
 

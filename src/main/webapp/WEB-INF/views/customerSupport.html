@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>customerSupport</title>
+</head>
+<style>
+  #postTable {
+    border: solid 1px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+
+    width: 70%;
+    height: 200px;
+  }
+
+  #commentTable {
+    border: solid 1px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+
+    padding-top: 30px;
+
+    width: 70%;
+
+    text-align: center;
+  }
+
+  #pagingTable {
+    margin: auto;
+  }
+
+  #newCommentTable {
+    border: solid 1px;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 70%;
+  }
+
+  #newCommentContent {
+    margin-left: 3px;
+    width: 90%;
+    height: 90%;
+
+    resize: none;
+  }
+</style>
+
+<body>
+<table id="postTable">
+  <tr>
+    <td th:text="'Title: ' + ${post.title}"/>
+  </tr>
+  <tr>
+    <td th:text="'Name: ' + ${post.name}"/>
+    <td th:text="'Category: ' + ${post.category}"/>
+  </tr>
+  <tr>
+    <td th:text="'RegDate: ' + ${post.regDate}"/>
+  </tr>
+  <tr>
+    <td>
+      <br/>
+    </td>
+  </tr>
+  <tr>
+    <td>Content</td>
+  </tr>
+  <tr>
+    <td th:text="${post.content}"/>
+  </tr>
+  <tr th:if="${userNo} == 1">
+    <td>
+      <input type="button" id="deletePostButton" value="delete"/>
+    </td>
+  </tr>
+</table>
+<!--comment-->
+<table id="commentTable">
+  <tr th:each="comment:${commentList}">
+    <td th:text="${comment.commentNo}"/>
+    <td class="name" th:text="${comment.name}"/>
+    <td class="content" th:text="${comment.content}"/>
+    <td class="regDate" th:text="${comment.regDate}"/>
+    <td>
+      <input type="button" th:if="${userNo} == 1" value="X"
+             th:onclick="deleteCommentFunc([[${comment.commentNo}]])"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <br/>
+    </td>
+  </tr>
+</table>
+<!--paging-->
+<table id="pagingTable">
+  <tr>
+    <td th:block th:with="startAt=${commentPaging.startAt}, endBy=${commentPaging.endBy}" th:colspan="5">
+      <a th:if="${commentPaging.startAt} - 1 > 0"
+         th:href="@{/post( postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} - 5)}"
+         th:text="prev"/>
+      <span th:if="${commentPaging.totalPage} != 0">
+                        <a th:each="presentPage : ${#numbers.sequence(startAt, endBy)}"
+                           th:href="@{/post(postNo=${post.postNo}, presentPage=${presentPage})}"
+                           th:text=|[${presentPage}]|/>
+                    </span>
+      <span th:if="${commentPaging.totalPage} == 0">
+                        Comments not exist
+                    </span>
+      <a th:if="${commentPaging.endBy} + 1 < ${commentPaging.totalPage}"
+         th:href="@{/post(postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} + 5)}"
+         th:text="next"/>
+    </td>
+  </tr>
+</table>
+<!--new comment-->
+<table id="newCommentTable" th:if="${userNo} == ${post.userNo.userNo} or ${userNo} == 1">
+  <!--             || ${userNo} == 1-->
+  <tr>
+    <td th:text="${name}" id="newCommentName"/>
+  </tr>
+  <tr>
+    <td>
+      <textarea id="newCommentContent"></textarea>
+    </td>
+    <td>
+      <input type="button" id="newCommentButton" value="submit"/>
+    </td>
+  </tr>
+</table>
+
+<table id="serviceButtonTable">
+  <tr>
+    <td>
+      <input type="button" id="serviceButton" value="back"/>
+    </td>
+  </tr>
+</table>
+
+
+<!--forms-->
+<form id="deletePostForm" action="/delete" method="post">
+  <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+</form>
+
+<form id="newCommentForm" action="/newComment" method="post">
+  <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+  <input type="hidden" name="name" th:value="${name}"/>
+  <input type="hidden" name="pw" id="pw"/>
+  <input type="hidden" name="content" id="content"/>
+  <input type="hidden" name="userNo" id="userNo"/>
+</form>
+
+<form id="deleteCommentForm" action="/deleteComment" method="post">
+  <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+  <input type="hidden" name="commentNo" id="commentNo"/>
+</form>
+
+<script th:inline="javascript">
+  function deletePostFunc() {
+    let deletePostForm = document.querySelector('#deletePostForm');
+    console.log ("delete");
+    if ([[${userNo}]] == 1) {
+      let deleteConfirm = confirm("Delete this post?");
+      if (deleteConfirm) {
+        deletePostForm.submit();
+      }
+    } else {
+      alert("You are not authorized");
+    }
+  }
+
+  function newCommentFunc() {
+    let newCommentForm = document.querySelector('#newCommentForm');
+    let content = document.querySelector('#newCommentContent').value;
+
+    if ([[${userNo}]] == [[${post.userNo.userNo}]] || [[${userNo}]] == 1) {
+      if (content.length < 5) {
+        alert("Please check your comment form");
+      } else {
+        document.querySelector('#pw').value = "0000";
+        document.querySelector('#content').value = content;
+        document.querySelector('#userNo').value = [[${userNo}]];
+
+        newCommentForm.submit();
+      }
+    }
+  }
+
+  function deleteCommentFunc(commentNo) {
+    let deleteCommentForm = document.querySelector('#deleteCommentForm');
+    document.querySelector('#commentNo').value = commentNo;
+    if ([[${userNo}]] == 1) {
+      let deleteConfirm = confirm("Delete this comment?");
+      if (deleteConfirm) {
+        deleteCommentForm.submit();
+      }
+    } else {
+      alert("You are not authorized");
+    }
+  }
+
+  function service() {
+    location.href = "/notice";
+  }
+
+  if ([[${userNo}]] == 1) {
+    document.querySelector('#deletePostButton').addEventListener('click', deletePostFunc);
+  }
+  if ([[${userNo}]] == [[${post.userNo.userNo}]] || [[${userNo}]] == 1) {
+    document.querySelector('#newCommentButton').addEventListener('click', newCommentFunc);
+  }
+  document.querySelector('#serviceButton').addEventListener('click', service);
+</script>
+</body>
+</html>

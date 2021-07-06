@@ -36,18 +36,16 @@ public class Post {
     @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, length = 500)
     private String title;
 
-    @Column(nullable = false, length = 10000)
+    @Column(nullable = false, length = 5000)
     private String content;
 
     @Column(name = "reg_date")
-    @CreationTimestamp
-    private LocalDateTime regDate;
+    private String regDate;
 
     @Column(name = "mod_date")
-    @UpdateTimestamp
-    private LocalDateTime modDate;
+    private String modDate;
 
 }

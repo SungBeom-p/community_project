@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @ComponentScan(basePackages = {"com.okay.service"})
@@ -30,6 +31,18 @@ public class UserController extends Exception{
     @Autowired
     SurveyService surveyService;
 
+    @GetMapping("/")
+    public String main(HttpServletRequest request){ // 첫 진입시 Main 화면
+        HttpSession session = userService.sessionAutowired(request);
+        return "main";
+    }
+    //세션제거
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.invalidate();// 세션의 모든 속성을 삭제
+        return "redirect:/";
+    }
 
     @GetMapping("/login")
     public String login(){ // 로그인 HTML 이동
@@ -62,14 +75,16 @@ public class UserController extends Exception{
     @PostMapping(value = "/register")
     public String register(UserDto dto){ // 회원가입 Server Data 전송
             userService.login(dto.getUserId(), dto.getUserPw());
-            UserDto userDto = UserDto.builder()
+    String localdatetime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-dd-MM"));
+        System.out.println(localdatetime);
+        UserDto userDto = UserDto.builder()
                     .userNo(userService.max()+1L)
                     .userId(dto.getUserId())
                     .userPw(dto.getUserPw())
                     .name(dto.getName())
                     .email(dto.getEmail())
                     .gender(dto.getGender())
-                    .regDate(LocalDateTime.now())
+                    .regDate(localdatetime)
                     .build();
             userService.create(userDto);
             return "main";
@@ -115,13 +130,12 @@ public class UserController extends Exception{
         User user = userService.selectOne(userNo);
         if (user != null) {
             dto.setUserNo(user.getUserNo());
-            dto.setRegDate(LocalDateTime.now());
+            dto.setRegDate(user.getRegDate());
         }
-
         userService.update(dto);
-
         return "redirect:/mypage";
     }
+
     @GetMapping("/myadmin") //관리자일경우만
     public String adminmenu(HttpServletRequest request, Model model) {
         System.out.println("admin in!!!~~~~~~~");
@@ -130,7 +144,7 @@ public class UserController extends Exception{
         if(userNo != 1){
             return "redirect:/gallery";
         }
-        model.addAttribute("comment",commentService.commentsize().size() +surveyCommentService.selectsize().size());
+        model.addAttribute("comment",commentService.commentSize().size() +surveyCommentService.selectsize().size());
         model.addAttribute("post", postService.selectAll().size() + surveyService.selectadmin().size());
         model.addAttribute("count", userService.allUser().size());
         model.addAttribute("user", userService.allUser());
@@ -146,14 +160,13 @@ public class UserController extends Exception{
         }
         User user = userService.selectOne(userNo);
 
-        model.addAttribute("postlist",postService.listpost(user));
+        model.addAttribute("postlist",postService.listPost(user));
         model.addAttribute("surveylist",surveyService.listsurvey(user));
-        model.addAttribute("commentlist",commentService.listcomment(user));
+        model.addAttribute("commentlist",commentService.listComment(user));
         model.addAttribute("svcommentlist",surveyCommentService.listcomment(user));
 
-        model.addAttribute("comment",commentService.activeommentsize(user).size() +surveyCommentService.selectcommentsize(user).size());
-        model.addAttribute("post", postService.postupdate(user).size() + surveyService.selectActive(user).size());
-        //model.addAttribute("user", userService.allUser());
+        model.addAttribute("comment",commentService.activeCommentSize(user).size() +surveyCommentService.selectcommentsize(user).size());
+        model.addAttribute("post", postService.postUpdate(user).size() + surveyService.selectActive(user).size());
         return "myactive";
     }
 
@@ -166,72 +179,32 @@ public class UserController extends Exception{
         }
         User useren = userService.selectOne(userNo);
         if(userNo != 2){
+
         //0705 회원삭제시 post의 userNo를 2로 변경
-        List<Post> postup = postService.postupdate(useren);
+        List<Post> postup = postService.postUpdate(useren);
         postup.stream().forEach(i->{
             Post pooup = postService.selectOne(i.getPostNo());
             PostDto dto = new PostDto();
-                    //        PostDto.builder()
-            //        .postNo(pooup.getPostNo())
-            //        .userNo(userService.selectOne(2L))
-            //        .content(pooup.getContent())
-            //        .views(pooup.getViews())
-            //        .name(pooup.getName())
-            //        .modDate(pooup.getModDate())
-            //        .regDate(pooup.getRegDate())
-            //        .category(pooup.getCategory())
-            //        .fileName(pooup.getFileName())
-            //        .pw(pooup.getPw())
-            //        .title(pooup.getTitle())
-            //        .build();
+
             dto = dto.changePostDto(pooup);
             dto.setUserNo(userService.selectOne(2L));
             postService.update(dto);
         });
         //0705 회원삭제시 comment의 userNo를 2로 변경
-        List<Comment> commentlist = commentService.activeommentsize(useren);
+        List<Comment> commentlist = commentService.activeCommentSize(useren);
         commentlist.forEach(i->{
             Comment comment = commentService.selectOne(i.getCommentNo());
             CommentDto comentdto = new CommentDto();
-                    //        CommentDto.builder()
-            //        .commentNo(comment.getCommentNo())
-            //        .userNo(userService.selectOne(2L))
-            //        .postNo(comment.getPostNo())
-            //        .content(comment.getContent())
-            //        .name(comment.getName())
-            //        .pw(comment.getPw())
-            //        .regDate(comment.getRegDate())
-            //            .build();
-           comentdto = comentdto.changeCommentDto(comment);
+
+            comentdto = comentdto.changeCommentDto(comment);
             comentdto.setUserNo(userService.selectOne(2L));
             commentService.update(comentdto);
         });
-
         //survey의 userNo를 2로 변경
         List<Survey> surveylist = surveyService.selectActive(useren);
         surveylist.forEach(i->{
             Survey survey = surveyService.selectOne(i.getSurveyNo());
             SurveyDto surveyDto = new SurveyDto();
-                    //        SurveyDto.builder()
-            //        .surveyNo(survey.getSurveyNo())
-            //        .userNo(userService.selectOne(2L))
-            //        .path(survey.getPath())
-            //        .name(survey.getName())
-            //        .title(survey.getTitle())
-            //        .pw(survey.getPw())
-            //        .fileName2(survey.getFileName2())
-            //        .fileName1(survey.getFileName1())
-            //        .result2(survey.getResult2())
-            //        .result1(survey.getResult1())
-            //        .startTime(survey.getStartTime())
-            //        .endTime(survey.getEndTime())
-            //        .option1(survey.getOption1())
-            //        .option2(survey.getOption2())
-            //        .size1(survey.getSize1())
-            //        .size2(survey.getSize2())
-            //        .views(survey.getViews())
-            //        .hit(survey.getHit())
-            //        .build();
                 surveyDto = surveyDto.changeSurveyDto(survey);
             surveyDto.setUserNo(userService.selectOne(2L));
             surveyService.update(surveyDto);
@@ -241,21 +214,12 @@ public class UserController extends Exception{
         selectcommentsize.forEach(i->{
             SurveyComment surveycomment = surveyCommentService.selectOne(i.getId());
             SurveyCommentDto surveyCommentDto = new SurveyCommentDto();
-            //SurveyCommentDto.builder()
-            //        .id(surveycomment.getId())
-            //        .userNO(userService.selectOne(2L))
-            //        .name(surveycomment.getName())
-            //        .surveyNo(surveycomment.getSurveyNo())
-            //        .regDate(surveycomment.getRegDate())
-            //        .content(surveycomment.getContent())
-            //        .build();
             surveyCommentDto = surveyCommentDto.changeSurveyCommentDto(surveycomment);
-            surveyCommentDto.setUserNO(userService.selectOne(2L));
+            surveyCommentDto.setUserNo(userService.selectOne(2L));
             surveyCommentService.update(surveyCommentDto);
         });
         }
         userService.remove(userNo);
         return"mypage";
     }
-
 }

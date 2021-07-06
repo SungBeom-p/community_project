@@ -37,7 +37,6 @@ public class Comment {
     private String content;
 
     @Column(name = "reg_date")
-    @CreationTimestamp
-    private LocalDateTime regDate;
+    private String regDate;
 
 }

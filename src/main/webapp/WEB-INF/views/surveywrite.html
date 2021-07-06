@@ -6,6 +6,7 @@
   <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>board</title>
+
   <style>
     body {
       padding-top: 70px;
@@ -17,7 +18,7 @@
 <article>
   <div class="container" role="main">
     <h2>board Form</h2>
-    <form action="surveywrite" method="post">
+    <form action="surveywrite" method="post" id="form" enctype="multipart/form-data">
 
       <div class="mb-3">
         <label for="title">제목</label>
@@ -32,36 +33,37 @@
       <div class="mb-3">
         <label for="opinion1">Opinion1</label>
         <input type="text" class="form-control" name="opinion1" id="opinion1" placeholder="1번 항목을 입력해 주세요">
-        <input type="file" name="opinion1" accept="image/png, image/jpeg, image/gif" >
+        <input type="file" name="uploadFile1" accept="image/png, image/jpeg, image/gif" >
       </div>
 
       <div class="mb-3">
         <label for="opinion2">Opinion2</label>
         <input type="text" class="form-control" name="opinion2" id="opinion2" placeholder="2번 항목을 입력해 주세요">
-        <input type="file" name="opinion2" accept="image/png, image/jpeg, image/gif">
+        <input type="file" name="uploadFile2" accept="image/png, image/jpeg, image/gif">
       </div>
 
-      <div class="mb-3">
-        <label for="endTime">마감일</label>
-        <input type="date" name="endTime" id="endTime" value="${}">
-      </div>
+      <!--      <div class="mb-3">-->
+      <!--        <label for="endTime">마감일</label>-->
+      <!--        <input type="date" name="endTime" id="endTime" value="${}">-->
+      <!--      </div>-->
 
       <div>
-        <input type="submit" class="btn btn-sm btn-primary" id="btnSave" value="저장"/>
+        <button type="submit" class="btn btn-sm btn-primary" id="btnSave" value="저장">저장</button>
         <button type="button" class="btn btn-sm btn-primary" id="btnList">목록</button>
       </div>
     </form>
   </div>
 </article>
 <script>
-  // $(document).on('click', '#btnSave', function(e){
-  //   e.preventDefault();
-  //   $("#form").submit();
-  // });
+  // $(doucment).ready(function (){
+  //   $("#btnSave").click(i=>{
+  //     $("#form").onsubmit();
+  //   })
+  // })
 
   $(document).on('click', '#btnList', function(e){
-    e.preventDefault();
-    location.href="/survey";
+
+    location.href="/surveyBoard"; // 7월 2일 12시 19부 수정
   });
 
 </script>

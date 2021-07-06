@@ -19,7 +19,7 @@
   <li><a th:href="@{/myactive(request=${session.userId})}">활동 내역</a></li>
   <li th:if="${session.userId == 1}">
     <a th:href="@{/myadmin(request=${session.userId})}">회원 관리 </a></li>
-  <li><a href="#about">About</a></li>
+  <li><a th:href="@{/about}">About</a></li>
 </div>
 
 <form action="/userEdit" method="post">

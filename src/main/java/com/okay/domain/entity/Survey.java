@@ -38,17 +38,11 @@ public class Survey {
     @Column(name="file_name2")
     private String fileName2;   //이미지이름
 
-    @Column(name="size1")
-    private Long size1; // 이미지크기
-
     @Column
     private String option1; // 의견 1
 
     @Column
     private String option2; // 의견 2
-
-    @Column(name="size2")
-    private Long size2; // 이미지크기
 
     @Column(name="result1", nullable = false)
     private Long result1;
@@ -62,18 +56,17 @@ public class Survey {
     @Column(nullable = false, length = 20)
     private String pw;
 
-    @Column(nullable = false)
     private String path;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, length = 500)
     private String title;
 
     @Column(name = "start_time")
-    @CreationTimestamp
-    private LocalDateTime startTime;
+
+    private String startTime;
 
     @Column(name = "end_time")
-    private LocalDateTime endTime;
+    private String endTime;
 }
 
 

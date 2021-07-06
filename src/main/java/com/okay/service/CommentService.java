@@ -7,9 +7,12 @@ import com.okay.domain.repository.CommentRepository;
 import com.okay.dto.CommentDto;
 import com.okay.dto.Paging;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,80 +23,34 @@ public class CommentService extends Service{
     @Autowired
     CommentRepository commentRepository;
 
-    public void create(CommentDto commentDto){
-        Comment comment = commentDto.changeComment(commentDto);
-        commentRepository.save(comment);
-    }
-
     public void update(CommentDto commentDto){
         Comment comment = commentDto.changeComment(commentDto);
         commentRepository.save(comment);
     }
 
-    public void delete(CommentDto commentDto){
-        commentRepository.deleteById(commentDto.getCommentNo());
-    }
-
-    public CommentDto selectOne(CommentDto commentDto){
-        Comment comment = commentDto.changeComment(commentDto);
-        Optional<Comment> temp = commentRepository.findById(comment.getCommentNo());
-        CommentDto result = commentDto.changeCommentDto(temp.get());
-        return result;
-    }
-
     public Comment selectOne(Long id){
         Optional<Comment> result = commentRepository.findById(id);
-       // result.ifPresent(comment -> {throw new IllegalAccessError();
-       // });
         return result.get();
     }
 
-    public List<CommentDto> selectAll(CommentDto commentDto){
-        List<Comment> temp = commentRepository.findAll();
-        List<CommentDto> result = new ArrayList<>();
-        temp.forEach(i->{
-            result.add(commentDto.changeCommentDto(i));
-        });
-        return result;
-    }
-    public List<Comment> selectAll(Long id){
-        return commentRepository.findAll();
-    }
-
-
-
-
-
-
-    @Transactional
-    public Comment deletepost(Post postNo){
-        Comment comment = commentRepository.deleteCommentByPostNo(postNo);
-        return comment;
-    }
-
     //관리자 회원관리에 사용
-    public List<Comment> commentsize(){
-        List<Comment> list = commentRepository.findAllBy();
+    public List<Comment> commentSize(){
+        List<Comment> list = commentRepository.findAll();
         return list;
     }
 
     //회원 와 관리자 가 mypqge 활동내역에 사용
-    public List<Comment> activeommentsize(User userNo){
+    public List<Comment> activeCommentSize(User userNo){
         List<Comment> list = commentRepository.findAllByUserNo(userNo);
         return list;
     }
     //회원 와 관리자 가 mypqge 활동내역에 사용
-    public List<Comment> listcomment(User userNo){
+    public List<Comment> listComment(User userNo){
         List<Comment> list = commentRepository.findFirst5ByUserNoOrderByCommentNoDesc(userNo);
         return list;
     }
 
 
-
-
-
-
-    //인환씨
     public List<CommentDto> getFullCommentList(Long postNo) {
         Optional<Post> post = postRepository.findById(postNo);
         List<Comment> commentEntityList = commentRepository.findByPostNo(post.get());
@@ -110,21 +67,22 @@ public class CommentService extends Service{
         Paging paging = new Paging();
         paging.setPresentPage(presentPage);
         paging.setTotalElement(totalComment);
-        Long temp = presentPage;
+        Long page = presentPage;   //현재 페이지
+
         while (true) {
-            if (temp % paging.getPageQty() == 1) {
-                paging.setStartAt(temp);
+            if (page % paging.getPageQty() == 1) {
+                paging.setStartAt(page);
                 paging.setEndBy(paging.getStartAt() + (paging.getPageQty() - 1));
                 break;
             } else {
-                temp--;
+                page--;
             }
         }
+        //전체 페이지
+        Double totalPage = Math.ceil(Double.valueOf(paging.getTotalElement()) / paging.getCommentQty());
+        paging.setTotalPage(totalPage.longValue());
 
-        Double temp2 = Math.ceil(new Double(paging.getTotalElement()) / paging.getCommentQty());
-        paging.setTotalPage(temp2.longValue());
-
-        if (presentPage > paging.getTotalPage()) {
+        if (page > paging.getTotalPage()) {
             paging.setPresentPage(paging.getTotalPage());
         }
         if (paging.getStartAt() > paging.getTotalPage()) {
@@ -137,6 +95,7 @@ public class CommentService extends Service{
         return paging;
     }
 
+    //10개만 추출 댓글페이지
     public List<CommentDto> getCommentList(List<CommentDto> fullCommentList, Paging paging) {
         List<CommentDto> commentList = new ArrayList<>();
         Long startComment = (paging.getPresentPage() - 1) * paging.getCommentQty() + 1; //31
@@ -144,7 +103,6 @@ public class CommentService extends Service{
         if (endComment > paging.getTotalElement()) {
             endComment = paging.getTotalElement();
         }
-
         for (; startComment <= endComment; startComment++) {
             commentList.add(fullCommentList.get(startComment.intValue() - 1));
         }
@@ -154,35 +112,26 @@ public class CommentService extends Service{
     public void newComment(Long postNo, Long userNo, String name, String pw, String content) {
         User user = userRepository.getOne(userNo);
         Post post = postRepository.getOne(postNo);
-        Comment lastComment = commentRepository.findTop1ByOrderByCommentNoDesc();
-        Long cNo ;
-        if(lastComment == null) {
-            cNo = 0L;
-        }
-        else {
-             cNo = lastComment.getCommentNo() + 1L;
-        }
+        BigDecimal max = commentRepository.max();
 
         Comment comment = Comment.builder()
-                .commentNo(cNo)
+                .commentNo(Long.valueOf(String.valueOf(max)+1L))
                 .postNo(post)
                 .userNo(user)
                 .name(name)
                 .pw(pw)
                 .content(content)
-                .regDate(LocalDateTime.now())
+                .regDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .build();
         commentRepository.save(comment);
     }
-
-
     public void delete(Long commentNo) {
         commentRepository.deleteById(commentNo);
     }
 
     public void deleteAll(Long postNo) {
-        Post post = postRepository.findByPostNo(postNo);
-        commentRepository.deleteAllByPostNo(post);
+        Optional<Post> post = postRepository.findById(postNo);
+        commentRepository.deleteAllByPostNo(post.get());
     }
 
 

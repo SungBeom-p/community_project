@@ -16,11 +16,4 @@ public abstract class Service {
     @Autowired
     CommentRepository commentRepository;
 
-    public Post serarchPost(Long id){ // MyPage 기능
-        return null;
-    }
-
-
-
-
 }

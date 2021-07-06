@@ -52,8 +52,11 @@
     <mvc:resources location="/img/" mapping="/img/**"/>
 
     <!--  파일업로드 디렉토리 설정 -->
-    <bean id="uploadPath" class="java.lang.String">
-        <constructor-arg value="C:\Users\haren\IdeaProjects\community_spring\src\main\resources\file"/>
+    <bean id="uploadSurveyPath" class="java.lang.String">
+        <constructor-arg value="C:\Users\haren\IdeaProjects\community_spring\src\main\resources\survey"/>
     </bean>
-
+    <!--  파일업로드 디렉토리 설정 -->
+    <bean id="uploadPostPath" class="java.lang.String">
+        <constructor-arg value="C:\Users\haren\IdeaProjects\community_spring\src\main\resources\post"/>
+    </bean>
 </beans>

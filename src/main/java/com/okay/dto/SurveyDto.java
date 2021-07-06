@@ -20,8 +20,6 @@ public class SurveyDto implements SurveyAdapt {
     private User userNo;
     private String fileName1;   //이미지이름
     private String fileName2;   //이미지이름
-    private Long size1; // 이미지크기
-    private Long size2; // 이미지크기
     private Long result1;
     private Long result2;
     private String name;
@@ -31,8 +29,8 @@ public class SurveyDto implements SurveyAdapt {
     private String path;
     private String title;
     private Long hit;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String startTime;
+    private String endTime;
     @Override
     public Survey changeSurvey(SurveyDto surveyDto) {
         Survey survey = Survey.builder()
@@ -41,8 +39,6 @@ public class SurveyDto implements SurveyAdapt {
                 .userNo(surveyDto.getUserNo())
                 .fileName1(surveyDto.getFileName1())
                 .fileName2(surveyDto.getFileName2())
-                .size1(surveyDto.getSize2())
-                .size2(surveyDto.getSize2())
                 .path(surveyDto.getPath())
                 .option1(surveyDto.getOption1())
                 .option2(surveyDto.getOption2())
@@ -65,8 +61,6 @@ public class SurveyDto implements SurveyAdapt {
                 .userNo(survey.getUserNo())
                 .fileName1(survey.getFileName1())
                 .fileName2(survey.getFileName2())
-                .size1(survey.getSize1())
-                .size2(survey.getSize2())
                 .name(survey.getName())
                 .path(survey.getPath())
                 .hit(survey.getHit())

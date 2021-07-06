@@ -13,12 +13,12 @@ import lombok.*;
 @Setter
 @ToString
 public class SurveyCommentDto implements SurveyCommentAdapt {
-    Long id;
-    Survey surveyNo;
-    String name;
-    String content;
-    String regDate;
-    User userNO;
+    private Long id;
+    private Survey surveyNo;
+    private String name;
+    private String content;
+    private String regDate;
+    private User userNo;
 
     @Override
     public SurveyComment changeSurveyComment(SurveyCommentDto surveyCommentDto) {
@@ -28,7 +28,7 @@ public class SurveyCommentDto implements SurveyCommentAdapt {
                 .name(surveyCommentDto.getName())
                 .content(surveyCommentDto.getContent())
                 .regDate(surveyCommentDto.getRegDate())
-                .userNo(surveyCommentDto.userNO)
+                .userNo(surveyCommentDto.getUserNo())
                 .build();
         return  surveyComment;
     }
@@ -41,7 +41,7 @@ public class SurveyCommentDto implements SurveyCommentAdapt {
                 .name(surveyComment.getName())
                 .content(surveyComment.getContent())
                 .regDate(surveyComment.getRegDate())
-                .userNO(surveyComment.getUserNo())
+                .userNo(surveyComment.getUserNo())
                 .build();
         return surveyCommentDto;
     }

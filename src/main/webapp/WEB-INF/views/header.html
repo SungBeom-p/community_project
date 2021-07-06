@@ -34,7 +34,7 @@
     <div class="subcontainer">
         <ul id="nav2" class="nav justify-content-center">
             <li class="nav-item">
-                <a class="nav-link active" href="/noticeBoard">공지 사항</a>
+                <a class="nav-link active" href="/notice">공지 사항</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" href="/service">고객 센터</a>
@@ -53,14 +53,4 @@
             </li>
         </ul>
     </div>
-    <script th:inline="javascript">
-        $(document).ready(function (){
-            $("#logout").click(function (){
-                console.log("세션제거");
-                sessionStorage.clear();
-            })
-
-        })
-
-    </script>
 </header>

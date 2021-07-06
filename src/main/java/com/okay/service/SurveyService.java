@@ -40,7 +40,26 @@ public class SurveyService extends Service {
         Optional<Survey> result = surveyRepository.findById(id);
         return result.get();
     }
-
+//0706 진성
+    public SurveyDto selectOneDto(Long id){
+        Optional<Survey> byId = surveyRepository.findById(id);
+        SurveyDto surveyDto = new SurveyDto();
+        SurveyDto result = surveyDto.changeSurveyDto(byId.get());
+        return result;
+    }
+//0706 진성
+    public void addResult(Long id, String result){
+        Optional<Survey> temp = surveyRepository.findById(id);
+        SurveyDto surveyDto = new SurveyDto();
+        surveyDto = surveyDto.changeSurveyDto(temp.get());
+        if(result.equals("true")){
+            surveyDto.setResult1(temp.get().getResult1()+1L);
+        } else{
+            surveyDto.setResult2(temp.get().getResult2()+1L);
+        }
+        Survey survey = surveyDto.changeSurvey(surveyDto);
+        surveyRepository.save(survey);
+    }
 
 
     public Page<Survey> getSurveyList(Pageable pageable, SearchDto searchDto) { // 글 목록 조회
@@ -75,6 +94,7 @@ public class SurveyService extends Service {
         List<Survey> surveyList = surveyRepository.findFirst5ByOrderByViewsDesc();
         return surveyList;
     }
+
     public List<Survey> selectadmin(){
         List<Survey> list = surveyRepository.findAllBy();
         return list;

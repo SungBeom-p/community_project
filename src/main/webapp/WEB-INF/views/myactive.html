@@ -77,11 +77,13 @@
   </div>
   </div>
 </section>
-<button type="button" id="postLineUp">전체게시판 최근 게시물</button>
-<button type="button" id="surveyLineUp">투표 최근 게시물</button>
-<button type="button" id="comment">전체게사물 최근 댓글</button>
-<button type="button" id="surveycommentLineUp" value="surveycomment">투표 최근 댓글</button>
-
+<select id="sel">
+  <option id="defalut" selected="selected">최근기록 선택</option>
+  <option value="option1">전체게시판 최근 게시물</option>
+  <option value="option2">투표 최근 게시물</option>
+  <option value="option3">전체게사물 최근 댓글</option>
+  <option value="option4">투표 최근 댓글</option>
+</select>
 <!-- table -->
 <section>
   <div class="container-fluid" id="containsectrion">
@@ -92,39 +94,43 @@
     let comment = [[${commentlist}]];
     let post = [[${postlist}]];
     let svcomment = [[${svcommentlist}]];
-    let survey = [[${surveylist}]];
+
     console.log(comment);
     console.log(post);
     console.log(svcomment);
-    console.log(survey);
+
     let flag = false;
-    $('#postLineUp').click( function(event){
-      flag = false;
-      $("#containsectrion").empty();
-      $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
-              "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-              "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
-              "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" +'제목'+ "</td>" +
-              "<td style='width: 330px;text-align: center;'>" + '조회수' + "</td>" +
-              "</tr> " +
-              "</table>" );
-      console.log("클릭???");
-    if(flag == false){
-    post.forEach(i=>{
-      $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
-              "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-              "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.postNo +
-              "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.title + "</td>" +
-              "<td style='width: 330px;text-align: center;'>" + i.views + "</td>" +
-              "</tr> " +
-              "</table>")
-    })
-      }
-     flag = true;
-      })
-
-
-    $('#surveyLineUp').click( function(event){
+   $('#sel').change(function(){
+     let state = $('#sel option:selected').val();
+     console.log('이벤트발생!')
+     if(state =='option1') {
+       flag = false;
+       $("#containsectrion").empty();
+       $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+               "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
+               "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
+               "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + '제목' + "</td>" +
+               "<td style='width: 330px;text-align: center;'>" + '조회수' + "</td>" +
+               "</tr> " +
+               "</table>");
+       console.log("클릭???");
+       if (flag == false) {
+         post.forEach(i => {
+           $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+                   "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
+                   "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.postNo +
+                   "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.title + "</td>" +
+                   "<td style='width: 330px;text-align: center;'>" + i.views + "</td>" +
+                   "</tr> " +
+                   "</table>")
+         })
+       }
+       flag = true;
+     }
+    if(state =='option2') {
+      let survey = [[${surveylist}]];
+      console.log('option2이벤트')
+      console.log(survey)
       flag = false;
       $("#containsectrion").empty();
       $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
@@ -146,63 +152,61 @@
                   "</table>")
         })
       }
-      flag = true;
-    })
-
-
-    $('#comment').click( function(event){
-      flag = false;
-      $("#containsectrion").empty();
-      $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
-              "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-              "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
-              "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" +'내용'+ "</td>" +
-              "<td style='width: 330px;text-align: center;'>" + '적성일' + "</td>" +
-              "</tr> " +
-              "</table>" );
-      console.log("클릭???");
-      if(flag == false){
-        comment.forEach(i=>{
-          $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
-                  "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-                  "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.commentNo +
-                  "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.content + "</td>" +
-                  "<td style='width: 330px;text-align: center;'>" + i.regDate + "</td>" +
-                  "</tr> " +
-                  "</table>")
-        })
       }
-      flag = true;
-    })
+     if(state =='option3') {
+       flag = false;
+       $("#containsectrion").empty();
+       $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+               "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
+               "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
+               "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" +'내용'+ "</td>" +
+               "<td style='width: 330px;text-align: center;'>" + '적성일' + "</td>" +
+               "</tr> " +
+               "</table>" );
+       console.log("클릭???");
+       if(flag == false){
+         comment.forEach(i=>{
+           $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+                   "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
+                   "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.commentNo +
+                   "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.content + "</td>" +
+                   "<td style='width: 330px;text-align: center;'>" + i.regDate + "</td>" +
+                   "</tr> " +
+                   "</table>")
+         })
+       }
+       flag = true;
 
-    $('#surveycommentLineUp').click( function(event){
-      flag = false;
-      $("#containsectrion").empty();
-      $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
-              "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-              "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
-              "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" +'내용'+ "</td>" +
-              "<td style='width: 330px;text-align: center;'>" + '적성일' + "</td>" +
-              "</tr> " +
-              "</table>" );
-      console.log("클릭???");
-      if(flag == false){
-        svcomment.forEach(i=>{
-          $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
-                  "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-                  "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.id +
-                  "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.content + "</td>" +
-                  "<td style='width: 330px;text-align: center;'>" + i.regDate + "</td>" +
-                  "</tr> " +
-                  "</table>")
-        })
-      }
-      flag = true;
-    })
+     }
+     if(state =='option4') {
+       flag = false;
+       $("#containsectrion").empty();
+       $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+               "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
+               "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
+               "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + '내용' + "</td>" +
+               "<td style='width: 330px;text-align: center;'>" + '적성일' + "</td>" +
+               "</tr> " +
+               "</table>");
+       console.log("클릭???");
+       if (flag == false) {
+         svcomment.forEach(i => {
+           $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+                   "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
+                   "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.id +
+                   "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.content + "</td>" +
+                   "<td style='width: 330px;text-align: center;'>" + i.regDate + "</td>" +
+                   "</tr> " +
+                   "</table>")
+         })
+       }
+       flag = true;
+     }
 
-  })
+   })
 
 
+   })
 </script>
 </body>
 </html>

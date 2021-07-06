@@ -2,6 +2,7 @@ package com.okay.dto;
 import com.okay.Adapt.UserAdapt;
 import com.okay.domain.entity.User;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +19,7 @@ public class UserDto implements UserAdapt {
     private String name;
     private String email;
     private Boolean gender;
-    private LocalDateTime regDate;
+    private String regDate;
 
     public UserDto(Long userNo){
         this.userNo = userNo;

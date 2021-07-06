@@ -2,207 +2,143 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
-  <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
-  <!--    <link th:href="@{./css/register.css}" rel="stylesheet"/>-->
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <title>board</title>
+
   <style>
-    @import url(https://fonts.googleapis.com/css?family=BenchNine:700);
-    .snip1535 {
-      background-color: #2C85B1;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      display: inline-block;
-      font-family: 'BenchNine', Arial, sans-serif;
-      font-size: 1em;
-      font-size: 22px;
-      line-height: 1em;
-      outline: none;
-      padding: 12px 40px 10px;
-      position: relative;
-      text-transform: uppercase;
-      font-weight: 700;
+    body {
+      padding-top: 70px;
+      padding-bottom: 30px;
     }
-    .snip1535:before,
-    .snip1535:after {
-      border-color: transparent;
-      -webkit-transition: all 0.25s;
-      transition: all 0.25s;
-      border-style: solid;
-      border-width: 0;
-      content: "";
-      height: 24px;
-      position: absolute;
-      width: 24px;
+    #category {
+      padding-top: 10px;
+      padding-bottom: 20px;
     }
-    .snip1535:before {
-      border-color: #c47135;
-      border-right-width: 2px;
-      border-top-width: 2px;
-      right: -5px;
-      top: -5px;
+    #title {
+      padding-top: 20px;
     }
-    .snip1535:after {
-      border-bottom-width: 2px;
-      border-color: #c47135;
-      border-left-width: 2px;
-      bottom: -5px;
-      left: -5px;
+    #content {
+      height: 200px;
     }
-    .snip1535:hover,
-    .snip1535.hover {
-      background-color: #0F2F3E;
+    #uploadFile {
+      padding-top: 10px;
+      padding-bottom: 30px;
     }
-    .snip1535:hover:before,
-    .snip1535.hover:before,
-    .snip1535:hover:after,
-    .snip1535.hover:after {
-      height: 100%;
-      width: 100%;
-    }
-
-    .title{
-      margin-top: 2%;
-      float: left;
-      margin-left: 10%;
-      font-size: 25px;
-      width: 30%;
-    }
-    .input{
-      margin-top: 1%;
-      float: left;
-      width: 30%;
-      text-align: center;
-      margin-right: 10%;
-    }
-    form{
-      margin-top: 50px;
-      text-align: center;
-      width: 60%;
-      height: 850px;
-      margin-left: 20%;
-      border: #23698B solid 5px;
-    }
-    .snip1535{
-      margin-top: 5%;
-      float: left;
-      margin-left: 8%;
-    }
-    h1{
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      text-align: center;
-      font-size: 70px;
-      font-weight: bold;
-    }
-    hr{
-      width: 30%;
-      margin-left: 35%;
-      background-color: #23698B;
-      height: 5px;
-
-    }
-    input{
-      margin: 10px;
-      width: 150%;
-      height: 40px;
-      border: 2px solid #23698B;
-      text-align: center;
-      font-size: 16px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
-    .big{
-      width: 100%;
-      height: 100%;
-    }
-    .select input[type=radio]{
-      display: none;
-    }
-    .select input[type=radio]+label{
-      display: inline-block;
-      cursor: pointer;
-      height: 24px;
-      width: 90px;
-      border: 1px solid black;
-      line-height: 24px;
-      text-align: center;
-      font-weight:bold;
-      font-size:13px;
-    }
-    .select input[type=radio]+label{
-      background-color: #fff;
-      color: #333;
-    }
-    .select input[type=radio]:checked+label{
-      background-color: #23698B;
-      color: #fff;
-    }
-    #content{
-      height: 500px;
-      width: 500px;
-      border: 2px solid #23698B;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      font-size: 16px;
-    }
-
   </style>
 </head>
 <body>
-<h1>Write</h1>
-<hr>
-
-<form action="write" method="post">
-  <div class="big">
-    <div class ="title">
-      제목 : <br><br>
-      비밀번호 : <br><br>
-      이름 : <br><br>
-      내용 : <br><br>
-
-    </div>
-    <div class="input">
-      <label>
-        <input type="text" name="title"  id="title" placeholder="제목을 입력하세요"/><br>
-      </label>
-
-      <label>
-        <input type="password" name="userPw" id="password" placeholder="비밀번호를 입력하세요."/><br>
-      </label>
-
-      <label>
-        <input type="text" name="name" id="name" placeholder="이름을 입력하세요"/><br>
-      </label>
-      <br>
-      <label>
-        <textarea name="content" id="content" placeholder="내용을 입력하세요." ></textarea><br>
-      </label>
+<article>
+  <div class="container" role="main">
+    <h2>board Form</h2>
+    <form action="write" method="post" id="form" enctype="multipart/form-data">
 
       <th:block th:if="${session.userId == 1}">
-        <input type="radio" id="notice" name="category"/>
+        <label for="content" id="category">공지글</label>
+        <input type="radio" name="category" ondblclick="this.checked=false"/> <!--두번 누르면 선택 취소-->
       </th:block>
 
-      <button id="submit" type="button" class = "snip1535">Submit</button>
-    </div>
+      <div class="mb-3">
+        <label for="title">제목</label>
+        <input type="text" class="form-control" name="title" id="title">
+      </div>
+
+      <th:block th:if="${session.userId == 1}">
+        <div class="mb-3">
+          <label for="adminName">작성자</label>
+          <input type="text" class="form-control" name="name" id="adminName" th:value="${name}" readonly>
+        </div>
+      </th:block>
+
+      <th:block th:if="${session.userId > 2}">
+        <div class="mb-3">
+          <label for="userName">작성자</label>
+          <input type="text" class="form-control" name="name" id="userName" th:value="${name}" readonly>
+        </div>
+      </th:block>
+
+      <th:block th:if="${session.userId == 2}">
+        <div class="mb-3">
+          <label for="name">작성자</label>
+          <input type="text" class="form-control" name="name" id="name">
+        </div>
+      </th:block>
+
+      <div class="mb-3">
+        <label for="content">내용</label>
+        <textarea name="content" class="form-control" id="content" placeholder="내용을 입력해 주세요"></textarea>
+        <input type="file" name="uploadFile" id="uploadFile" accept="image/jpg, image/jpeg, image/png, image/gif" >
+      </div>
+
+      <th:block th:if="${session.userId == 1}">
+        <div class="mb-3">
+          <!--          <label for="adminPw">비밀번호</label>-->
+          <input type="hidden" class="form-control" name="pw" id="adminPw" th:value="${pw}" readonly>
+        </div>
+      </th:block>
+
+      <th:block th:if="${session.userId > 2}">
+        <div class="mb-3">
+          <!--          <label for="userPw">비밀번호</label>-->
+          <input type="hidden" class="form-control" name="pw" id="userPw" th:value="${pw}" readonly>
+        </div>
+      </th:block>
+
+      <th:block th:if="${session.userId == 2}">
+        <div class="mb-3">
+          <label for="pw">비밀번호</label>
+          <input type="text" class="form-control" name="pw" id="pw">
+        </div>
+      </th:block>
+
+      <div>
+        <button id="btnSave" disabled="true" class="btn btn-sm btn-primary" value="저장">저장</button>
+        <button type="button"  class="btn btn-sm btn-primary" id="btnList">목록</button>
+      </div>
+
+    </form>
   </div>
-</form>
+</article>
+<script th:inline="javascript">
 
+  $(document).on('click', '#btnList', function(e){
+    location.href="/service";
+  });
 
-<script>
+  // $(function(){
+  //   $("#title") && $("#adminName") && $("#userName") && $("#name") && $("#content") && $("#adminPw") && $("#userPw") && $("#pw").on('input', function () {
+  //     if ($("#title") && $("#adminName") && $("#userName") && $("#name") && $("#content") && $("#adminPw") && $("#userPw") && $("#pw").val().length < 1) {
+  //       $('#btnSave').attr("disabled", true);
+  //     } else $('#btnSave').attr("disabled", false);
+  //   })
+  // })
+
   $(document).ready(function (){
-    $("#submit").click(()=>{
+    $("body").on('input',function (){
+      if($("#title").val().length>2){
+        if($("#content").val().length>10){
+          $('#btnSave').prop("disabled", false);
+        }else{
+          $('#btnSave').prop("disabled", true);
+        }
+      }
+    })
+
+    $("#btnSave").click(()=>{
       if($("#title").val().length<2){
         alert("제목은 2글자 이상 입력해주세요.");
-      }else if($("#password").val().length<4){
-        alert("비밀번호는 4글자 이상 입력하세요");
+      }else if($("#pw").val().length<4){
+        alert("비밀번호는 4글자 이상 입력해주세요.");
       }else if($("#name").val().length<2){
-        alert("이름은 2글자 이상해주세요.");
-      }else if($("#content").val().length<10){
-        alert("내용은 10글자 이상 입력해주세요.");
+        alert("이름은 2글자 이상 입력해주세요.");
       }else{
-        $("#submit").prop("type", "submit");
+        $("#btnSave").prop("type", "submit");
       }
     })
   })
+
 </script>
 
 </body>
+
 </html>

@@ -19,7 +19,7 @@ public class CommentDto implements CommentAdapt {
     private String name;
     private String pw;
     private String content;
-    private LocalDateTime regDate;
+    private String regDate;
 
 
     @Override

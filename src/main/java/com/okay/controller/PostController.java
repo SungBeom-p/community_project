@@ -20,16 +20,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
 public class PostController {
+    @Resource(name = "uploadPostPath")
+    String path;
     @Autowired
     PostService postService;
     @Autowired
@@ -41,24 +46,18 @@ public class PostController {
 
 
     @GetMapping("/search")
-    public String search(Model model, @RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="size", defaultValue="20") int size, SearchDto searchDto) {
+    public String search(Model model, @RequestParam(value="page", defaultValue="1") int page
+            ,@RequestParam(value="size", defaultValue="20") int size, SearchDto searchDto) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("postNo").descending()); // 0부터 담기기때문에..-1 requestparam->페이징 받아줌
         Page<Post> searchList = postService.getSearchList(pageable, searchDto);
         model.addAttribute("searchList", searchList);
         return "search";
     }
 
-    //공지사항 리스트 20210702
-    @GetMapping("/noticeBoard")
-    public String noticeboard(Model model, @RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="size", defaultValue="20") int size, String category, SearchDto searchDto) {
-        category ="on";
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("postNo").descending()); // 0부터 담기기때문에..-1 requestparam->페이징 받아줌
-        Page<Post> noticelist = postService.getNoticeList(pageable, category, searchDto);
-        model.addAttribute("noticelist", noticelist);
-        return "noticeBoard";
-    }
+
     @GetMapping("/board")
-    public String board(Model model, @RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="size", defaultValue="20") int size, String category, SearchDto searchDto) {
+    public String board(Model model, @RequestParam(value="page", defaultValue="1") int page
+            ,@RequestParam(value="size", defaultValue="20") int size, String category, SearchDto searchDto) {
         category = "off";
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("postNo").descending()); // 0부터 담기기때문에..-1 requestparam->페이징 받아줌
         Page<Post> postList = postService.getPostList(pageable, category, searchDto);
@@ -67,95 +66,109 @@ public class PostController {
     }
 
     @GetMapping("/gallery")
-    public String gallarylist(Model model) {
+    public String gallaryList(Model model) {
         System.out.println("컨트롤러 출력되나??");
-        List<Post> cntlist = postService.postCntTen("off"); //poslist limit5 orderbyviews desc
-        List<Post> noticelist = postService.postCnt("on"); //noticeist limit5 orderbyviews desc
+        List<Post> cntList = postService.postCntTen("off"); //poslist limit5 orderbyviews desc
+        List<Post> noticeList = postService.postCnt("on"); //noticeist limit5 orderbyviews desc
         List<Survey> surveyList = surveyService.surveyListfive(); //poslist limit5 orderbyviews desc
-        model.addAttribute("post", cntlist);
-        model.addAttribute("notice", noticelist);
+        model.addAttribute("post", cntList);
+        model.addAttribute("notice", noticeList);
         model.addAttribute("survey", surveyList);
         return "gallery";
     }
 
 
     @GetMapping("/write")
-    public String getWrite(HttpServletRequest request){
+    public String getWrite(HttpServletRequest request, Model model){
         HttpSession session = userService.sessionAutowired(request);
+        Long id = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        User user = userService.selectOne(id);
+        model.addAttribute("name", user.getName()); // 작성자 넘김
+        model.addAttribute("pw",user.getUserPw());
         return "write";
     }
+
     @PostMapping("/write")
-    public String postWrite(HttpServletRequest request, String title, String name, String userPw ,String content, String category){
+    public String postWrite(HttpServletRequest request, String title, String name,
+                            MultipartFile uploadFile, String pw , String content, String category){
         if(category ==null){
             category="off";
         }
-
         HttpSession session = userService.sessionAutowired(request);
         Long id = Long.valueOf(String.valueOf(session.getAttribute("userId")));
-        System.out.println("@@@@@@@@@@@@@@");
-        System.out.println(id);
-
         User user = userService.selectOne(id);
-
+        String regDate =LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        File file = new File(path,uploadFile.getOriginalFilename()); // 파일 입력
+        try{
+            uploadFile.transferTo(file);
+        }catch (Exception e){
+            System.out.println("파일 전송 실패");
+        }
         PostDto postDto = PostDto.builder()
                 .postNo(postService.max()+1L)
                 .userNo(user)
                 .category(category)
                 .title(title)
                 .name(name)
-                .pw(userPw)
+                .pw(pw)
+                .fileName(uploadFile.getOriginalFilename())
                 .content(content)
-                .modDate(LocalDateTime.now())
-                .regDate(LocalDateTime.now())
+                .modDate(regDate)
+                .regDate(regDate)
                 .views(0L)
                 .build();
         postService.create(postDto);
-        PostDto postDto1 = postService.selectOne(postDto); // 7월 2일 오후 10시 47분 추가
-        return "redirect:/post?postNo=" + postDto1.getPostNo(); // 7월 2일 오후 10시 47분 추가
+        PostDto dto = postService.selectOne(postDto); // 7월 2일 오후 10시 47분 추가
+        return "redirect:/post?postNo=" + dto.getPostNo(); // 7월 2일 오후 10시 47분 추가
+    }
+    @GetMapping("/notice") // 7.2 추가
+    public String getNoticeList(Model model, @RequestParam(value="page", defaultValue="1") int page
+            ,@RequestParam(value="size", defaultValue="20") int size, String category, SearchDto searchDto) {
+        category = "on";
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("postNo").descending()); // 0부터 담기기때문에..-1 requestparam->페이징 받아줌
+        Page<Post> noticeList = postService.getNoticeList(pageable, category, searchDto);
+        model.addAttribute("noticeList", noticeList);
+        return "noticeBoard";
     }
 
     //고개센터 리스트 뿌리기 20210702
-    @GetMapping("service")
-    public String serviceList(Model model, @RequestParam(value="page", defaultValue="1") int page, @RequestParam(value="size", defaultValue="20") int size, String category, SearchDto searchDto){
+    @GetMapping("/service")
+    public String serviceList(Model model, @RequestParam(value="page", defaultValue="1") int page
+            ,@RequestParam(value="size", defaultValue="20") int size,String category, SearchDto searchDto){
         category ="service";
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("postNo").descending()); // 0부터 담기기때문에..-1 requestparam->페이징 받아줌
-        Page<Post> servicelist = postService.getClientList(pageable, category, searchDto);
-        model.addAttribute("servicelist", servicelist);
-        return"serviceboard"; //고객센터
+        Page<Post> servicelist = postService.getServiceList(pageable, category, searchDto);
+        model.addAttribute("serviceList", servicelist);
+        return"serviceBoard"; //고객센터
     }
+
+
     //회원일때 고객센터 글쓰기 가는링크
-    @GetMapping("question")
-    public String getquestion(HttpServletRequest request,Model model){
+    @GetMapping("/question")
+    public String getQuestion(HttpServletRequest request,Model model){
         HttpSession session = request.getSession();
         Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
         User user = userService.selectOne(userNo);
         model.addAttribute("user", user);
         return"question";
     }
-    //비회원일때 고객센터 글쓰기가는링크
-//    @GetMapping("nonquestion")
-//    public String nongetquestion(){
-//        return"question";
-//    }
-    //비회원일때 고객센터 글쓰기가는링크
-    //회원 비회원 다 글쓰고 postlink
-    @PostMapping("question")
-    public String postquestion(HttpServletRequest request,String name, String title, String content){
+    @PostMapping("/question")
+    public String postQuestion(HttpServletRequest request,String name, String title, String content){
         HttpSession session = request.getSession();
-        String cate ="service";
+        String category ="service";
         Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
         User user = userService.selectOne(userNo);
-        PostDto dto = new PostDto();
-            dto = PostDto.builder()
+        String regDate =LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        PostDto dto = PostDto.builder()
                     .postNo(postService.max()+1L)
                     .userNo(user)
-                    .category(cate)
+                    .category(category)
                     .content(content)
                     .name(name)
                     .title(title)
                     .pw(user.getUserPw())
-                    .regDate(LocalDateTime.now())
-                    .modDate(LocalDateTime.now())
+                    .regDate(regDate)
+                    .modDate(regDate)
                     .views(0L)
                     .build();
         postService.create(dto);
@@ -163,57 +176,20 @@ public class PostController {
     }
 
 
-
-
-
-
-
-
-
-
-
-    //인환씨
-
-
     @GetMapping("/post")
-    public String post(HttpServletRequest request, Model model, Long postNo, Long presentPage, String func,
-                       Long userNo, String name, String pw, String content, Long commentNo) {
-        postService.postviewupdate(postNo); //접속시 view가 1증가
+    public String post(HttpServletRequest request, Model model, Long postNo,
+                       Long presentPage) {
         HttpSession session = request.getSession();
         Long userNum = Long.valueOf(String.valueOf(session.getAttribute("userId")));
 
         if (presentPage == null) {
             presentPage = 1L;
         }
-        if (func == null) {
-            func = "";
-        }
-
-        if (func.equals("editPost")) {
-            return "redirect:/edit?postNo=" + postNo;
-        } else if (func.equals("deletePost")) {
-            commentService.deleteAll(postNo);
-            postService.delete(postNo);
-            return "main";
-        } else if (func.equals("newComment")) {
-            commentService.newComment(postNo, userNo, name, pw, content);
-            return "redirect:/post?postNo=" + postNo;
-        } else if (func.equals("deleteComment")) {
-            commentService.delete(commentNo);
-            return "redirect:/post?postNo=" + postNo;
-        }
-
-//        get postDto and exception handling
         PostDto post = postService.getPost(postNo);
-        if (post == null) {
-            return "main";
-        } else {
-            model.addAttribute("post", post);
-        }
-
-
+        model.addAttribute("post", post);
+// 0706 위에 수정
         List<CommentDto> fullCommentList = commentService.getFullCommentList(postNo);
-        Paging commentPaging = commentService.paging(presentPage, new Long(fullCommentList.size()));
+        Paging commentPaging = commentService.paging(presentPage, Long.valueOf(fullCommentList.size()));
         model.addAttribute("commentPaging", commentPaging);
         if (commentPaging.getTotalElement() > 0) {
             List<CommentDto> commentList = commentService.getCommentList(fullCommentList, commentPaging);
@@ -228,46 +204,45 @@ public class PostController {
         } else {
             model.addAttribute("userNo", 2);
         }
-        return "post";
+        return"post";
     }
 
-    @RequestMapping("/edit")
-    public String edit(Model model, Long postNo, String func, Long views,
-                       String title, String name, String pw, String category,
-                       String content, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Long userNum = Long.valueOf(String.valueOf(session.getAttribute("userId")));
-        if (func == null) {
-            func = "";
-        }
-
+    @PostMapping("/edit")
+    public String edit(Model model, String func, Long postNo,
+                       String category, Long views,
+                       String title, String name, String pw, String content
+    ) {
         PostDto post = postService.getPost(postNo);
-        model.addAttribute("post", post);
-
-        if (func.equals("editPost")) {
+        if (func.equals("edit")) {
+            model.addAttribute("post", post);
+            return "edit";
+        } else {
             postService.editPost(post.getUserNo(), postNo, views, title, name, pw, category, content, post.getRegDate());
             return "redirect:/post?postNo=" + postNo;
         }
-
-        if (post.getUserNo().getUserNo() > 2 || userNum == 1) {
-            System.out.println("ininininininininin!!!!" +userNum);
-            return "edit_members";
-        } else {
-            return "edit_nMembers";
-        }
     }
 
+    @PostMapping("/remove")
+    public String delete(Long postNo) {
+        commentService.deleteAll(postNo);
+        postService.delete(postNo);
+        return "redirect:/board";
+    }
 
+    @PostMapping("/new-comment")
+    public String newComment(Long postNo, String name,
+                             String pw, String content, Long userNo) {
 
+        commentService.newComment(postNo, userNo, name, pw, content);
 
+        return "redirect:/post?postNo=" + postNo;
+    }
 
-
-
-
-
-
-
-
+    @PostMapping("/remove-comment")
+    public String deleteComment(Long commentNo, Long postNo) {
+        commentService.delete(commentNo);
+        return "redirect:/post?postNo=" + postNo;
+    }
 
 
 }

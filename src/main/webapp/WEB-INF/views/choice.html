@@ -253,22 +253,21 @@
     </div>
 </header>
 <article>
-    <form action="survey" method="POST">
-        <h1>투표 시스템</h1>
+    <form th:action="@{/choice(surveyNo=${surveyNo})}" method="POST">
+        <h1>투표 시스템 </h1>
         <hr>
         <div class="content">
-
-            <img class="img" id="img1" src="./img/favicon.ico" /><br>
-            <img class="img" id="img2" src="./img/favicon.ico" /><br><br><br><br><br><br><br><br><br>
+            <img class="img" id="img1" src="" width="300px" height="300px"/><br>
+            <img class="img" id="img2" src="" width="300px" height="300px"/><br><br><br><br><br><br><br><br><br>
             <div class="opnion">
-                <h3 class="opnion1">탕수육은 부먹파!</h3>
-                <h3 class="opnion2">탕수육은 찍먹파!</h3>
+                <h3 class="opnion1"></h3>
+                <h3 class="opnion2"></h3>
             </div>
             <div class="center-align">
                 <input type="radio" name="result" id="size_1" value="true" checked/>
-                <label for="size_1">부먹</label>
+                <label for="size_1">Click</label>
                 <input type="radio" name="result" id="size_2" value="false" />
-                <label for="size_2">찍먹</label>
+                <label for="size_2">Click</label>
             </div>
         </div>
         <button class="button" type="submit">Submit !</button>
@@ -305,6 +304,28 @@
     $(document).ready(function () {
         let list = [[${comment}]];
 
+
+        let session = [[${session}]];
+        if(session.userId ===2){
+            alert("비회원입니다");
+            location.href ="/surveyBoard";
+        }
+        let img = [[${img}]];
+        let option1 = img.option1;
+        $(".opnion1").append(option1);
+
+        let option2 = img.option2;
+        $(".opnion2").append(option2);
+        let file1 = "./survey/"+img.fileName1;
+        let file2 = "./survey/"+img.fileName2;
+        $("#img1").attr("src",file1);
+        $("#img2").attr("src",file2);
+
+        if(img.fileName1==="" || img.fileName2===""){ // img 경로가 없을 경우 숨기기
+            $("#img1").hide();
+            $("#img2").hide();
+        }
+
         if(list.length <= 15){
             $('#icon').contents().unwrap().text('');
             $('#listadd').unwrap().text('');
@@ -317,6 +338,7 @@
             let user = $("#reg_id").val();
             let regDate = new Date();
             let today = regDate.toLocaleDateString();
+
             let cnt = 1;
 
             let testString = window.location.href;
@@ -338,7 +360,7 @@
                     "regDate": today
             }
             $.ajax({ // 댓글 Server 저장
-                url: "/choice",
+                url: "/commentchoice",
                 type: "POST",
                 data: obj,
                 //    dataType: 'json',
@@ -388,8 +410,9 @@
                 flag = true;
 
             }
-            $('#icon').contents().unwrap().text('');
-            $('#listadd').unwrap().text('');
+            $('#icon').contents().unwrap().text(''); //속성제거 + text변경
+            $('#listadd').unwrap().text(''); //속성 제거
+
             })
 
     })

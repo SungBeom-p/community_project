@@ -1,10 +1,11 @@
 package com.okay.domain.entity;
 
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Builder
 @Entity
@@ -34,7 +35,6 @@ public class User {
     private Boolean gender;
 
     @Column(name = "reg_date")
-    @CreationTimestamp
-    private LocalDateTime regDate;
+    private String regDate;
 
 }

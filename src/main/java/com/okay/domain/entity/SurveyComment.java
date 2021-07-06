@@ -18,15 +18,15 @@ import javax.persistence.*;
 public class SurveyComment{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
     @ManyToOne(cascade = CascadeType.DETACH)
-    Survey surveyNo;
+    private Survey surveyNo;
 
-    String content;
+    private String content;
     @Column(name = "reg_date")
-    String regDate;
+    private String regDate;
 
     @JoinColumn(name = "user_no")
     @ManyToOne(cascade = CascadeType.DETACH)

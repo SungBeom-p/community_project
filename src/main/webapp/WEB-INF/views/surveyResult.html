@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+  <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
+    <style>
+        #myChart{
+            position: absolute;
+            top : 200px;
+            left : 700px;
+        }
+        h2{
+            position: absolute;
+            top : 130px;
+            left : 200px;
+        }
+        hr{
+            border: 2px solid black !important;
+            width: 200px;
+            position: absolute;
+            top : 160px;
+            left : 200px;
+        }
+        .modal{
+            position:absolute;
+            width:100%;
+            height:100%;
+            background: rgba(0,0,0,0.8);
+            top:0;
+            left:0;
+            display:none;
+        }
+        .modal_content{
+            background-color: #E1E1E1;
+            position: absolute;
+            left: 770px;
+            top : 350px;
+            width: 400px;
+            height: 300px;
+            border-radius: 1em;
+            text-align: center;
+        }
+        #total{
+            position: absolute;
+            left : 900px;
+            top : 720px;
+        }
+        #time{
+            position: absolute;
+            left : 865px;
+            top : 740px;
+        }
+
+    </style>
+
+</head>
+<body>
+<header id="header" th:insert="/header.html"></header>
+<h2>Survey Result</h2>
+<hr>
+
+<canvas id="myChart" width="500" height="500"></canvas>
+<div id="total">전체 투표 수 :<span>[[${total}]]</span></div>
+<div id="time">[[${startTime}]] ~ [[${endTime}]]</div>
+<div class="modal">
+    <div class="modal_content">
+        <div id="change"></div>
+        <img id="img" src="" width="200px", height="200px"/>
+
+    </div>
+</div>
+
+</body>
+<script th:inline="javascript">
+    let result1 = [[${result1}]];
+    let result2 = [[${result2}]];
+    let img1 = [[${img1}]];
+    let img2 = [[${img2}]];
+    let opnion1 = [[${opnion1}]];
+    let opnion2 = [[${opnion2}]];
+    let file1 = "./survey/"+img1;
+    let file2 = "./survey/"+img2;
+
+    if(result1>result2){
+        $("#change").append("<br><h3>"+opnion1+" 우세</h3>");
+        if(img1===""){
+            $("#img").hide();
+        }
+        $("#img").attr("src",file1);
+    }else if(result1<result2){
+        $("#change").append("<br><h3>"+opnion2+" 우세</h3>");
+        if(img1===""){
+            $("#img").hide();
+        }
+        $("#img").attr("src",file2);
+    }else{
+        $("#change").append("<br><h3>동등</h3>");
+        $("#img").remove();
+    }
+
+
+    let color= {
+        color1 : [
+            'rgb(66, 133, 244)',
+            'rgb(234, 67, 53)'
+        ],
+
+        color2 : [
+            'rgb(234, 67, 53)',
+            'rgb(251, 188, 5)'
+        ],
+        color3 : [
+            'rgb(251, 188, 5)',
+            'rgb(52, 168, 83)'
+        ],
+        color4 : [
+            'rgb(251, 188, 5)',
+            'rgb(66, 133, 244)'
+        ],
+        color5 : [
+            'rgb(234, 67, 53)',
+            'rgb(52, 168, 83)'
+        ],
+        color6 : [
+            'rgb(108, 139, 79)',
+            'rgb(56, 140, 225)'
+        ],
+        color7 : [
+            'rgb(232, 128, 170)',
+            '#241B52'
+        ],
+        color8 : [
+            'rgb(167, 197, 75)',
+            '#8D4C31'
+        ],
+        color9 : [
+            'rgb(156, 98, 18)',
+            '#01407E'
+        ],
+        color10 : [
+            'rgb(96, 0, 100)',
+            'rgb(182, 166, 1)'
+        ]
+    }
+    let borderColor= {
+        color1 : [
+            'rgb(45, 91, 167)',
+            'rgb(157, 45, 35)'
+        ],
+
+        color2 : [
+            'rgb(157, 45, 35)',
+            'rgb(174, 130, 3)'
+        ],
+        color3 : [
+            'rgb(174, 130, 3)',
+            'rgb(28, 91, 45)'
+        ],
+        color4 : [
+            'rgb(174, 130, 3)',
+            'rgb(45, 91, 167)'
+        ],
+        color5 : [
+            'rgb(157, 45, 35)',
+            'rgb(28, 91, 45)'
+        ]
+    }
+    let type = {
+        type1 : "doughnut",
+        type2 : "pie",
+
+    }
+    let rand = Math.floor(Math.random() *11);
+    let typeRand = Math.floor(Math.random()*3);
+
+    function selectType(typeRand){
+        if(typeRand===1){
+            return type.type1;
+        }else{
+            return type.type2;
+        }
+    }
+    function selectColor(rand){
+        if(rand===1){
+            return color.color1;
+        }else if(rand===2){
+            return color.color2;
+        }else if(rand===3){
+            return color.color3;
+        }else if(rand===4){
+            return color.color4;
+        }else if(rand===5){
+            return color.color5;
+        }else if(rand===6){
+            return color.color6;
+        }else if(rand===7){
+            return color.color7;
+        }else if(rand===8){
+            return color.color8;
+        }else if(rand===9){
+            return color.color9;
+        }else{
+            return color.color10;
+        }
+    }
+    function selectBorderColor(rand){
+        if(rand===1){
+            return borderColor.color1;
+        }else if(rand===2){
+            return borderColor.color2;
+        }else if(rand===3){
+            return borderColor.color3;
+        }else if(rand===4){
+            return borderColor.color4;
+        }else{
+            return borderColor.color5;
+        }
+    }
+
+    $(document).ready(function (){
+
+
+        $("#myChart").click(function (){
+            $(".modal").fadeIn();
+        })
+        $(".modal").click(function (){
+            $(".modal").fadeOut();
+        })
+    })
+
+    let ctx = document.getElementById('myChart');
+    let myChart = new Chart(ctx, {
+        type: selectType(typeRand),
+        data: {
+            labels: [opnion1, opnion2],
+            datasets: [{
+
+                data: [result1, result2],
+                backgroundColor:
+                    selectColor(rand)
+                ,
+                borderColor:
+                    selectBorderColor(rand)
+                ,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    });
+
+
+</script>
+</html>

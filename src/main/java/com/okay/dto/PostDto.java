@@ -4,6 +4,7 @@ import com.okay.Adapt.PostAdapt;
 import com.okay.domain.entity.Post;
 import com.okay.domain.entity.User;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 @NoArgsConstructor
@@ -21,8 +22,8 @@ public class PostDto implements PostAdapt {
     private String category;
     private String title;
     private String content;
-    private LocalDateTime regDate;
-    private LocalDateTime modDate;
+    private String regDate;
+    private String modDate;
     private String fileName;
 
     @Override
