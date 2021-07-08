@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,6 +23,11 @@ import java.util.Optional;
 public class CommentService extends Service{
     @Autowired
     CommentRepository commentRepository;
+
+    LocalDate today = LocalDate.now();
+    LocalDate yesterday = LocalDate.now().minusDays(1);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    String now = today.format(formatter);
 
     public void update(CommentDto commentDto){
         Comment comment = commentDto.changeComment(commentDto);
@@ -113,15 +119,23 @@ public class CommentService extends Service{
         User user = userRepository.getOne(userNo);
         Post post = postRepository.getOne(postNo);
         BigDecimal max = commentRepository.max();
+        // 0707 수정 시작
+        CommentDto dto= new CommentDto();
+        if(dto.getCommentNo()== null){
+            dto.setCommentNo(0L);
+        }else{
+            dto.setCommentNo(Long.valueOf(String.valueOf(commentRepository.max())+1L));
+        }
 
         Comment comment = Comment.builder()
-                .commentNo(Long.valueOf(String.valueOf(max)+1L))
+                .commentNo(dto.getCommentNo())
+                // 0707 수정 끝
                 .postNo(post)
                 .userNo(user)
                 .name(name)
                 .pw(pw)
                 .content(content)
-                .regDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .regDate(now)
                 .build();
         commentRepository.save(comment);
     }

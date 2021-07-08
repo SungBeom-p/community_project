@@ -10,11 +10,133 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
-    <link th:href="@{./css/gallery.css}" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <!--    <link th:href="@{./css/gallery.css}" rel="stylesheet" type="text/css"/>-->
     <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
+    <style>
+
+        a {
+            text-decoration:none;
+        }
+        a.okaya:link { color: black; text-decoration: none;}
+        a.okaya:visited { color: black; text-decoration: none;}
+        a.okaya:hover { color: royalblue; text-decoration: underline;}
+
+        /*   nav ul {
+               list-style: none;
+               border-top: 1px solid #23698b;
+               border-bottom: 1px solid #23698b;
+               text-align: center;
+               background-color: #232f32;
+           } */
+        h5 {
+            padding-bottom: 5%;
+            border-bottom: 2.5px solid royalblue;
+        }
+
+        .post ul li {
+            height: 40px;
+        }
+
+        .notice_container {
+            float: right;
+
+            width: 23%;
+            text-align: left;
+        }
+
+        .survey_container{
+            float: right;
+
+            width: 23%;
+            text-align: left;
+        }
+
+        .post_container {
+            float: left;
+
+            width: 25%;
+            text-align: left;
+        }
+        #sessiontag {
+            position: absolute;
+            top: 0px;
+            right: 35px;
+        }
+        #sessiontag1{
+            position: absolute;
+            top: 0px;
+            right: 35px;
+
+        }
+        #sessiontag1>a{
+            color: #cdcdcd;
+        }
+
+        #sessiontag>a{
+            color: #cdcdcd;
+        }
+        #okaytitle{
+            color:#cdcdcd;
+        }
+        #headertop{
+            background-color: #131921;
+        }
+        #nav2 {
+            background-color:#232f32;
+
+        }
+        #nav2 li>a{
+            display: inline;
+            color: white;
+        }
+
+
+        .post_container{
+            position: absolute;
+            top : 500px;
+            left : 220px;
+
+        }
+        .survey_container{
+            position: absolute;
+            top : 500px;
+            left : 750px;
+        }
+        .notice_container{
+            position: absolute;
+            top : 500px;
+            left : 1250px;
+        }
+        .openApi{
+            position: absolute;
+            top : 150px;
+            left : 420px;
+            width: 1000px;
+            height: 300px;
+
+        }
+        #coronaChart{
+            position: absolute;
+            left : 600px;
+            top : -5px;
+        }
+        h3{
+            position: absolute;
+            top : 165px;
+            left : 820px;
+        }
+    </style>
 </head>
 <body>
 <header th:insert="/header.html"></header>
+<div class="openApi">
+    <h3>[[${num}]]</h3>
+    <canvas id="myChart" width="500" height="300"></canvas>
+    <canvas id="coronaChart" width="500" height="300"></canvas>
+</div>
+
 <div  class = "post_container">
     <h5 class = "post_title">
         <a class="okaya" href="/board">자유 게시판
@@ -82,8 +204,90 @@
 </div>
 </div>
 <script th:inline="javascript">
-        let regdate = [[${post}]]
-        console.log(regdate);
+    var ctx = document.getElementById('myChart');
+    var ctx2 = document.getElementById('coronaChart');
+    let day = [[${day}]];
+
+    let timeArr = [[${timeArr}]];
+    let contentArr = [[${contentArr}]];
+
+    let division = [[${division}]];
+    division=division.slice(0,division.length-1);
+    let cnt = [[${cnt}]].slice(0,[[${cnt}]].length-1);
+
+
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: timeArr,
+            datasets: [{
+                label: day + ' 미세먼지',
+                data: contentArr,
+                backgroundColor:
+                    'rgba(255, 206, 86, 0.5)'
+                ,
+                borderColor:
+                    'rgba(255, 206, 86, 1.5)'
+                ,
+                borderWidth: 2
+                ,
+                lineTension : 0.2,  // 0이면 꺾은선 그래프, 숫자가 높을수록 둥글해짐
+
+                fill : false
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    });
+    var coronaChart = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: division,
+            datasets: [{
+                label: '시.도별 코로나 확진자수',
+                data: cnt,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
+                    'rgb(255, 99, 132,1.5)',
+                    'rgba(54, 162, 235, 1.5)',
+                    'rgba(255, 206, 86, 1.5)',
+                    'rgba(75, 192, 192, 1.5)',
+                    'rgba(153, 102, 255, 1.5)',
+                    'rgba(255, 159, 64, 1.5)',
+                    'rgb(204, 79, 105)',
+                    'rgb(42, 126, 183)',
+                    'rgb(204, 164, 68)',
+                    'rgb(55, 141, 141)',
+                    'rgb(122, 81, 204)',
+                    'rgb(204, 127, 51)'
+                ],
+
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+
+            },
+        }
+    });
+
+
+
 
 </script>
 

@@ -26,9 +26,9 @@ public class SurveyService extends Service {
         surveyRepository.save(survey);
     }
 
-
-    public void remove(SurveyDto surveyDto) { // DB DELETE
-        surveyRepository.deleteById(surveyDto.getSurveyNo());
+// survey게시물 삭제시 사용
+    public void remove(Long surveyNo) { // DB DELETE
+        surveyRepository.deleteById(surveyNo);
     }
 
     public void update(SurveyDto surveyDto) { // DB UPDATE
@@ -40,6 +40,7 @@ public class SurveyService extends Service {
         Optional<Survey> result = surveyRepository.findById(id);
         return result.get();
     }
+
 //0706 진성
     public SurveyDto selectOneDto(Long id){
         Optional<Survey> byId = surveyRepository.findById(id);
@@ -61,42 +62,32 @@ public class SurveyService extends Service {
         surveyRepository.save(survey);
     }
 
-
     public Page<Survey> getSurveyList(Pageable pageable, SearchDto searchDto) { // 글 목록 조회
         Page<Survey> surveyList = null;
-        Page<Survey> nullStoreList = null;
+        Page<Survey> nullSurveyList = null;
         switch (searchDto.getSearchFilter()) {
-//            case "title_content":
-//                surveyList = surveyRepository.findAllByTitleContainingOrContentContaining(searchDto.getSearchValue(), searchDto.getSearchValue(), pageable); //전체 검색
-//                break;
+            //전체글 인것 마냥 바꿔주시면되요 히진씨
+            //아 그리고 히진씨~ 이거 case가 굳이 필요없을수 있으니 없이 표현 가능하면
+            // 그렇게 변환해주실수있다면~ 해주세요 ^^
             case "title":
                 surveyList = surveyRepository.findAllByTitleContaining(searchDto.getSearchValue(), pageable); //제목으로 검색하는 경우
                 break;
-//            case "content":
-//                surveyList = surveyRepository.findAllByContentContaining(searchDto.getSearchValue(), pageable); //내용으로 검색하는 경우
-//                break;
             default:
                 surveyList = surveyRepository.findAll(pageable); //기본값 전체글 목록 (Paging)
                 break;
         }
-        if (surveyList.isEmpty()) return nullStoreList; //검색 결과가 없을 경우 빈 객체 반환
-
+        if (surveyList.isEmpty()) return nullSurveyList; //검색 결과가 없을 경우 빈 객체 반환
         return surveyList;
     }
 
-    public SurveyDto getSurvey(Long surveyNo) {
-        Survey surveyEntity = surveyRepository.findBySurveyNo(surveyNo);
-        SurveyDto surveyDto = new SurveyDto();
-        surveyDto = surveyDto.changeSurveyDto(surveyEntity);
-        return surveyDto;
-    }
+
     public List<Survey> surveyListfive(){
         List<Survey> surveyList = surveyRepository.findFirst5ByOrderByViewsDesc();
         return surveyList;
     }
 
-    public List<Survey> selectadmin(){
-        List<Survey> list = surveyRepository.findAllBy();
+    public List<Survey> selectAdmin(){
+        List<Survey> list = surveyRepository.findAll();
         return list;
     }
 
@@ -106,18 +97,29 @@ public class SurveyService extends Service {
         return list;
     }
     //회원 와 관리자 가 mypqge 활동내역에 사용
-    public List<Survey> listsurvey(User userNo){
+    public List<Survey> listSurvey(User userNo){
         List<Survey> list = surveyRepository.findFirst5ByUserNoOrderBySurveyNoDesc(userNo);
         return list;
     }
 
 
     public Long max(){
-
         BigDecimal max = surveyRepository.max();
         Long no = Long.valueOf(String.valueOf(max));
         return no;
     }
+
+    //조아요버튼
+    public Survey likeButton(Long id){
+        Survey survey = surveyRepository.findById(id).get();
+        return survey;
+    }
+
+
+    public void delete(Long Id) {
+        surveyRepository.deleteById(Id);
+    }
+
 
 
 

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-  <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
     <style>
 
         ul{
@@ -55,7 +55,7 @@
         }
         #myAllChart{
             position: absolute;
-            top: 280px;
+            top: 300px;
             left: 400px;
         }
         #myCommentChart{
@@ -65,7 +65,7 @@
         }
         h1{
             position: absolute;
-            left: 950px;
+            left: 960px;
             top:150px;
         }
         hr{
@@ -79,142 +79,132 @@
 
 </head>
 <body>
-  <header id="header" th:insert="/header.html"></header>
-  <div id="mypage">
-      <p>MY PAGE</p>
-      <li><a th:href="@{/mypage(request=${session.userId})}">개인 프로필</a></li>
-      <li><a th:href="@{/userEdit(request=${session.userId})}">프로필 수정</a></li>
-      <li><a th:href="@{/active(request=${session.userId})}">활동 내역</a></li>
-      <li th:if="${session.userId == 1}">
-          <a th:href="@{/myadmin(request=${session.userId})}">회원 관리 </a></li>
-      <li><a class="active" th:href="@{/about(request=${session.userId})}">About</a></li>
-  </div>
-  <h1>나의 활동 통계</h1>
-  <hr>
-    <div>
-        <canvas id="myChart" width="400" height="400"></canvas>
-        <canvas id="myCommentChart" width="400" height="400"></canvas>
-        <canvas id="myAllChart" width="400" height="400"></canvas>
-    </div>
-    <div>
+<header id="header" th:insert="/header.html"></header>
+<div id="mypage">
+    <p>MY PAGE</p>
+    <li><a th:href="@{/mypage(request=${session.userId})}">개인 프로필</a></li>
+    <li><a th:href="@{/userEdit(request=${session.userId})}">프로필 수정</a></li>
+    <li><a th:href="@{/active(request=${session.userId})}">활동 내역</a></li>
+    <li th:if="${session.userId == 1}">
+        <a th:href="@{/myadmin(request=${session.userId})}">회원 관리 </a></li>
+    <li><a class="active" th:href="@{/about(request=${session.userId})}">About</a></li>
+</div>
+<h1>나의 활동 통계</h1>
+<hr>
+<div id>
+    <canvas id="myChart" width="400" height="420"></canvas>
+    <canvas id="myCommentChart" width="400" height="420"></canvas>
+    <canvas id="myAllChart" width="400" height="400"></canvas>
+</div>
 
-    </div>
-  <script th:inline="javascript">
-      let week = [[${week}]];
-      let comment = [[${comment}]];
-      let all = [[${all}]];
+<script th:inline="javascript">
+    let post = [[${post}]];
+    let comment = [[${comment}]];
+    let all = [[${all}]];
 
-      let arr = [];
-      let arr2 = [];
-      let arr3 = [];
+    var ctx = document.getElementById('myChart');
+    var ctx2 = document.getElementById('myCommentChart');
+    var ctx3 = document.getElementById('myAllChart');
 
-      week.forEach((i,j)=>{
-          arr[j]=i;
-      });
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['8주전', '7주전', '6주전', '5주전', '4주전', '3주전', '2주전','1주전','최근'],
+            datasets: [{
+                label: '최근 게시글 활동 추이',
+                data: post,
 
-      comment.forEach((i,j)=>{
-          arr2[j]=i;
-      });
+                backgroundColor:
+                    'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    });
+    var myCommentChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ['8주전', '7주전', '6주전', '5주전', '4주전', '3주전', '2주전','1주전','최근'],
+            datasets: [{
+                label: '최근 댓글 활동 추이',
+                data: comment,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)'
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132,1.5)',
+                    'rgba(54, 162, 235, 1.5)',
+                    'rgba(255, 206, 86, 1.5)',
+                    'rgba(75, 192, 192, 1.5)',
+                    'rgba(153, 102, 255, 1.5)',
+                    'rgba(255, 159, 64, 1.5)'
+                ]
 
-      all.forEach((i,j)=>{
-          arr3[j]=i;
-      })
 
-
-
-      var ctx = document.getElementById('myChart');
-      var ctx2 = document.getElementById('myCommentChart');
-      var ctx3 = document.getElementById('myAllChart');
-      var myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-              labels: ['8주전', '7주전', '6주전', '5주전', '4주전', '3주전', '2주전','1주전','최근'],
-              datasets: [{
-                  label: '최근 게시글 활동 추이',
-                  data: arr,
-
-                  borderColor:
-                      'rgba(75, 192, 192, 1)',
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              responsive: false,
-              scales: {
-                  yAxes: [{
-                      ticks: {
-                          beginAtZero: true
-                      }
-                  }]
-              },
-          }
-      });
-      var myCommentChart = new Chart(ctx2, {
-          type: 'bar',
-          data: {
-              labels: ['8주전', '7주전', '6주전', '5주전', '4주전', '3주전', '2주전','1주전','최근'],
-              datasets: [{
-                  label: '최근 댓글 활동 추이',
-                  data: arr2,
-                  borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)',
-                      'rgba(255, 159, 64, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              responsive: false,
-              scales: {
-                  yAxes: [{
-                      ticks: {
-                          beginAtZero: true
-                      }
-                  }]
-              },
-          }
-      });
-      var myAllChart = new Chart(ctx3, {
-          type: 'doughnut',
-          data: {
-              labels: ['자유게시물', '자유게시물 댓글', '투표 게시물', '투표 게시물 댓글'],
-              datasets: [{
-                  label: '최근 댓글 활동 추이',
-                  data: arr3,
-                  backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(75, 192, 192, 0.2)',
-                      'rgba(153, 102, 255, 0.2)',
-                      'rgba(255, 159, 64, 0.2)'
-                  ],
-                  borderColor: [
-                      'rgba(255, 99, 132, 1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)',
-                      'rgba(255, 159, 64, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              responsive: false,
-              scales: {
-                  yAxes: [{
-                      ticks: {
-                          beginAtZero: true
-                      }
-                  }]
-              },
-          }
-      });
-  </script>
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    });
+    var myAllChart = new Chart(ctx3, {
+        type: 'doughnut',
+        data: {
+            labels: ['자유게시물', '자유게시물 댓글', '투표 게시물', '투표 게시물 댓글'],
+            datasets: [{
+                label: '최근 활동 추이',
+                data: all,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+        }
+    });
+</script>
 </body>
 </html>

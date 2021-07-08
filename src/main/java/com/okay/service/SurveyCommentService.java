@@ -7,8 +7,6 @@ import com.okay.domain.repository.SurveyCommentRepository;
 import com.okay.domain.repository.SurveyRepository;
 import com.okay.dto.SurveyCommentDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,17 +31,17 @@ public class SurveyCommentService {
     }
 
  // 관리자의 회원관리에 사용
-    public List<SurveyComment> selectsize(){
-        List<SurveyComment> list = surveyCommentRepository.findAllBy();
+    public List<SurveyComment> selectSize(){
+        List<SurveyComment> list = surveyCommentRepository.findAll();
         return list;
     }
     //회원 + 관리자의 회원활동내역에 사용
-    public List<SurveyComment> selectcommentsize(User userNo){
+    public List<SurveyComment> selectCommentSize(User userNo){
         List<SurveyComment> list = surveyCommentRepository.findAllByUserNo(userNo);
         return list;
     }
     //회원 와 관리자 가 mypqge 활동내역에 사용
-    public List<SurveyComment> listcomment(User userNo){
+    public List<SurveyComment> listComment(User userNo){
         List<SurveyComment> list = surveyCommentRepository.findFirst5ByUserNoOrderByIdDesc(userNo);
         return list;
     }
@@ -64,6 +62,14 @@ public class SurveyCommentService {
         Long no = Long.valueOf(String.valueOf(max));
         return no;
     }
+
+    //희진
+
+    public void deleteAll(Long Id) {
+        Optional<Survey> survey = surveyRepository.findById(Id);
+        surveyCommentRepository.deleteAllBySurveyNo(survey.get());
+    }
+
 
 
 }

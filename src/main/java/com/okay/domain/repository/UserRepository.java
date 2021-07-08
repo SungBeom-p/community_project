@@ -11,14 +11,10 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findAllByUserIdAndUserPw(String userId, String userPw);
-    List<User> findAll();
-
-
     //dto 넘버 증감
     @Query(value = "select max(userNo) from User")
     BigDecimal max();
 
-
-    //인환씨
-    User findByUserNo (Long userNo);
+    //성범 만듬
+    List<User> findAllByUserId(String userId);
 }

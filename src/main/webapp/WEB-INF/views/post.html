@@ -1,9 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+          crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <title>게시글 상세 페이지</title>
 
@@ -12,29 +13,37 @@
             padding-top: 70px;
             padding-bottom: 30px;
         }
+
         #category {
             padding-top: 10px;
             padding-bottom: 20px;
         }
+
         #title {
             padding-top: 20px;
         }
+
         #content {
             height: 200px;
         }
+
         #uploadFile {
             padding-top: 10px;
             padding-bottom: 30px;
         }
-        ul{
-            list-style:none;
+
+        ul {
+            list-style: none;
         }
-        li{
+
+        li {
             text-align: center
         }
+
         a {
-            text-decoration:none;
+            text-decoration: none;
         }
+
         /*   nav ul {
                list-style: none;
                border-top: 1px solid #23698b;
@@ -54,21 +63,25 @@
             text-decoration: none;
             line-height: 3em;
         }
-        #sessiontag1>a{
+
+        #sessiontag1 > a {
             color: #cdcdcd;
         }
 
-        #sessiontag>a{
+        #sessiontag > a {
             color: #cdcdcd;
         }
-        #nav2 li>a{
+
+        #nav2 li > a {
             display: inline;
             color: white;
         }
+
         @import url(https://fonts.googleapis.com/css?family=Roboto:400,700);
-        strong{
+        strong {
             color: #58ba83;
         }
+
         label {
             display: table-cell;
             vertical-align: middle;
@@ -78,58 +91,67 @@
             color: white;
             padding: 5px 10px;
             border-radius: 3px;
-            transition:none;
+            transition: none;
         }
-        button{
-            background:#36A2D7;
-            color:#fff;
-            border:none;
-            position:relative;
-            height:60px;
-            font-size:1.6em;
-            padding:0 2em;
-            cursor:pointer;
-            transition:800ms ease all;
-            outline:none;
-        }
-        button:before,button:after{
-            content:'';
-            position:absolute;
-            top:0;
-            right:0;
-            height:2px;
-            width:0;
+
+        button {
             background: #36A2D7;
-            transition:400ms ease all;
+            color: #fff;
+            border: none;
+            position: relative;
+            height: 60px;
+            font-size: 1.6em;
+            padding: 0 2em;
+            cursor: pointer;
+            transition: 800ms ease all;
+            outline: none;
         }
-        button:after{
-            right:inherit;
-            top:inherit;
-            left:0;
-            bottom:0;
+
+        button:before, button:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 2px;
+            width: 0;
+            background: #36A2D7;
+            transition: 400ms ease all;
         }
-        #main{
+
+        button:after {
+            right: inherit;
+            top: inherit;
+            left: 0;
+            bottom: 0;
+        }
+
+        #main {
             width: 60%;
             margin-left: 20%;
             height: 500px;
 
         }
-        .title{
+
+        .title {
             font-weight: bold;
         }
-        .name{
+
+        .name {
             font-size: large;
             padding-top: 10px;
         }
-        .regDate{
+
+        .regDate {
             font-size: medium;
             padding-bottom: 3%;
             border-bottom: 2.5px solid #c1dad6 !important;
         }
-        .postContent{
+
+        .postContent {
             margin-top: 3%;
         }
-        .agora{
+
+        .agora {
             margin-top: 5%;
             width: 60%;
             margin-left: 20%;
@@ -143,11 +165,11 @@
     <h1 class="title">[[${post.title}]]</h1>
     <h3 class="name">[[${post.name}]]</h3>
     <h3 class="regDate">작성일[[${post.regDate}]]
-        <th:block th:if="${post.regDate} != ${post.modDate}" />
+        <th:block th:if="${post.regDate} != ${post.modDate}"/>
         수정일 [[${post.modDate}]]
         조회수 [[${post.views}]]
-        <input type="button" id="editPostButton" value="edit"/>
-        <input type="button" id="deletePostButton" value="delete"/>
+        <input type="button" id="editPostButton" value="수정"/>
+        <input type="button" id="deletePostButton" value="삭제"/>
         <input type="button" id="boardButton" value="목록"/>
     </h3>
     <h3 class="postContent">[[${post.content}]]</h3>
@@ -161,215 +183,242 @@
         <form name="form" id="form" role="form" modelAttribute="replyVO" method="post">
             <div class="row">
                 <div class="col-sm-10">
-                    <textarea path="content" id="newCommentContent" class="form-control" rows="3" placeholder="댓글을 입력해 주세요"></textarea>
+                            <textarea path="content" id="newCommentContent" class="form-control" rows="3"
+                                      placeholder="댓글을 입력해 주세요"></textarea>
                 </div>
                 <div class="col-sm-2">
-                    <input class="form-control" id="newCommentNameNm"   th:value="${name}"></input>
+                    <input class="form-control" id="newCommentNameNm" th:value="${name}"></input>
                     <th:block th:if="${session.userId} == 2">
-                        <input  class="form-control" type="password" id="newCommentPassword" placeholder="PW를 입력하세요."/>
+                        <input class="form-control" type="password" id="newCommentPassword"
+                               placeholder="PW를 입력하세요."/>
                     </th:block>
-                    <button type="button" class="btn btn-sm btn-primary" id="newCommentButton" style="width: 100%; margin-top: 10px"> 저 장 </button>
-
+                    <button type="button" class="btn btn-sm btn-primary" id="newCommentButton"
+                            style="width: 100%; margin-top: 10px"> 저 장
+                    </button>
                 </div>
             </div>
         </form>
-        <!--comment-->
-        <table id="commentTable">
-            <tr th:each="comment:${commentList}">
-                <td th:text="${comment.commentNo}"/>
-                <td class="name" th:text="${comment.name}"/>
-                <td class="content" th:text="${comment.content}"/>
-                <td class="regDate" th:text="${comment.regDate}"/>
-                <td>
-                    <input type="button" value="X" th:onclick="deleteCommentFunc([[${comment.commentNo}]],
+    </div>
+</div>
+<!--comment-->
+<table id="commentTable">
+    <tr th:each="comment:${commentList}">
+        <td th:text="${comment.commentNo}"/>
+        <td class="name" th:text="${comment.name}"/>
+        <td class="content" th:text="${comment.content}"/>
+        <td class="regDate" th:text="${comment.regDate}"/>
+        <td>
+            <input type="button" value="X" th:onclick="deleteCommentFunc([[${comment.commentNo}]],
                                [[${comment.userNo.userNo}]], [[${comment.pw}]])"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <br/>
-                </td>
-            </tr>
-        </table>
-        <!--paging-->
-        <table id="pagingTable">
-            <tr>
-                <td th:block th:with="startAt=${commentPaging.startAt}, endBy=${commentPaging.endBy}" th:colspan="5">
-                    <a th:if="${commentPaging.startAt} - 1 > 0"
-                       th:href="@{/post( postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} - 5)}"
-                       th:text="prev"/>
-                    <span th:if="${commentPaging.totalPage} != 0">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <br/>
+        </td>
+    </tr>
+</table>
+<!--paging-->
+<table id="pagingTable">
+    <tr>
+        <td th:block th:with="startAt=${commentPaging.startAt}, endBy=${commentPaging.endBy}"
+            th:colspan="5">
+            <a th:if="${commentPaging.startAt} - 1 > 0"
+               th:href="@{/post( postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} - 5)}"
+               th:text="prev"/>
+            <span th:if="${commentPaging.totalPage} != 0">
                         <a th:each="presentPage : ${#numbers.sequence(startAt, endBy)}"
                            th:href="@{/post(postNo=${post.postNo}, presentPage=${presentPage})}"
-                           th:text=|[${presentPage}]|/>
+                           th:text=|[${presentPage}]|></a>
                     </span>
-                    <span th:if="${commentPaging.totalPage} == 0">
+            <span th:if="${commentPaging.totalPage} == 0">
                         Comments not exist
                     </span>
-                    <a th:if="${commentPaging.endBy} + 1 < ${commentPaging.totalPage}"
-                       th:href="@{/post(postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} + 5)}"
-                       th:text="next"/>
-                </td>
-            </tr>
-        </table>
+            <a th:if="${commentPaging.endBy} + 1 < ${commentPaging.totalPage}"
+               th:href="@{/post(postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} + 5)}"
+               th:text="next"/>
+        </td>
+    </tr>
+</table>
 
-        <!--forms-->
-        <form id="editPostForm" action="/edit" method="post">
-            <input type="hidden" name="func" value="edit">
-            <input type="hidden" name="postNo" th:value="${post.postNo}"/>
-        </form>
-
-
-        <form id="deletePostForm" action="/remove" method="post">
-            <input type="hidden" name="postNo" th:value="${post.postNo}"/>
-        </form>
+<!--forms-->
+<form id="editPostForm" action="/edit" method="post">
+    <input type="hidden" name="func" value="edit">
+    <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+</form>
 
 
-        <form id="newCommentForm" action="/new-comment" method="post">
-            <input type="hidden" name="postNo" th:value="${post.postNo}"/>
-            <input type="hidden" name="name" id="name"/>
-            <input type="hidden" name="pw" id="pw"/>
-            <input type="hidden" name="content" id="content"/>
-            <input type="hidden" name="userNo" id="userNo"/>
-        </form>
+<form id="deletePostForm" action="/remove" method="post">
+    <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+    <input type="hidden" name="category" th:value="${post.category}"/>
+</form>
 
 
-        <form id="deleteCommentForm" action="/remove-comment" method="post">
-            <input type="hidden" name="func" value="deleteComment"/>
-            <input type="hidden" name="postNo" th:value="${post.postNo}"/>
-            <input type="hidden" name="commentNo" id="commentNo"/>
-        </form>
-        <script th:inline="javascript">
+<form id="newCommentForm" action="/newComment" method="post">
+    <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+    <input type="hidden" name="name" id="name"/>
+    <input type="hidden" name="pw" id="pw"/>
+    <input type="hidden" name="content" id="content"/>
+    <input type="hidden" name="userNo" id="userNo"/>
+</form>
 
-            function editPostFunc() {
-                let editPostForm = document.querySelector('#editPostForm');
-                if ([[${post.userNo.userNo}]] != 2) {
-                    if ([[${post.userNo.userNo}]] == [[${userNo}]] || [[${userNo}]] == 1) {
-                        editPostForm.submit();
-                    } else {
-                        alert("권한이 없습니다.");
-                    }
+
+<form id="deleteCommentForm" action="/removeComment" method="post">
+    <input type="hidden" name="func" value="deleteComment"/>
+    <input type="hidden" name="postNo" th:value="${post.postNo}"/>
+    <input type="hidden" name="commentNo" id="commentNo"/>
+</form>
+
+<script th:inline="javascript">
+
+    if ([[${userNo}]] != 2) {
+        document.querySelector('#newCommentNameNm').readOnly = true;
+    }
+
+    function editPostFunc() {
+        let editPostForm = document.querySelector('#editPostForm');
+        if ([[${post.userNo.userNo}]] != 2) {
+            if ([[${post.userNo.userNo}]] == [[${userNo}]] || [[${userNo}]] == 1) {
+                editPostForm.submit();
+            } else {
+                alert("권한이 없습니다.");
+            }
+        } else {
+            if ([[${userNo}]] == 1) {
+                editPostForm.submit();
+            } else {
+                let pwCheck = prompt("비밀번호를 입력해주세요.");
+                if (pwCheck == [[${post.pw}]]) {
+                    editPostForm.submit();
+                } else if (pwCheck == null) {
+
                 } else {
-                    if ([[${userNo}]] == 1) {
-                        editPostForm.submit();
-                    } else {
-                        let pwCheck = prompt("비밀번호를 입력해주세요.");
-                        if (pwCheck == [[${post.pw}]]) {
-                            editPostForm.submit();
-                        } else {
-                            alert("권한이 없습니다.");
-                        }
-                    }
+                    alert("권한이 없습니다.");
                 }
             }
+        }
+    }
 
-            function deletePostFunc() {
-                let deletePostForm = document.querySelector('#deletePostForm');
-                if ([[${post.userNo.userNo}]] != 2) {
-                    if ([[${post.userNo.userNo}]] == [[${userNo}]] || [[${userNo}]] == 1) {
-                        console.log([[${post.userNo.userNo}]]);
-                        let deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
-                        if (deleteConfirm) {
-                            deletePostForm.submit();
-                        }
-                    } else {
-                        alert("권한이 없습니다.");
-                    }
+    function deletePostFunc() {
+        let deletePostForm = document.querySelector('#deletePostForm');
+        if ([[${post.userNo.userNo}]] != 2) {
+            if ([[${post.userNo.userNo}]] == [[${userNo}]] || [[${userNo}]] == 1) {
+                console.log([[${post.userNo.userNo}]]);
+                let deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
+                if (deleteConfirm) {
+                    deletePostForm.submit();
+                }
+            } else {
+                alert("권한이 없습니다.");
+            }
+        } else {
+            if ([[${userNo}]] == 1) {
+                let deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
+                if (deleteConfirm) {
+                    deletePostForm.submit();
+                }
+            } else {
+                let pwCheck = prompt("비빌번호를 입력하세요.");
+                if (pwCheck == [[${post.pw}]]) {
+                    deletePostForm.submit();
+                } else if (pwCheck == null) {
                 } else {
-                    if ([[${userNo}]] == 1) {
-                        let deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
-                        if (deleteConfirm) {
-                            deletePostForm.submit();
-                        } else {
-                            let pwCheck = prompt("비빌번호를 입력하세요.");
-                            if (pwCheck == [[${post.pw}]]) {
-                                deletePostForm.submit();
-                            } else {
-                                alert("권한이 없습니다.");
-                            }
-                        }
-                    }
+                    alert("권한이 없습니다.");
                 }
             }
+        }
+    }
 
-            function newCommentFuncM() {
-                let newCommentForm = document.querySelector('#newCommentForm');
-                let content = document.querySelector('#newCommentContent').value;
+    function newCommentFuncM() {
+        let newCommentForm = document.querySelector('#newCommentForm');
+        let content = document.querySelector('#newCommentContent').value;
 
-                if (content.length < 5) {
-                    alert("Please check your comment form");
+        if (content.length < 5) {
+            alert("이름, 비밀번호 혹은 댓글 내용이 너무 짧습니다.");
+        } else {
+            document.querySelector('#name').value = [[${name}]];
+            document.querySelector('#pw').value = "0000";
+            document.querySelector('#content').value = content;
+            document.querySelector('#userNo').value = [[${userNo}]];
+
+            newCommentForm.submit();
+        }
+    }
+
+    function newCommentFuncNm() {
+        let newCommentForm = document.querySelector('#newCommentForm');
+        let name = document.querySelector('#newCommentNameNm').value;
+        let pw = document.querySelector('#newCommentPassword').value;
+        let content = document.querySelector('#newCommentContent').value;
+
+        if (name.length < 2 || pw.length < 4 || content.length < 5) {
+            alert("이름, 비밀번호 혹은 댓글 내용이 너무 짧습니다.");
+        } else {
+            document.querySelector('#name').value = name;
+            document.querySelector('#pw').value = pw;
+            document.querySelector('#content').value = content;
+            document.querySelector('#userNo').value = [[${userNo}]];
+
+            newCommentForm.submit();
+        }
+    }
+
+    function deleteCommentFunc(commentNo, userNo, pw) {
+        let deleteCommentForm = document.querySelector('#deleteCommentForm');
+        document.querySelector('#commentNo').value = commentNo;
+
+        if (userNo != 2) {
+            if (userNo == [[${userNo}]] || [[${userNo}]] == 1) {
+                let deleteConfirm = confirm("댓글을 삭제하시겠습니까?");
+                if (deleteConfirm) {
+                    deleteCommentForm.submit();
+                }
+            } else {
+                alert("권한이 없습니다.");
+            }
+        } else {
+            if ([[${userNo}]] == 1) {
+                let deleteConfirm = confirm("댓글을 삭제하시겠습니까?");
+                if (deleteConfirm) {
+                    deleteCommentForm.submit();
+                }
+            } else {
+                let pwCheck = prompt("비밀번호를 입력해주세요.");
+                if (pwCheck == pw) {
+                    deleteCommentForm.submit();
+                } else if (pwCheck == null) {
+
                 } else {
-                    document.querySelector('#name').value = [[${name}]];
-                    document.querySelector('#pw').value = "0000";
-                    document.querySelector('#content').value = content;
-                    document.querySelector('#userNo').value = [[${userNo}]];
-
-                    newCommentForm.submit();
+                    alert("권한이 없습니다.");
                 }
             }
+        }
+    }
 
-            function newCommentFuncNm() {
-                let newCommentForm = document.querySelector('#newCommentForm');
-                let name = document.querySelector('#newCommentNameNm').value;
-                let pw = document.querySelector('#newCommentPassword').value;
-                let content = document.querySelector('#newCommentContent').value;
+    function board() {
+        let category = [[${post.category}]];
+        let page = "";
+        if (category == "on") {
+            page = "/notice";
+        } else if (category == "off") {
+            page = "/board";
+        } else {
+            page = "/service";
+        }
+        location.href = page;
+    }
 
-                if (name.length < 2 || pw.length < 4 || content.length < 5) {
-                    alert("이름, 비밀번호 혹은 댓글 내용이 너무 짧습니다.");
-                } else {
-                    document.querySelector('#name').value = name;
-                    document.querySelector('#pw').value = pw;
-                    document.querySelector('#content').value = content;
-                    document.querySelector('#userNo').value = [[${userNo}]];
 
-                    newCommentForm.submit();
-                }
-            }
+    document.querySelector('#editPostButton').addEventListener('click', editPostFunc);
+    document.querySelector('#deletePostButton').addEventListener('click', deletePostFunc);
 
-            function deleteCommentFunc(commentNo, userNo, pw) {
-                let deleteCommentForm = document.querySelector('#deleteCommentForm');
-                document.querySelector('#commentNo').value = commentNo;
+    if ([[${userNo}]] != 2) {
+        document.querySelector('#newCommentButton').addEventListener('click', newCommentFuncM);
+    } else if ([[${userNo}]] == 2) {
+        document.querySelector('#newCommentButton').addEventListener('click', newCommentFuncNm);
+    }
+    document.querySelector('#boardButton').addEventListener('click', board);
 
-                if (userNo != 2) {
-                    if (userNo == [[${userNo}]] || [[${userNo}]] == 1) {
-                        let deleteConfirm = confirm("댓글을 삭제하시겠습니까?");
-                        if (deleteConfirm) {
-                            deleteCommentForm.submit();
-                        }
-                    } else {
-                        alert("권한이 없습니다.");
-                    }
-                } else {
-                    if ([[${userNo}]] == 1) {
-                        let deleteConfirm = confirm("댓글을 삭제하시겠습니까?");
-                        if (deleteConfirm) {
-                            deleteCommentForm.submit();
-                        }
-                    } else {
-                        let pwCheck = prompt("비밀번호를 입력해주세요.");
-                        if (pwCheck == pw) {
-                            deleteCommentForm.submit();
-                        } else {
-                            alert("권한이 없습니다.");
-                        }
-                    }
-                }
-            }
-
-            function board() {
-                location.href = "/board";
-            }
-
-            document.querySelector('#editPostButton').addEventListener('click', editPostFunc);
-            document.querySelector('#deletePostButton').addEventListener('click', deletePostFunc);
-
-            if ([[${userNo}]] != 2) {
-                document.querySelector('#newCommentButton').addEventListener('click', newCommentFuncM);
-            } else if ([[${userNo}]] == 2) {
-                document.querySelector('#newCommentButton').addEventListener('click', newCommentFuncNm);
-            }
-            document.querySelector('#boardButton').addEventListener('click', board);
-        </script>
+</script>
 </body>
-
 </html>

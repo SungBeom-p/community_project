@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -23,6 +24,11 @@ public class PostService extends Service{
 
     @Autowired
     PostRepository postRepository;
+
+    LocalDate today = LocalDate.now();
+    LocalDate yesterday = LocalDate.now().minusDays(1);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+    String now = today.format(formatter);
 
 
 
@@ -67,7 +73,6 @@ public List<PostDto> selectAll(){
                 break;
         }
         if(searchList.isEmpty()) return nullSearchList; //검색 결과가 없을 경우 빈 객체 반환
-
         return searchList;
     }
 
@@ -179,7 +184,7 @@ public List<PostDto> selectAll(){
     public void editPost(User userNo, Long postNo, Long views, String title,
                          String name, String pw, String category, String content,
                          String regDate) {
-        User user = userRepository.findByUserNo(userNo.getUserNo());
+        User user = userRepository.findById(userNo.getUserNo()).get();
         Post post = Post.builder()
                 .userNo(user)
                 .postNo(postNo)
@@ -189,8 +194,8 @@ public List<PostDto> selectAll(){
                 .pw(pw)
                 .category(category)
                 .content(content)
-                .regDate(regDate)
-                .modDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .regDate(now)
+                .modDate(now)
                 .build();
                 postRepository.save(post);
     }

@@ -31,7 +31,7 @@
   <li><a class="active" th:href="@{/myactive(request=${session.userId})}">활동 내역</a></li>
   <li th:if="${session.userId == 1}">
     <a th:href="@{/myadmin(request=${session.userId})}">회원 관리 </a></li>
-  <li><a href="#about">About</a></li>
+  <li><a th:href="@{/about}">About</a></li>
 </div>
 <section>
   <div class="container-fluid">
@@ -94,15 +94,10 @@
     let comment = [[${commentlist}]];
     let post = [[${postlist}]];
     let svcomment = [[${svcommentlist}]];
-
-    console.log(comment);
-    console.log(post);
-    console.log(svcomment);
-
     let flag = false;
+
    $('#sel').change(function(){
      let state = $('#sel option:selected').val();
-     console.log('이벤트발생!')
      if(state =='option1') {
        flag = false;
        $("#containsectrion").empty();
@@ -113,7 +108,6 @@
                "<td style='width: 330px;text-align: center;'>" + '조회수' + "</td>" +
                "</tr> " +
                "</table>");
-       console.log("클릭???");
        if (flag == false) {
          post.forEach(i => {
            $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
@@ -129,8 +123,6 @@
      }
     if(state =='option2') {
       let survey = [[${surveylist}]];
-      console.log('option2이벤트')
-      console.log(survey)
       flag = false;
       $("#containsectrion").empty();
       $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
@@ -140,7 +132,6 @@
               "<td style='width: 330px;text-align: center;'>" + '조회수' + "</td>" +
               "</tr> " +
               "</table>" );
-      console.log("클릭???");
       if(flag == false){
         survey.forEach(i=>{
           $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
@@ -163,7 +154,6 @@
                "<td style='width: 330px;text-align: center;'>" + '적성일' + "</td>" +
                "</tr> " +
                "</table>" );
-       console.log("클릭???");
        if(flag == false){
          comment.forEach(i=>{
            $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
@@ -176,7 +166,6 @@
          })
        }
        flag = true;
-
      }
      if(state =='option4') {
        flag = false;
@@ -188,7 +177,6 @@
                "<td style='width: 330px;text-align: center;'>" + '적성일' + "</td>" +
                "</tr> " +
                "</table>");
-       console.log("클릭???");
        if (flag == false) {
          svcomment.forEach(i => {
            $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +

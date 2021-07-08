@@ -50,7 +50,19 @@
 <!--    <error-page>-->
     <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/views/404error.html</location>
+        <location>/WEB-INF/views/errorPage/404error.html</location>
+    </error-page>
+    <error-page>
+        <error-code>409</error-code>
+        <location>/WEB-INF/views/errorPage/409error.html</location>
+    </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/views/errorPage/400error.html</location>
+    </error-page>
+    <error-page>
+        <error-code>200</error-code>
+        <location>/WEB-INF/views/errorPage/409error.html</location>
     </error-page>
 
 <!--        <error-code>404</error-code>-->

@@ -31,8 +31,13 @@
 <body>
 <table>
     <tr>
+        <td>
+            <input id="editPostTitle" th:value="${post.content}"/>
+        </td>
+    </tr>
+    <tr>
         <td th:if="${post.userNo.userNo} != 2">
-            <input type="text" name="title" id="editPostTitle" th:value="${post.title}"/>
+            <input type="text" name="title" id="editPostName" th:value="${post.name}"/>
         </td>
 
         <td th:if="${post.userNo.userNo} == 2">
@@ -50,6 +55,10 @@
     <tr>
         <td>
             <textarea name="content" id="editPostContent">[[${post.content}]]</textarea>
+        </td>
+        <td>
+            <input type="file" name="uploadFile" id="uploadFile"
+                   accept="image/jpg, image/jpeg, image/png, image/gif">
         </td>
     </tr>
     <tr>
@@ -70,24 +79,24 @@
     <input type="hidden" name="regDate" id="regDate"/>
     <input type="hidden" name="content" id="content"/>
     <input type="hidden" name="views" id="views"/>
+    <input type="hidden" name="fileName" id="fileName"/>
 </form>
 
 <script th:inline="javascript">
     function editPostFunc() {
         document.querySelector('#title').value = document.querySelector('#editPostTitle').value;
         if ([[${post.userNo.userNo}]] != 2) {
-            console.log('11111111111');
+
             document.querySelector('#name').value = [[${post.name}]];
             document.querySelector('#pw').value = "0000";
         } else {
-            console.log('222222222222222');
             document.querySelector('#name').value = document.querySelector('#editPostName').value;
             document.querySelector('#pw').value = document.querySelector('#editPostPassword').value;
         }
-        console.log('333333333333333');
         document.querySelector('#regDate').value = [[${post.regDate}]];
         document.querySelector('#content').value = document.querySelector('#editPostContent').value;
         document.querySelector('#views').value = [[${post.views}]];
+        document.querySelector("#fileName").value = document.querySelector('#uploadFile').value;
 
         let name = document.querySelector('#name').value;
         let pw = document.querySelector('#pw').value;
@@ -101,8 +110,17 @@
         }
     }
 
-    function cancel () {
-        location.href="/post?postNo=" + [[${post.postNo}]];
+    function cancel() {
+        let category = [[${post.category}]];
+        let page = "";
+        if (category == "on") {
+            page = "/notice";
+        } else if (category == "off") {
+            page = "/board";
+        } else {
+            page = "/service";
+        }
+        location.href = page + "?postNo=" + [[${post.postNo}]];
     }
 
     document.querySelector('#editPostButton').addEventListener('click', editPostFunc);

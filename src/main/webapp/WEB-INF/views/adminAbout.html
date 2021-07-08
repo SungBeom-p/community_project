@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+  <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
+  <style>
+
+    ul{
+      list-style:none;
+    }
+    a {
+      text-decoration:none;
+    }
+    nav ul li {
+      display: inline;
+      letter-spacing: .3em;
+      margin-left: 2em;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      line-height: 3em;
+    }
+    #mypage{
+      list-style-type: none;
+      float: left;
+      margin: 0;
+      padding: 15px;
+      width: 230px;
+      height: 600px;
+      background-color: white;
+    }
+    #mypage li a {
+      display: block;
+      color: #000;
+      padding: 8px 16px;
+      text-decoration: none;
+    }
+    #mypage li a.active {
+      background-color: #3B5998   ;
+      color: white;
+    }
+    #mypage li a:hover:not(.active) {
+      background-color: #555;
+      color: white;
+    }
+    .myChart{
+      position: absolute;
+      top : 350px;
+      left : 900px;
+    }
+    .myAllChart{
+      position: absolute;
+      top: 364px !important;
+      left: 380px !important;
+    }
+    .myCommentChart{
+      position: absolute;
+      top: 350px !important;
+      left : 1400px !important;
+    }
+    h1{
+      position: absolute;
+      left: 960px;
+      top:150px;
+    }
+    hr{
+      position: absolute;
+      left: 955px;
+      width: 250px;
+      top: 200px;
+      border: 3px solid #131921 !important;
+    }
+    #adminRegisterChart{
+      position: absolute;
+      top : 20px;
+      left : 500px;
+    }
+    #adminFileChart{
+      position: absolute;
+      top : 20px;
+      left : 1000px;
+    }
+
+
+  </style>
+
+</head>
+<body>
+<header id="header" th:insert="/header.html"></header>
+<div id="mypage">
+  <p>MY PAGE</p>
+  <li><a th:href="@{/mypage(request=${session.userId})}">개인 프로필</a></li>
+  <li><a th:href="@{/userEdit(request=${session.userId})}">프로필 수정</a></li>
+  <li><a th:href="@{/active(request=${session.userId})}">활동 내역</a></li>
+  <li th:if="${session.userId == 1}">
+    <a th:href="@{/myadmin(request=${session.userId})}">회원 관리 </a></li>
+  <li><a class="active" th:href="@{/about(request=${session.userId})}">About</a></li>
+</div>
+<h1> 커뮤니티 현황</h1>
+<hr>
+<div>
+  <canvas class ="myChart" id="adminAllChart" width="400" height="400"></canvas>
+  <canvas class="myAllChart" id="adminRegisterChart" width="400" height="400"></canvas>
+  <canvas class="myCommentChart" id="adminFileChart" width="400" height="400"></canvas>
+</div>
+
+<script th:inline="javascript">
+  let adminAll = [[${adminAll}]];
+  let registerAll = [[${registerAll}]];
+  let file = [[${file}]];
+
+  var ctx4 = document.getElementById('adminAllChart');
+  var ctx5 = document.getElementById('adminRegisterChart');
+  var ctx6 = document.getElementById('adminFileChart');
+
+
+  var adminAllChart = new Chart(ctx4, {
+    type: 'polarArea',
+    data: {
+      labels: ['공지사항','고객센터','자유게시판','투표 게시판','댓글'],
+      datasets: [{
+        label: '관리자용 서비스 현황',
+        data: adminAll,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+          'rgba(255, 159, 64, 0.5)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132,1.5)',
+          'rgba(54, 162, 235, 1.5)',
+          'rgba(255, 206, 86, 1.5)',
+          'rgba(75, 192, 192, 1.5)',
+          'rgba(153, 102, 255, 1.5)',
+          'rgba(255, 159, 64, 1.5)'
+        ]
+
+
+      }]
+    },
+    options: {
+      responsive: false,
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+    }
+  });
+  var adminRegisterChart = new Chart(ctx5, {
+    type: 'line',
+    data: {
+      labels: ['8주전', '7주전', '6주전', '5주전', '4주전', '3주전', '2주전','1주전','최근'],
+      datasets: [{
+        label: '회원가입 현황',
+        data: registerAll,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+          'rgba(255, 159, 64, 0.5)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132,1.5)',
+          'rgba(54, 162, 235, 1.5)',
+          'rgba(255, 206, 86, 1.5)',
+          'rgba(75, 192, 192, 1.5)',
+          'rgba(153, 102, 255, 1.5)',
+          'rgba(255, 159, 64, 1.5)'
+        ]
+
+
+      }]
+    },
+    options: {
+      responsive: false,
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+    }
+  });
+  var adminRegisterChart = new Chart(ctx6, {
+    type: 'pie',
+    data: {
+      labels: ['파일이 없는 게시글','파일이 있는 게시글'],
+      datasets: [{
+        label: '게시물 파일 여부',
+        data: file,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.5)',
+          'rgba(54, 162, 235, 0.5)',
+          'rgba(255, 206, 86, 0.5)',
+          'rgba(75, 192, 192, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+          'rgba(255, 159, 64, 0.5)'
+        ],
+        borderColor: [
+          'rgb(255, 99, 132,1.5)',
+          'rgba(54, 162, 235, 1.5)',
+          'rgba(255, 206, 86, 1.5)',
+          'rgba(75, 192, 192, 1.5)',
+          'rgba(153, 102, 255, 1.5)',
+          'rgba(255, 159, 64, 1.5)'
+        ]
+
+
+      }]
+    },
+    options: {
+      responsive: false,
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+    }
+  });
+</script>
+</body>
+</html>
