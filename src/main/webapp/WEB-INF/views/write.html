@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-latest.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>board</title>
@@ -34,7 +36,7 @@
     <form action="write" method="post" id="form" enctype="multipart/form-data">
       <th:block th:if="${session.userId == 1}">
         <label for="content" id="category">공지글</label>
-        <input type="radio" name="category" ondblclick="this.checked=false"/> <!--두번 누르면 선택 취소-->
+        <input  type="radio" name="category" ondblclick="this.checked=false"/> <!--두번 누르면 선택 취소-->
       </th:block>
 
       <div class="mb-3">
@@ -45,21 +47,21 @@
       <th:block th:if="${session.userId == 1}">
         <div class="mb-3">
           <label for="adminName">작성자</label>
-          <input type="text" class="form-control" name="name" id="adminName" th:value="${name}" readonly>
+          <input type="text" maxlength="10" class="form-control" name="name" id="adminName" th:value="${name}" readonly>
         </div>
       </th:block>
 
       <th:block th:if="${session.userId > 2}">
         <div class="mb-3">
           <label for="userName">작성자</label>
-          <input type="text" class="form-control" name="name" id="userName" th:value="${name}" readonly>
+          <input type="text" maxlength="10" class="form-control" name="name" id="userName" th:value="${name}" readonly>
         </div>
       </th:block>
 
       <th:block th:if="${session.userId == 2}">
         <div class="mb-3">
           <label for="name">작성자</label>
-          <input type="text" class="form-control" name="name" id="name">
+          <input type="text" maxlength="10" class="form-control" name="name" id="name">
         </div>
       </th:block>
 
@@ -90,29 +92,19 @@
         </div>
       </th:block>
     </form>
-      <div>
-        <button id="btnSave" disabled="true" class="btn btn-sm btn-primary" value="저장">저장</button>
-        <button type="button"  class="btn btn-sm btn-primary" id="btnList">목록</button>
-      </div>
+    <div>
+      <button id="btnSave" class="btn btn-sm btn-primary" value="저장">저장</button>
+      <button type="button"  class="btn btn-sm btn-primary" id="btnList">목록</button>
+    </div>
   </div>
 
 </article>
 <script th:inline="javascript">
 
-  $(document).on('click', '#btnList', function(e){
-    location.href="/notice";
-  });
+
 
   $(document).ready(function (){
-    $("body").on('input',function (){
-      if($("#title").val().length >2){
-        if($("#content").val().length>10){
-          $('#btnSave').prop("disabled", false);
-        }else{
-          $('#btnSave').prop("disabled", true);
-        }
-      }
-    })
+
     $('#btnSave').click(()=>{
       if($("input[name='title']").val().length<2 ){
         alert("제목은 2글자 이상 입력해주세요.");
@@ -123,10 +115,10 @@
       }else if($("input[name='pw']").val().length <= 0) {
         alert("비밀번호는 4글자 이상 입력해주세요.");
         $('#form').preventDefault();
-        }else{
+      }else{
         $('#form').submit();
-        }
-      })
+      }
+    })
   })
 
 </script>

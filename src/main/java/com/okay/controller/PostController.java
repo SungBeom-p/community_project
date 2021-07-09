@@ -90,7 +90,7 @@ public class PostController {
 
     @GetMapping("/gallery")
     public String gallaryList(Model model) {
-        List<Post> cntList = postService.postCntTen("off"); //poslist limit5 orderbyviews desc
+        List<Post> cntList = postService.postCntFive("off"); //poslist limit5 orderbyviews desc
         List<Post> noticeList = postService.postCnt("on"); //noticeist limit5 orderbyviews desc
         List<Survey> surveyList = surveyService.surveyListfive(); //poslist limit5 orderbyviews desc
         BufferedReader br = null;
@@ -240,10 +240,11 @@ public class PostController {
         }
         // 0707 수정 시작
         PostDto dt= new PostDto();
-        if(dt.getPostNo()== null){
-            dt.setPostNo(0L);
-        }else{
+
+        try{
             dt.setPostNo(postService.max()+1L);
+        }catch (Exception e){
+            dt.setPostNo(1L);
         }
 
         PostDto postDto = PostDto.builder()
@@ -260,17 +261,19 @@ public class PostController {
                 .views(0L)
                 .build();
         postService.create(postDto);
-
-        return "redirect:/post?postNo=" + postDto.getPostNo()+1L;
+        return "redirect:/post?postNo="+postDto.getPostNo();
         // 0707 수정 끝
     }
     @GetMapping("/notice") // 7.2 추가
     public String getNoticeList(Model model, @RequestParam(value="page", defaultValue="1") int page
             ,@RequestParam(value="size", defaultValue="20") int size, String category, SearchDto searchDto) {
         category = "on";
+
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("postNo").descending()); // 0부터 담기기때문에..-1 requestparam->페이징 받아줌
         Page<Post> noticeList = postService.getNoticeList(pageable, category, searchDto);
+
         model.addAttribute("noticeList", noticeList);
+
         return "noticeBoard";
     }
 
@@ -302,38 +305,49 @@ public class PostController {
         Long userNo = Long.valueOf(String.valueOf(session.getAttribute("userId")));
         User user = userService.selectOne(userNo);
         PostDto dto = PostDto.builder()
-                    .postNo(postService.max()+1L)
-                    .userNo(user)
-                    .category(category)
-                    .content(content)
-                    .name(name)
-                    .title(title)
-                    .fileName("")
-                    .pw(user.getUserPw())
-                    .regDate(now)
-                    .modDate(now)
-                    .views(0L)
-                    .build();
+                .postNo(postService.max()+1L)
+                .userNo(user)
+                .category(category)
+                .content(content)
+                .name(name)
+                .title(title)
+                .fileName("")
+                .pw(user.getUserPw())
+                .regDate(now)
+                .modDate(now)
+                .views(0L)
+                .build();
         postService.create(dto);
         return"redirect:/service";
     }
 
 
     @GetMapping("/post")
-    public String post(HttpServletRequest request, Model model, Long postNo,
-                       Long presentPage) {
+    public String post(HttpServletRequest request, Model model, Long postNo,Long presentPage) {
         HttpSession session = request.getSession();
-        Long userNum = Long.valueOf(String.valueOf(session.getAttribute("userId")));
-
-        if (presentPage == null) {
+        if(presentPage == null){
             presentPage = 1L;
         }
-        PostDto post = postService.getPost(postNo);
-        model.addAttribute("post", post);
-// 0706 위에 수정
+
+        Long userNum = Long.valueOf(String.valueOf(session.getAttribute("userId")));
+        try{
+            Post entity = postService.selectOne(postNo);
+            PostDto post = new PostDto();
+            post = post.changePostDto(entity);
+            model.addAttribute("post", post);
+        }catch (Exception e){
+            return "main";
+        }
+
+        Post post = postService.selectOne(postNo);
+        System.out.println(post.getFileName());
+        model.addAttribute("img", post.getFileName());
+
+        // 0706 위에 수정
         List<CommentDto> fullCommentList = commentService.getFullCommentList(postNo);
         Paging commentPaging = commentService.paging(presentPage, Long.valueOf(fullCommentList.size()));
         model.addAttribute("commentPaging", commentPaging);
+
         if (commentPaging.getTotalElement() > 0) {
             List<CommentDto> commentList = commentService.getCommentList(fullCommentList, commentPaging);
             model.addAttribute("commentList", commentList);
@@ -346,18 +360,28 @@ public class PostController {
     }
 
     @PostMapping("/edit")
-    public String edit(Model model, String func, Long postNo,
-                       String category, Long views,
-                       String title, String name, String pw, String content
-    ) {
-        PostDto post = postService.getPost(postNo);
-        if (func.equals("edit")) {
-            model.addAttribute("post", post);
-            return "edit";
-        } else {
-            postService.editPost(post.getUserNo(), postNo, views, title, name, pw, category, content, post.getRegDate());
-            return "redirect:/post?postNo=" + postNo;
-        }
+    public String edit(Model model,Long postNo) {
+        // postNo의 값을 불러오기
+        Post post = postService.selectOne(postNo);
+        model.addAttribute("post",post);
+
+        return "edit";
+    }
+    @PostMapping("/editPost")
+    public String editPost(Long postNo, String title,String pw,String category, String name, String content, MultipartFile uploadFile){
+        Post post = postService.selectOne(postNo);
+
+        PostDto dto = new PostDto();
+        PostDto postDto = dto.changePostDto(post);
+
+        postDto.setContent(content);
+        postDto.setCategory(post.getCategory());
+        postDto.setTitle(title);
+        postDto.setName(name);
+        postDto.setPw(post.getPw());
+
+        postService.update(postDto);
+        return "redirect:/post?postNo="+postDto.getPostNo();
     }
 
     @PostMapping("/remove")

@@ -10,7 +10,6 @@
 
     <style>
         body {
-            padding-top: 70px;
             padding-bottom: 30px;
         }
 
@@ -136,31 +135,41 @@
             font-weight: bold;
         }
 
-        .name {
-            font-size: large;
-            padding-top: 10px;
-        }
-
-        .regDate {
-            font-size: medium;
-            padding-bottom: 3%;
-            border-bottom: 2.5px solid #c1dad6 !important;
-        }
 
         .postContent {
-            margin-top: 3%;
+
+
         }
 
         .agora {
-            margin-top: 5%;
+            position: relative;
+            margin-top: 3%;
             width: 60%;
             margin-left: 20%;
             height: 500px;
         }
+        header{
+            margin-bottom: 50px;
+        }
+        h6{
+            width: 100%;
+        }
+        #pagingTable{
+            position: relative;
+            left: 510px;
+        }
+        a {
+            text-decoration:none;
+        }
+
+
+        span a:link { font-size:20px; color: black; text-decoration: none;}
+        span a:visited { color: black; text-decoration: none;}
+        span a:hover { color: royalblue; text-decoration: underline;}
     </style>
 </head>
 <body>
-
+<header th:insert="/header.html"></header>
 <div class="my-3 p-3 bg-white rounded shadow-sm" id="main">
     <h1 class="title">[[${post.title}]]</h1>
     <h3 class="name">[[${post.name}]]</h3>
@@ -168,78 +177,89 @@
         <th:block th:if="${post.regDate} != ${post.modDate}"/>
         수정일 [[${post.modDate}]]
         조회수 [[${post.views}]]
-        <input type="button" id="editPostButton" value="수정"/>
-        <input type="button" id="deletePostButton" value="삭제"/>
-        <input type="button" id="boardButton" value="목록"/>
+        <input type="button" class="btn btn-sm btn-primary" id="editPostButton" value="수정"/>
+        <input type="button" class="btn btn-sm btn-primary" id="deletePostButton" value="삭제"/>
+        <input type="button" class="btn btn-sm btn-primary" id="boardButton" value="목록"/>
     </h3>
-    <h3 class="postContent">[[${post.content}]]</h3>
-    <!--        <th:block th:if="${img == ! null}">-->
-    <!--            <img class="img" id="img" src="" width="300px" height="300px"/><br>-->
-    <!--        </th:block>-->
-</div>
-<div class="agora">
-    <!-- Reply Form {s} -->
-    <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
-        <form name="form" id="form" role="form" modelAttribute="replyVO" method="post">
-            <div class="row">
-                <div class="col-sm-10">
+
+    <h3 class="postContent"><img id="img" src="" width="" height="">[[${post.content}]]</h3>
+
+
+
+    <div class="agora">
+        <!-- Reply Form {s} -->
+        <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
+            <form name="form" id="form" role="form" modelAttribute="replyVO" method="post">
+                <div class="row">
+                    <div class="col-sm-10">
                             <textarea path="content" id="newCommentContent" class="form-control" rows="3"
                                       placeholder="댓글을 입력해 주세요"></textarea>
-                </div>
-                <div class="col-sm-2">
-                    <input class="form-control" id="newCommentNameNm" th:value="${name}"></input>
-                    <th:block th:if="${session.userId} == 2">
-                        <input class="form-control" type="password" id="newCommentPassword"
-                               placeholder="PW를 입력하세요."/>
-                    </th:block>
-                    <button type="button" class="btn btn-sm btn-primary" id="newCommentButton"
-                            style="width: 100%; margin-top: 10px"> 저 장
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!--comment-->
-<table id="commentTable">
-    <tr th:each="comment:${commentList}">
-        <td th:text="${comment.commentNo}"/>
-        <td class="name" th:text="${comment.name}"/>
-        <td class="content" th:text="${comment.content}"/>
-        <td class="regDate" th:text="${comment.regDate}"/>
-        <td>
-            <input type="button" value="X" th:onclick="deleteCommentFunc([[${comment.commentNo}]],
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control" id="newCommentNameNm" th:value="${name}"></input>
+                        <th:block th:if="${session.userId} == 2">
+                            <input class="form-control" type="password" id="newCommentPassword"
+                                   placeholder="PW를 입력하세요."/>
+                        </th:block>
+                        <button type="button" class="btn btn-sm btn-primary" id="newCommentButton"
+                                style="width: 100%; margin-top: 10px"> 저 장
+                        </button>
+                    </div>
+                    <h6 class="border-bottom pb-2 mb-0">Reply list</h6>
+                    <!--comment-->
+                    <table id="commentTable" style='margin-top: 5px;'>
+                        <thead>
+                        <th>내용</th>
+                        <th>날짜</th>
+                        <th >이름</th>
+
+                        </thead>
+                        <tbody>
+                        <tr th:each="comment:${commentList}" style='border-bottom: #B7B7B7 1px double ;'>
+                            <td style='width: 900px;height: 50px;margin-right: 2px' class="content" th:text="${comment.content}"/>
+                            <td style='width: 100px' class="regDate" th:text="${comment.regDate}"/>
+                            <td style='width: 100px' class="name" th:text="${comment.name}"/>
+                            <td>
+                                <input type="button" value="X" th:onclick="deleteCommentFunc([[${comment.commentNo}]],
                                [[${comment.userNo.userNo}]], [[${comment.pw}]])"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <br/>
-        </td>
-    </tr>
-</table>
-<!--paging-->
-<table id="pagingTable">
-    <tr>
-        <td th:block th:with="startAt=${commentPaging.startAt}, endBy=${commentPaging.endBy}"
-            th:colspan="5">
-            <a th:if="${commentPaging.startAt} - 1 > 0"
-               th:href="@{/post( postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} - 5)}"
-               th:text="prev"/>
-            <span th:if="${commentPaging.totalPage} != 0">
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tr>
+                            <td>
+                                <!--paging-->
+                                <table id="pagingTable">
+                                    <tr>
+                                        <td th:block th:with="startAt=${commentPaging.startAt}, endBy=${commentPaging.endBy}"
+                                            th:colspan="5">
+                                            <a th:if="${commentPaging.startAt} - 1 > 0"
+                                               th:href="@{/post( postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} - 5)}"
+                                               th:text="prev"/>
+                                            <span th:if="${commentPaging.totalPage} != 0">
                         <a th:each="presentPage : ${#numbers.sequence(startAt, endBy)}"
                            th:href="@{/post(postNo=${post.postNo}, presentPage=${presentPage})}"
                            th:text=|[${presentPage}]|></a>
                     </span>
-            <span th:if="${commentPaging.totalPage} == 0">
+                                            <span th:if="${commentPaging.totalPage} == 0">
                         Comments not exist
                     </span>
-            <a th:if="${commentPaging.endBy} + 1 < ${commentPaging.totalPage}"
-               th:href="@{/post(postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} + 5)}"
-               th:text="next"/>
-        </td>
-    </tr>
-</table>
+                                            <a th:if="${commentPaging.endBy} + 1 < ${commentPaging.totalPage}"
+                                               th:href="@{/post(postNo = ${post.postNo}, presentPage = ${commentPaging.startAt} + 5)}"
+                                               th:text="next"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!--forms-->
 <form id="editPostForm" action="/edit" method="post">
@@ -270,6 +290,27 @@
 </form>
 
 <script th:inline="javascript">
+    let img = [[${img}]];
+    let post = [[${post}]];
+
+    let file = "./post/"+img;
+    $(document).ready(function (){
+        if(img===""){
+            $("#img").hide();
+        }
+
+        if($(".postContent").val().length<100){
+            $("#img").prop("width", 200);
+            $("#img").prop("height", 200);
+            $("#img").attr("src",file);
+        }else{
+            $("#img").prop("width", 300);
+            $("#img").prop("height", 300);
+            $("#img").attr("src",file);
+        }
+
+
+    })
 
     if ([[${userNo}]] != 2) {
         document.querySelector('#newCommentNameNm').readOnly = true;

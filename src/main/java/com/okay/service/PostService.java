@@ -144,10 +144,10 @@ public List<PostDto> selectAll(){
         return postGalleryOrder;
     }
 
-    public List<Post> postCntTen(String category){
-        List<Post> postGalleryOrderTen = postRepository.findFirst10ByCategoryOrderByViewsDesc(category);
+    public List<Post> postCntFive(String category){
+        List<Post> postGalleryOrderFive = postRepository.findFirst5ByCategoryOrderByViewsDesc(category);
 
-        return postGalleryOrderTen;
+        return postGalleryOrderFive;
     }
 
     public List<Post> postUpdate(User userNo){

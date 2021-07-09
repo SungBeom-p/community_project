@@ -7,9 +7,10 @@
     <!--페이지 부트스트랩-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <!--    <link th:href="@{./css/board.css}" rel="stylesheet"/>-->
+    <script src="https://kit.fontawesome.com/fd1e0c1830.js" crossorigin="anonymous"></script>
     <style>
         body{
-            position: absolute !important;
+            position: relative !important;
             width: 100%;
             top: 0px;
             left: 0px;
@@ -61,11 +62,6 @@
             font-weight: bold !important;
             font-family: "Franklin Gothic Demi";
         }
-        .text {
-            position: absolute !important;
-            top: 170px;
-            left: 350px;
-        }
         .table {
             position: absolute !important;
             width: 800px !important;
@@ -112,9 +108,12 @@
         }
         .paging{
             position: absolute !important;
-            right: 600px;
-            left: 600px;
-            top: 650px;
+            padding: 20px;
+            left: 30%;
+
+        }
+        #pageUl li{
+            float: left;
         }
         .searchForm{
             position: absolute !important;
@@ -122,30 +121,53 @@
             left: 765px;
             width:700px; height:0px;
         }
+        #searchButton{
+            border-radius: 10px;
+            background-color: #ffffff;
+            color: royalblue;
+            font-size: 20px;
+            padding: 1.5px 3.2px;
+            display: inline-block;
+            border: 1px solid white;
+            text-shadow:0 1px 0 rgba(0,0,0,0.15);
+        }
+        #searchButton:active{
+            top: 1px;
+            border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+        }
         .new{
             position: absolute !important;
             top: 161px;
             left: 1085px;
         }
-        .result{
-            position: absolute !important;
-            top: 170px;
-            left: 350px;
-        }
-        #result {
+        #writeButton{
             border-radius: 10px;
+            background-color:  #b2b2b2;
+            color: white;
             padding: 1.5px 3.2px;
             display: inline-block;
             border: 1px solid rgba(0,0,0,0.21);
             border-bottom-color: rgba(0,0,0,0.34);
             text-shadow:0 1px 0 rgba(0,0,0,0.15);
         }
-        #result:active{
+        #writeButton:active{
             top: 1px;
             border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
             box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
         }
-        #searchButton{
+        a {
+            text-decoration:none;
+        }
+        span a:link { color: black; text-decoration: none;}
+        span a:visited { color: black; text-decoration: none;}
+        span a:hover { color: royalblue; text-decoration: underline;}
+        .result{
+            position: absolute !important;
+            top: 170px;
+            left: 350px;
+        }
+        #result {
             border-radius: 10px;
             background-color: #b2b2b2;
             color: white;
@@ -155,22 +177,7 @@
             border-bottom-color: rgba(0,0,0,0.34);
             text-shadow:0 1px 0 rgba(0,0,0,0.15);
         }
-        #searchButton:active{
-            top: 1px;
-            border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
-        }
-        #writeButton{
-            border-radius: 10px;
-            background-color: #a9cdc7;
-            color: white;
-            padding: 1.5px 3.2px;
-            display: inline-block;
-            border: 1px solid rgba(0,0,0,0.21);
-            border-bottom-color: rgba(0,0,0,0.34);
-            text-shadow:0 1px 0 rgba(0,0,0,0.15);
-        }
-        #writeButton:active{
+        #result:active{
             top: 1px;
             border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
             box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
@@ -186,13 +193,13 @@
             <option value="title">전체글</option>
         </select>
         <input type="text" id="value" name="searchValue" th:field="*{searchValue}"/>
-        <input type="button" id="searchButton" value="검색"/>
+        <button type="button" id="searchButton"><i class="fas fa-search"></i></button>
     </form>
 </div>
 <div class="new">
-    <form>
+    <form id="writeButtonForm">
         <input type="hidden" name="func" value="new">
-        <input type="button" value="글쓰기" id="writeButton" onclick = "location.href = '/surveyWrite' ">
+        <button type="button" id="writeButton" onclick = "location.href = '/surveyWrite'">글쓰기 <i class="fas fa-pencil-alt" style="font-size:18px"></i></button>
     </form>
 </div>
 <div class="result">
@@ -220,9 +227,8 @@
         <li th:text="${post.hit}" class="column5"/>
         </td>
     </ul>
-</div>
-<div class="paging">
-    <ul class="pagination justify-content-center"
+<div class="paging" th:if="${noticeList!=null}">
+    <ul class="pagination justify-content-center" id="pageUl"
         th:with="start=${T(Math).floor(surveyList.number/10)*10 + 1},
                     last=(${start + 9 < surveyList.totalPages ? start + 9 : surveyList.totalPages})">
         <li class="page-item">
@@ -249,6 +255,7 @@
             </a>
         </li>
     </ul>
+</div>
 </div>
 
 <script th:inline="javascript">

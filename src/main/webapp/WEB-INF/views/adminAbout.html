@@ -96,7 +96,7 @@
   <p>MY PAGE</p>
   <li><a th:href="@{/mypage(request=${session.userId})}">개인 프로필</a></li>
   <li><a th:href="@{/userEdit(request=${session.userId})}">프로필 수정</a></li>
-  <li><a th:href="@{/active(request=${session.userId})}">활동 내역</a></li>
+  <li><a th:href="@{/myactive(request=${session.userId})}">활동 내역</a></li>
   <li th:if="${session.userId == 1}">
     <a th:href="@{/myadmin(request=${session.userId})}">회원 관리 </a></li>
   <li><a class="active" th:href="@{/about(request=${session.userId})}">About</a></li>

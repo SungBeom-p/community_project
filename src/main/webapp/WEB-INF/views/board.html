@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <!--    <link th:href="@{./css/board.css}" rel="stylesheet"/>-->
+    <script src="https://kit.fontawesome.com/fd1e0c1830.js" crossorigin="anonymous"></script>
     <style>
         body{
             position: absolute !important;
@@ -39,20 +40,11 @@
         #sessiontag>a{
             color: #cdcdcd;
         }
-        #okaytitle{
-            color:#cdcdcd;
-        }
-        #headertop{
-            background-color: #131921;
-        }
-        #nav2 {
-            background-color:#232f32;
-
-        }
         #nav2 li>a {
             display: inline;
             color: white;
         }
+
         h3 {
             position: absolute !important;
             top: 110px;
@@ -106,9 +98,12 @@
         }
         .paging{
             position: absolute !important;
-            right: 600px;
-            left: 600px;
-            top: 650px;
+            padding: 20px;
+            left: 30%;
+
+        }
+        #pageUl li{
+            float: left;
         }
         .searchForm{
             position: absolute !important;
@@ -123,12 +118,12 @@
         }
         #searchButton{
             border-radius: 10px;
-            background-color: #b2b2b2;
-            color: white;
+            background-color: #ffffff;
+            color: royalblue;
+            font-size: 20px;
             padding: 1.5px 3.2px;
             display: inline-block;
-            border: 1px solid rgba(0,0,0,0.21);
-            border-bottom-color: rgba(0,0,0,0.34);
+            border: 1px solid white;
             text-shadow:0 1px 0 rgba(0,0,0,0.15);
         }
         #searchButton:active{
@@ -138,8 +133,8 @@
         }
         #searchButton2{
             border-radius: 10px;
-            background-color: #b2b2b2;
-            color: white;
+            background-color: #ffffff;
+            color: royalblue;
             padding: 1.5px 3.2px;
             display: inline-block;
             border: 1px solid rgba(0,0,0,0.21);
@@ -153,7 +148,7 @@
         }
         #writeButton{
             border-radius: 10px;
-            background-color: #a9cdc7;
+            background-color: #b2b2b2;
             color: white;
             padding: 1.5px 3.2px;
             display: inline-block;
@@ -167,11 +162,21 @@
             box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
         }
         #searchForm2{
-            position: absolute !important;
-            right: 600px;
-            left: 600px;
-            top: 720px;
+            position: relative !important;
+            left: 25%;
+            padding: 20px;
+
         }
+        #value2{
+            width: 250px;
+        }
+        a {
+            text-decoration:none;
+        }
+        span a:link { color: black; text-decoration: none;}
+        span a:visited { color: black; text-decoration: none;}
+        span a:hover { color: royalblue; text-decoration: underline;}
+
     </style>
 </head>
 <body>
@@ -185,13 +190,13 @@
             <option value="post_name">작성자</option>
         </select>
         <input type="text" id="value" name="searchValue" th:field="*{searchValue}"/>
-        <input type="button" id="searchButton" value="검색"/>
+        <button type="button" id="searchButton"><i class="fas fa-search"></i></button>
     </form>
 </div>
 <div class="new">
     <form>
         <input type="hidden" name="func" value="new">
-        <input type="button" value="글쓰기" id="writeButton" onclick = "location.href = '/write' ">
+        <button type="button" id="writeButton" onclick = "location.href = '/write'">글쓰기 <i class="fas fa-pencil-alt" style="font-size:18px"></i></button>
     </form>
 </div>
 <div class="table">
@@ -213,9 +218,17 @@
         <li th:text="${post.regDate}" class="column4"/>
         <li th:text="${post.views}" class="column5"/>
     </ul>
-</div>
-<div class="paging">
-    <ul class="pagination justify-content-center"
+<form name="searchForm" id="searchForm2" th:object="${searchDto}" action="">
+    <select name="searchFilter" th:field="*{searchFilter}">
+        <option value="post_title">제목</option>
+        <option value="post_content">내용</option>
+        <option value="post_name">작성자</option>
+    </select>
+    <input type="text" id="value2" name="searchValue" th:field="*{searchValue}"/>
+    <input type="button" id="searchButton2" value="검색"/>
+</form>
+<div class="paging" th:if="${noticeList!=null}">
+    <ul class="pagination justify-content-center" id="pageUl"
         th:with="start=${T(Math).floor(postList.number/10)*10 + 1},
                     last=(${start + 9 < postList.totalPages ? start + 9 : postList.totalPages})">
         <li class="page-item">
@@ -243,15 +256,8 @@
         </li>
     </ul>
 </div>
-<form name="searchForm" id="searchForm2" th:object="${searchDto}" action="">
-    <select name="searchFilter" th:field="*{searchFilter}">
-        <option value="post_title">제목</option>
-        <option value="post_content">내용</option>
-        <option value="post_name">작성자</option>
-    </select>
-    <input type="text" id="value2" name="searchValue" th:field="*{searchValue}"/>
-    <input type="button" id="searchButton2" value="검색"/>
-</form>
+</div>
+
 
 <script th:inline="javascript">
     document.querySelector('#searchButton').addEventListener('click', searchButtonSubmit);

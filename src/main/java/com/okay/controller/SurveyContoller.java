@@ -161,13 +161,19 @@ public class SurveyContoller {
         String flag = "";
         User user = userService.selectOne(userNo);
         Survey survey = surveyService.selectOne(surveyNo);
+        SurveyCommentDto dt= new SurveyCommentDto();
+        try{
+            dt.setId(surveyCommentService.max()+1L);
+        }catch (Exception e){
+            dt.setId(1L);
+        }
         SurveyCommentDto dto = SurveyCommentDto.builder()
-                .id(surveyCommentService.max()+1L)
+                .id(dt.getId())
                 .userNo(user)
                 .surveyNo(survey)
                 .name(name)
                 .content(content)
-                .regDate(regDate)
+                .regDate(now)
                 .build();
         surveyCommentService.create(dto);
         flag = "true";

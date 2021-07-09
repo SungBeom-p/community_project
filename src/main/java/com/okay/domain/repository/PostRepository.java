@@ -26,7 +26,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findFirst5ByUserNoOrderByPostNoDesc(User userNo); //최근 기준으로 내림차순 5개 추출
     List<Post> findFirst5ByCategoryOrderByViewsDesc(String category); //조회수를 기준으로 내림차순 5개 추출
-    List<Post> findFirst10ByCategoryOrderByViewsDesc(String category); //조회수를 기준으로 내림차순 10개 추출
     List<Post> findAllByUserNo(User userNo);
     List<Post> findAllByCategory(String category); //카테고리로 리스트
 
