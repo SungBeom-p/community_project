@@ -167,6 +167,7 @@ public class SurveyContoller {
         }catch (Exception e){
             dt.setId(1L);
         }
+        System.out.println("whatnum!!!??? "+dt.getId());
         SurveyCommentDto dto = SurveyCommentDto.builder()
                 .id(dt.getId())
                 .userNo(user)

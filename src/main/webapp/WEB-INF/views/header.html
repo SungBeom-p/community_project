@@ -5,6 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0" user-scalable="no">
     <title>Title</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -46,7 +47,7 @@
                 <a class="nav-link active" href="/surveyBoard">투 표</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/gallery">갤러리</a>
+                <a class="nav-link active" href="/gallery">모아보기</a>
             </li>
             <li class = "nav-item" th:if="${session.userId != 2 && session.userId != null}">
                 <a th:href="@{/mypage(request=${session.userId})}" class="nav-link">MY PAGE</a>

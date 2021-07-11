@@ -334,6 +334,8 @@ public class PostController {
             Post entity = postService.selectOne(postNo);
             PostDto post = new PostDto();
             post = post.changePostDto(entity);
+            post.setViews(entity.getViews()+1L);
+            postService.update(post);
             model.addAttribute("post", post);
         }catch (Exception e){
             return "main";

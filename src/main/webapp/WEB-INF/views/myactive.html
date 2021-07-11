@@ -14,9 +14,6 @@
   <script th:src="@{../js/jquery.js}" type="text/javascript"></script>
 </head>
 <style>
-  #member{
-    margin-right: 25% !important;
-  }
 </style>
 
 <body>
@@ -85,7 +82,7 @@
   <option value="option4">투표 최근 댓글</option>
 </select>
 <!-- table -->
-<section>
+<section id="selcontainer">
   <div class="container-fluid" id="containsectrion">
   </div>
 </section>
@@ -101,20 +98,20 @@
      if(state =='option1') {
        flag = false;
        $("#containsectrion").empty();
-       $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+       $("#containsectrion").append("<table style='margin-left: 20%; margin-top: 30px;'> " +
                "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-               "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
-               "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + '제목' + "</td>" +
-               "<td style='width: 330px;text-align: center;'>" + '조회수' + "</td>" +
+               "<td style='width: 375px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
+               "</td><td style='width: 375px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + '제목' + "</td>" +
+               "<td style='width: 375px;text-align: center;'>" + '조회수' + "</td>" +
                "</tr> " +
                "</table>");
        if (flag == false) {
          post.forEach(i => {
-           $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+           $("#containsectrion").append("<table style='margin-left: 20%; margin-top: 30px;'> " +
                    "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-                   "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.postNo +
-                   "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.title + "</td>" +
-                   "<td style='width: 330px;text-align: center;'>" + i.views + "</td>" +
+                   "<td style='width: 375px;height: 50px;margin-right: 2px;text-align: center;'>" + i.postNo +
+                   "</td><td style='width: 375px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.title + "</td>" +
+                   "<td style='width: 375px;text-align: center;'>" + i.views + "</td>" +
                    "</tr> " +
                    "</table>")
          })
@@ -125,20 +122,20 @@
       let survey = [[${surveylist}]];
       flag = false;
       $("#containsectrion").empty();
-      $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+      $("#containsectrion").append("<table style='margin-left: 20%; margin-top: 30px;'> " +
               "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-              "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
-              "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" +'제목'+ "</td>" +
-              "<td style='width: 330px;text-align: center;'>" + '조회수' + "</td>" +
+              "<td style='width: 375px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
+              "</td><td style='width: 375px;border-bottom: #B7B7B7 1px double;text-align: center;'>" +'제목'+ "</td>" +
+              "<td style='width: 375px;text-align: center;'>" + '조회수' + "</td>" +
               "</tr> " +
               "</table>" );
       if(flag == false){
         survey.forEach(i=>{
-          $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+          $("#containsectrion").append("<table style='margin-left: 20%; margin-top: 30px;'> " +
                   "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-                  "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.surveyNo +
-                  "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.title + "</td>" +
-                  "<td style='width: 330px;text-align: center;'>" + i.views + "</td>" +
+                  "<td style='width: 375px;height: 50px;margin-right: 2px;text-align: center;'>" + i.surveyNo +
+                  "</td><td style='width: 375px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.title + "</td>" +
+                  "<td style='width: 375px;text-align: center;'>" + i.views + "</td>" +
                   "</tr> " +
                   "</table>")
         })
@@ -147,20 +144,20 @@
      if(state =='option3') {
        flag = false;
        $("#containsectrion").empty();
-       $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+       $("#containsectrion").append("<table style='margin-left: 20%; margin-top: 30px;'> " +
                "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-               "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
-               "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" +'내용'+ "</td>" +
-               "<td style='width: 330px;text-align: center;'>" + '적성일' + "</td>" +
+               "<td style='width: 375px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
+               "</td><td style='width: 375px;border-bottom: #B7B7B7 1px double;text-align: center;'>" +'내용'+ "</td>" +
+               "<td style='width: 375px;text-align: center;'>" + '적성일' + "</td>" +
                "</tr> " +
                "</table>" );
        if(flag == false){
          comment.forEach(i=>{
-           $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+           $("#containsectrion").append("<table style='margin-left: 20%; margin-top: 30px;'> " +
                    "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-                   "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.commentNo +
-                   "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.content + "</td>" +
-                   "<td style='width: 330px;text-align: center;'>" + i.regDate + "</td>" +
+                   "<td style='width: 375px;height: 50px;margin-right: 2px;text-align: center;'>" + i.commentNo +
+                   "</td><td style='width: 375px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.content + "</td>" +
+                   "<td style='width: 375px;text-align: center;'>" + i.regDate + "</td>" +
                    "</tr> " +
                    "</table>")
          })
@@ -170,20 +167,20 @@
      if(state =='option4') {
        flag = false;
        $("#containsectrion").empty();
-       $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+       $("#containsectrion").append("<table style='margin-left: 20%; margin-top: 30px;'> " +
                "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-               "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
-               "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + '내용' + "</td>" +
-               "<td style='width: 330px;text-align: center;'>" + '적성일' + "</td>" +
+               "<td style='width: 375px;height: 50px;margin-right: 2px;text-align: center;'>" + 'No' +
+               "</td><td style='width: 375px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + '내용' + "</td>" +
+               "<td style='width: 375px;text-align: center;'>" + '적성일' + "</td>" +
                "</tr> " +
                "</table>");
        if (flag == false) {
          svcomment.forEach(i => {
-           $("#containsectrion").append("<table style='margin-right: 0%; margin-top: 5px;'> " +
+           $("#containsectrion").append("<table style='margin-left: 20%; margin-top: 30px;'> " +
                    "<tr style='border-bottom: #B7B7B7 1px double ;'> " +
-                   "<td style='width: 330px;height: 50px;margin-right: 2px;text-align: center;'>" + i.id +
-                   "</td><td style='width: 330px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.content + "</td>" +
-                   "<td style='width: 330px;text-align: center;'>" + i.regDate + "</td>" +
+                   "<td style='width: 375px;height: 50px;margin-right: 2px;text-align: center;'>" + i.id +
+                   "</td><td style='width: 375px;border-bottom: #B7B7B7 1px double;text-align: center;'>" + i.content + "</td>" +
+                   "<td style='width: 375px;text-align: center;'>" + i.regDate + "</td>" +
                    "</tr> " +
                    "</table>")
          })

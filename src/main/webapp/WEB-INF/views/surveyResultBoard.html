@@ -3,202 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <title>투표게시판</title>
+    <meta name="viewport" content="initial-scale=1.0" user-scalable="no">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <!--    <link th:href="@{./css/board.css}" rel="stylesheet"/>-->
     <script src="https://kit.fontawesome.com/fd1e0c1830.js" crossorigin="anonymous"></script>
-    <style>
-        body{
-            position: absolute !important;
-            width: 100%;
-            top: 0px;
-            left: 0px;
-        }
-        ul{
-            list-style:none;
-        }
-        li{
-            text-align: center
-        }
-        a {
-            text-decoration:none;
-        }
-        nav ul li {
-            display: inline;
-            letter-spacing: .3em;
-            margin-left: 2em;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            line-height: 3em;
-        }
-        #sessiontag1>a{
-            color: #cdcdcd;
-        }
+    <style> body{
+        position: absolute !important;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+    }
+    ul{
+        list-style:none;
+    }
+    li{
+        text-align: center
+    }
+    a {
+        text-decoration:none;
+    }
+    nav ul li {
+        display: inline;
+        letter-spacing: .3em;
+        margin-left: 2em;
+    }
+    nav ul li a {
+        color: white;
+        text-decoration: none;
+        line-height: 3em;
+    }
+    #sessiontag1>a{
+        color: #cdcdcd;
+    }
 
-        #sessiontag>a{
-            color: #cdcdcd;
-        }
-        #okaytitle{
-            color:#cdcdcd;
-        }
-        #headertop{
-            background-color: #131921;
-        }
-        #nav2 {
-            background-color:#232f32;
+    #sessiontag>a{
+        color: #cdcdcd;
+    }
+    #nav2 li>a {
+        display: inline;
+        color: white;
+    }
 
-        }
-        #nav2 li>a {
-            display: inline;
-            color: white;
-        }
-        h3 {
-            position: absolute !important;
-            top: 110px;
-            left: 350px;
-            font-weight: bold !important;
-            font-family: "Franklin Gothic Demi";
-        }
-        .text {
-            position: absolute !important;
-            top: 170px;
-            left: 350px;
-        }
-        .table {
-            position: absolute !important;
-            width: 800px !important;
-            top: 225px;
-            left: 350px;
-            right: 350px;
-        }
-        .table ul {
-            text-align: center;
-            margin: 0px;
-            padding: 0px;
-            list-style-type: none;
-            display: table;
-        }
-        .table .main li{
-            font-weight: bold;
-            border-bottom: #c1dad6 solid 2.5px;
-            text-align: center;
-            display: inline-block;
-            padding-bottom: 7px;
-        }
-        .table .mainContent li{
-            font-size: smaller;
-            border-bottom: darkgray solid 1.5px;
-            display: inline-block;
-            list-style-type: none;
-            border-collapse: collapse;
-            padding: 7px;
-        }
-        .table ul .column1 {
-            width: 20px
-        }
-        .table ul .column2 {
-            width: 370px
-        }
-        .table ul .column3 {
-            width: 170px
-        }
-        .table ul .column4 {
-            width: 130px
-        }
-        .table ul .column5{
-            width: 110px;
-        }
-        .paging{
-            position: absolute !important;
-            padding: 20px;
-            left: 30%;
+    h3 {
+        position: absolute !important;
+        top: -130px;
+        font-weight: bold !important;
+        font-family: "Franklin Gothic Demi";
+    }
+    .table {
+        position: relative !important;
+        width: 800px !important;
+        top: 200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .table .main {
+        position: absolute;
+        text-align: center;
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+        display: table;
+        top: -60px;
+    }
+    .table .main li{
+        font-weight: bold;
+        border-bottom: #c1dad6 solid 2.5px;
+        text-align: center;
+        display: inline-block;
+        padding-bottom: 7px;
+    }
+    .table .mainContent{
+        position: relative;
+        top: -20px;
+        position: relative;
+        text-align: center;
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+        display: table;
+    }
+    .table .mainContent li{
+        font-size: smaller;
+        border-bottom: darkgray solid 1.5px;
+        display: inline-block;
+        list-style-type: none;
+        border-collapse: collapse;
+        padding: 7px;
+    }
+    .table ul .column1 {
+        width: 20px
+    }
+    .table ul .column2 {
 
-        }
-        #pageUl li{
-            float: left;
-        }
-        .searchForm{
-            position: absolute !important;
-            top: 160px;
-            left: 765px;
-            width:700px; height:0px;
-        }
-        #searchButton{
-            border-radius: 10px;
-            background-color: #ffffff;
-            color: royalblue;
-            font-size: 20px;
-            padding: 1.5px 3.2px;
-            display: inline-block;
-            border: 1px solid white;
-            text-shadow:0 1px 0 rgba(0,0,0,0.15);
-        }
-        #searchButton:active{
-            top: 1px;
-            border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
-        }
-        .new{
-            position: absolute !important;
-            top: 161px;
-            left: 1085px;
-        }
-        #writeButton{
-            border-radius: 10px;
-            background-color:  #b2b2b2;
-            color: white;
-            padding: 1.5px 3.2px;
-            display: inline-block;
-            border: 1px solid rgba(0,0,0,0.21);
-            border-bottom-color: rgba(0,0,0,0.34);
-            text-shadow:0 1px 0 rgba(0,0,0,0.15);
-        }
-        #writeButton:active{
-            top: 1px;
-            border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
-        }
-        #searchButton{
-            border-radius: 10px;
-            background-color: #ffffff;
-            color: royalblue;
-            font-size: 20px;
-            padding: 1.5px 3.2px;
-            display: inline-block;
-            border: 1px solid white;
-            text-shadow:0 1px 0 rgba(0,0,0,0.15);
-        }
-        #searchButton:active{
-            top: 1px;
-            border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
-        }
-        #writeButton{
-            border-radius: 10px;
-            background-color: #b2b2b2;
-            color: white;
-            padding: 1.5px 3.2px;
-            display: inline-block;
-            border: 1px solid white;
-            text-shadow:0 1px 0 rgba(0,0,0,0.15);
-        }
-        #writeButton:active{
-            top: 1px;
-            border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
-        }
-        a {
-            text-decoration:none;
-        }
-        span a:link { color: black; text-decoration: none;}
-        span a:visited { color: black; text-decoration: none;}
-        span a:hover { color: royalblue; text-decoration: underline;}
+        width: 370px
+    }
+    .table ul .column3 {
+
+        width: 170px
+    }
+    .table ul .column4 {
+
+        width: 130px
+    }
+    .table ul .column5{
+
+        width: 110px;
+    }
+    .paging{
+        position: absolute !important;
+        padding: 20px;
+        margin-left: 37%;
+        margin-right: auto;
+    }
+    #pageUl li{
+        float: left;
+    }
+    .searchForm{
+        position: relative !important;
+        top: -130px;
+        left: 450px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .searchForm form {
+        position: absolute;
+    }
+
+    .new{
+        position: relative;
+        top: -130px;
+        left: 750px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #writeButton{
+        position: absolute;
+        float: left !important;
+        border-radius: 10px;
+        background-color: #b2b2b2;
+        color: white;
+        padding: 1.5px 3.2px;
+        display: inline-block;
+        border: 1px solid rgba(0,0,0,0.21);
+        border-bottom-color: rgba(0,0,0,0.34);
+        text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    }
+    #writeButton:active{
+        top: 1px;
+        border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+        box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+    }
+    #searchButton{
+        position: absolute;
+        border-radius: 10px;
+        background-color: #ffffff;
+        color: royalblue;
+        font-size: 20px;
+        padding: 1.5px 3.2px;
+        display: inline-block;
+        border: 1px solid white;
+        text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    }
+    #searchButton:active{
+        top: 1px;
+        border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+        box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+    }
+    a {
+        text-decoration:none;
+    }
+    span a:link { color: black; text-decoration: none;}
+    span a:visited { color: black; text-decoration: none;}
+    span a:hover { color: royalblue; text-decoration: underline;}
+    .text{
+        position: absolute !important;
+        top: -85px;
+    }
+
     </style>
 </head>
 <body>
 <header th:insert="/header.html"></header>
+<div class="table">
 <h3>투표현황</h3>
 <div class="text">투표현황입니다</div>
 <div class="searchForm">
@@ -214,7 +202,6 @@
     <input type="hidden" name="func" value="new">
     <button type="button" id="writeButton" onclick = "location.href = '/surveyWrite'">글쓰기 <i class="fas fa-pencil-alt" style="font-size:18px"></i></button>
 </div>
-<div class="table">
     <ul class="main">
         <li class="column1">　</li>
         <li class="column2">제목</li>
@@ -225,7 +212,7 @@
     <ul th:each="post : ${surveyList}" class="mainContent">
         <li th:text="${post.surveyNo}" class="column1"/>
         <li class="column2">
-            <span><a th:href="@{/choice(surveyNo=${post.surveyNo})}">
+            <span><a th:href="@{/surveyResult(surveyNo=${post.surveyNo})}">
                 <span th:text="${post.title}"></span></a>
             </span>
         </li>
@@ -234,30 +221,30 @@
         <li th:text="${post.hit}" class="column5"/>
         </td>
     </ul>
-<div class="paging" th:if="${noticeList!=null}">
+<div class="paging" th:if="${surveyList!=null}">
     <ul class="pagination justify-content-center" id="pageUl"
         th:with="start=${T(Math).floor(surveyList.number/10)*10 + 1},
                     last=(${start + 9 < surveyList.totalPages ? start + 9 : surveyList.totalPages})">
         <li class="page-item">
-            <a class="page-link" th:href="@{/surveyBoard(page=1)}" aria-label="First">
+            <a class="page-link" th:href="@{/surveyResultBoard(page=1)}" aria-label="First">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
         <li class="page-item" th:class="${surveyList.first} ? 'disabled'">
-            <a class="page-link" th:href="${surveyList.first} ? '#' :@{/surveyBoard(page=${surveyList.number})}" aria-label="Previous">
+            <a class="page-link" th:href="${surveyList.first} ? '#' :@{/surveyResultBoard(page=${surveyList.number})}" aria-label="Previous">
                 <span aria-hidden="true">&lt;</span>
             </a>
         </li>
         <li class="page-item" th:each="page: ${#numbers.sequence(start,last)}" th:class="${page == surveyList.number + 1} ? 'active'">
-            <a class="page-link" th:text="${page}" th:href="@{/surveyBoard(page=${page})}"></a>
+            <a class="page-link" th:text="${page}" th:href="@{/surveyResultBoard(page=${page})}"></a>
         </li>
         <li class="page-item" th:class="${surveyList.last} ? 'disabled'">
-            <a class="page-link" th:href="${surveyList.last} ? '#' : @{/surveyBoard(page=${surveyList.number + 2})}" aria-label="Next">
+            <a class="page-link" th:href="${surveyList.last} ? '#' : @{/surveyResultBoard(page=${surveyList.number + 2})}" aria-label="Next">
                 <span aria-hidden="true">&gt;</span>
             </a>
         </li>
         <li class="page-item">
-            <a class="page-link" th:href="@{/surveyBoard?(page=${surveyList.totalPages})}" aria-label="Last">
+            <a class="page-link" th:href="@{/surveyResultBoard?(page=${surveyList.totalPages})}" aria-label="Last">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>

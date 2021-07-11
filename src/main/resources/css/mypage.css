@@ -50,7 +50,7 @@ nav ul li a {
 }
 /*{ 헤더부분중 중고/모임/글 보는 단락*/
 #ulcolum{
-    text-align: center;
+    text-align: center; !important;
     width: 750px;
     margin-left: 350px;
 
@@ -59,12 +59,14 @@ nav ul li a {
 #ulcolum li{
     text-align: center;
     display:inline;
-    top:50px;
+    top:65px;
+    left: 17% !important;
 }
 #ulcolum p{
     font-size: 24px;
     display: inline;
     text-align: left;
+    padding: 10px;
 
 }
 
@@ -85,8 +87,8 @@ nav ul li a {
 }
 #mypage li a {
     display: block;
-    color: #000;
-    padding: 8px 16px;
+    color: #000000;
+    padding: 8px;
     text-decoration: none;
 }
 #mypage li a.active {

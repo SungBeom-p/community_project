@@ -29,15 +29,15 @@
             list-style-type: none;
             float: left;
             margin: 0;
-            padding: 15px;
-            width: 230px;
+            padding: 10px;
+            width: 200px;
             height: 600px;
             background-color: white;
         }
         #mypage li a {
             display: block;
-            color: #000;
-            padding: 8px 16px;
+            color: #000000;
+            padding: 8px;
             text-decoration: none;
         }
         #mypage li a.active {
@@ -51,29 +51,32 @@
         #myChart{
             position: absolute;
             top : 300px;
-            left : 900px;
+            left : 825px;
         }
         #myAllChart{
             position: absolute;
-            top: 300px;
-            left: 400px;
+            top: 280px;
+            left: 370px;
         }
         #myCommentChart{
             position: absolute;
             top: 300px;
-            left : 1400px;
+            left : 1280px;
         }
         h1{
             position: absolute;
-            left: 960px;
+            left: 800px;
             top:150px;
         }
         hr{
             position: absolute;
-            left: 955px;
+            left: 800px;
             width: 250px;
             top: 200px;
             border: 3px solid #131921 !important;
+        }
+        #chart{
+            position: relative;
         }
     </style>
 
@@ -91,10 +94,10 @@
 </div>
 <h1>나의 활동 통계</h1>
 <hr>
-<div id>
-    <canvas id="myChart" width="400" height="420"></canvas>
-    <canvas id="myCommentChart" width="400" height="420"></canvas>
-    <canvas id="myAllChart" width="400" height="400"></canvas>
+<div id="chart">
+    <canvas id="myChart" width="320" height="320"></canvas>
+    <canvas id="myCommentChart" width="320" height="320"></canvas>
+    <canvas id="myAllChart" width="320" height="320"></canvas>
 </div>
 
 <script th:inline="javascript">

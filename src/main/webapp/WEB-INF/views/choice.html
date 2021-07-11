@@ -200,6 +200,22 @@
             transition:800ms ease all;
         }
 
+        #listButton,#deleteButton{
+            border-radius: 10px;
+            background-color: #b2b2b2;
+            color: white;
+            padding: 1.5px 3.2px;
+            display: inline-block;
+            border: 1px solid rgba(0,0,0,0.21);
+            border-bottom-color: rgba(0,0,0,0.34);
+            text-shadow:0 1px 0 rgba(0,0,0,0.15);
+        }
+        #listButton:active,#deleteButton:active{
+            top: 1px;
+            border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+        }
+
         h1{
             margin-top: 2%;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -248,7 +264,7 @@
                 <a class="nav-link active" href="/surveyBoard">투 표</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/gallery">갤러리</a>
+                <a class="nav-link active" href="/gallery">모아보기</a>
             </li>
             <li class = "nav-item" th:if="${session.userId != 2 && session.userId != null}">
                 <a th:href="@{/mypage(request=${session.userId})}" class="nav-link">MY PAGE</a>
@@ -267,9 +283,6 @@
                 <h3 class="opnion1"></h3>
                 <h3 class="opnion2"></h3>
             </div>
-            <th:block th:if="${session.userId == img.userNo.userNo||session.userId==1}" >
-                <input type="button" id="deleteButton" value="삭제"/>
-            </th:block>
             <div class="center-align">
                 <input type="radio" name="result" id="size_1" value="true" checked/>
                 <label for="size_1">Click</label>
@@ -285,6 +298,10 @@
     <button type="button" id="hit" style="left: 50% ; position: absolute;"><i class="fas fa-heart" id="hitIcon" style="color: #b2b2b2;">
         <span id="hitText" >[[${img.hit}]]</span>
     </i></button><br>
+    <input type="button" id="listButton" value="목록"/>
+    <th:block th:if="${session.userId == img.userNo.userNo||session.userId==1}" >
+        <input type="button" id="deleteButton" value="삭제"/>
+    </th:block>
     <div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
         <form name="form" id="form" role="form" modelAttribute="replyVO" method="post">
             <div class="row">
@@ -323,6 +340,9 @@
                 $("#deleteForm").submit();
             }
         }
+        $('#listButton').click(function (){
+            self.location = "/surveyBoard";
+        })
             $(document).ready(function () {
                 let list = [[${comment}]];
 

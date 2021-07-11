@@ -128,24 +128,22 @@
             width: 60%;
             margin-left: 20%;
             height: 500px;
-
+            margin-right: auto;
+            margin-left: auto;
         }
 
         .title {
             font-weight: bold;
         }
-
-
         .postContent {
 
 
         }
-
         .agora {
             position: relative;
             margin-top: 3%;
-            width: 60%;
-            margin-left: 20%;
+            width: 100%;
+
             height: 500px;
         }
         header{
@@ -160,6 +158,11 @@
         }
         a {
             text-decoration:none;
+        }
+        #img{
+            position: relative;
+            display: block;
+            left : 30%;
         }
 
 
@@ -182,7 +185,7 @@
         <input type="button" class="btn btn-sm btn-primary" id="boardButton" value="목록"/>
     </h3>
 
-    <h3 class="postContent"><img id="img" src="" width="" height="">[[${post.content}]]</h3>
+    <h3 class="postContent"><img id="img" src="" width="300" height="300">[[${post.content}]]</h3>
 
 
 
@@ -297,19 +300,9 @@
     $(document).ready(function (){
         if(img===""){
             $("#img").hide();
-        }
-
-        if($(".postContent").val().length<100){
-            $("#img").prop("width", 200);
-            $("#img").prop("height", 200);
-            $("#img").attr("src",file);
         }else{
-            $("#img").prop("width", 300);
-            $("#img").prop("height", 300);
             $("#img").attr("src",file);
         }
-
-
     })
 
     if ([[${userNo}]] != 2) {
